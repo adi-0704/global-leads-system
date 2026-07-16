@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 22,
+      "name": "Aditya Dental Care",
+      "phone": "123-456-7890",
+      "address": "123 Test St",
+      "website": "https://example.com",
+      "status": "No Booking/AI",
+      "email": "business.n8n25@gmail.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-16T19:13:52.021462",
+      "replied_at": null,
+      "query": "dentist",
+      "location": "Miami",
+      "scraped_at": "2026-07-16T12:00:00",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no website analytics.",
+      "email_error": null
+    },
+    {
       "id": 21,
       "name": "Dr. Deborah Longwill, DO, FAOCD",
       "phone": "305) 279-7546",
@@ -402,15 +422,15 @@
     }
   ],
   "stats": {
-    "total": 20,
+    "total": 21,
     "no_website": 0,
-    "old_website": 8,
+    "old_website": 9,
     "modern_website": 12,
-    "sent": 1,
+    "sent": 2,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At",
-  "generated_at": "2026-07-16T13:40:28.015180+00:00"
+  "generated_at": "2026-07-16T13:44:01.794044+00:00"
 }
