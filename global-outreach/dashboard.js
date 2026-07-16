@@ -1,12 +1,42 @@
 // global-outreach/dashboard.js
 
+// ─── Mode Detection ───────────────────────────────────────────────────────────
+// IS_STATIC = true  → GitHub Pages (reads data.json, no Flask needed)
+// IS_STATIC = false → local Flask server (uses /api/* endpoints)
+const IS_STATIC = (
+    window.location.hostname.includes('github.io') ||
+    window.location.protocol === 'file:'
+);
+
+// Cached no-website CSV string (populated from data.json in static mode)
+let _noWebsiteCsv = '';
+
 // Global State
-let allLeads = [];
+let allLeads  = [];
 let configData = {};
-let activeTab = 'overview';
+let activeTab  = 'overview';
 
 // Initialize Dashboard
 document.addEventListener('DOMContentLoaded', () => {
+    // Adjust UI for static (read-only) mode
+    if (IS_STATIC) {
+        const scrapeBtn = document.querySelector('[onclick="openScrapeModal()"]');
+        if (scrapeBtn) {
+            scrapeBtn.title = 'Scraper runs automatically via GitHub Actions';
+            scrapeBtn.style.opacity = '0.4';
+            scrapeBtn.style.cursor  = 'not-allowed';
+            scrapeBtn.onclick = (e) => { e.preventDefault(); alert('Scraper runs automatically every day via GitHub Actions.\nCheck the Actions tab on your repo.'); };
+        }
+        // Swap CSV link to JS-powered Blob download
+        const csvLink = document.getElementById('btn-export-csv');
+        if (csvLink) {
+            csvLink.removeAttribute('href');
+            csvLink.onclick = (e) => { e.preventDefault(); downloadCsvBlob(); };
+        }
+        // Hide the settings save forms (read-only on Pages)
+        const settingsBtn = document.getElementById('btn-tab-settings');
+        if (settingsBtn) settingsBtn.style.display = 'none';
+    }
     fetchData();
 });
 
@@ -55,57 +85,71 @@ function switchTab(tabId) {
     }
 }
 
-// Fetch Leads & Stats from SQLite
+// Fetch Leads & Stats — auto-detects GitHub Pages vs local Flask
 async function fetchData() {
     const refreshIcon = document.getElementById('refresh-icon');
     if (refreshIcon) refreshIcon.classList.add('spinning');
     
     try {
-        // Parallel requests for speed
-        const [leadsRes, statsRes] = await Promise.all([
-            fetch('/api/leads'),
-            fetch('/api/stats')
-        ]);
-        
-        if (!leadsRes.ok || !statsRes.ok) {
-            throw new Error(`API error: leads=${leadsRes.status} stats=${statsRes.status}`);
+        let stats;
+
+        if (IS_STATIC) {
+            // ── GitHub Pages mode: single fetch of data.json ──────────────
+            const res = await fetch('data.json?t=' + Date.now()); // cache-bust
+            if (!res.ok) throw new Error(`data.json fetch failed: HTTP ${res.status}`);
+            const data = await res.json();
+
+            allLeads      = data.leads  || [];
+            stats         = data.stats  || {};
+            _noWebsiteCsv = data.no_website_csv || '';
+
+            // Show last-updated timestamp
+            if (data.generated_at) {
+                const ts = new Date(data.generated_at);
+                const el = document.getElementById('page-subtitle');
+                if (el) el.innerText += `  ·  Last updated: ${formatDate(data.generated_at)}`;
+            }
+        } else {
+            // ── Local Flask mode: parallel API calls ──────────────────────
+            const [leadsRes, statsRes] = await Promise.all([
+                fetch('/api/leads'),
+                fetch('/api/stats')
+            ]);
+            if (!leadsRes.ok || !statsRes.ok) {
+                throw new Error(`API error: leads=${leadsRes.status} stats=${statsRes.status}`);
+            }
+            allLeads = await leadsRes.json();
+            stats    = await statsRes.json();
         }
-        
-        // FIX #2: leadsRes.getJson does not exist — always use .json()
-        allLeads = await leadsRes.json();
-        const stats = await statsRes.json();
-        
-        // Update stats widgets
-        document.getElementById('kpi-total').innerText = stats.total;
-        document.getElementById('kpi-no-website').innerText = stats.no_website;
-        document.getElementById('kpi-old-website').innerText = stats.old_website;
-        document.getElementById('kpi-sent').innerText = stats.sent;
-        document.getElementById('kpi-replied').innerText = stats.replied;
-        document.getElementById('kpi-conversion').innerText = stats.conversion_rate + '%';
-        
-        // Update Sidebar Badges
-        document.getElementById('badge-count-nowebsite').innerText = stats.no_website;
-        document.getElementById('badge-count-campaign').innerText = stats.old_website;
-        
-        // Render current view
-        if (activeTab === 'overview') {
-            renderOverview();
-        } else if (activeTab === 'nowebsite') {
-            renderNoWebsiteTable();
-        } else if (activeTab === 'campaign') {
-            renderCampaignTable();
-        } else if (activeTab === 'modern') {
-            renderModernTable();
-        }
-        
+
+        // Update KPI cards
+        document.getElementById('kpi-total').innerText      = stats.total      ?? 0;
+        document.getElementById('kpi-no-website').innerText = stats.no_website ?? 0;
+        document.getElementById('kpi-old-website').innerText = stats.old_website ?? 0;
+        document.getElementById('kpi-sent').innerText       = stats.sent       ?? 0;
+        document.getElementById('kpi-replied').innerText    = stats.replied    ?? 0;
+        document.getElementById('kpi-conversion').innerText = (stats.conversion_rate ?? 0) + '%';
+
+        // Update sidebar badges
+        document.getElementById('badge-count-nowebsite').innerText = stats.no_website ?? 0;
+        document.getElementById('badge-count-campaign').innerText  = stats.old_website ?? 0;
+
+        // Render current tab
+        if      (activeTab === 'overview')   renderOverview();
+        else if (activeTab === 'nowebsite')  renderNoWebsiteTable();
+        else if (activeTab === 'campaign')   renderCampaignTable();
+        else if (activeTab === 'modern')     renderModernTable();
+
     } catch (err) {
-        console.error('Error fetching dashboard data:', err);
-        alert('Failed to connect to local database server. Make sure run_dashboard.py is running.');
+        console.error('Dashboard data error:', err);
+        if (IS_STATIC) {
+            alert('Could not load data.json.\nMake sure GitHub Actions has run at least once to generate it.');
+        } else {
+            alert('Could not connect to local server. Make sure run_dashboard.py is running.');
+        }
     } finally {
         if (refreshIcon) {
-            setTimeout(() => {
-                refreshIcon.classList.remove('spinning');
-            }, 600);
+            setTimeout(() => refreshIcon.classList.remove('spinning'), 600);
         }
     }
 }
@@ -417,6 +461,23 @@ async function submitScrapeJob(e) {
         submitBtn.innerText = "Start Scraper Job";
         submitBtn.disabled = false;
     }
+}
+
+// CSV Blob download (used in static / GitHub Pages mode)
+function downloadCsvBlob() {
+    if (!_noWebsiteCsv) {
+        alert('No No-Website leads to export yet.');
+        return;
+    }
+    const blob = new Blob([_noWebsiteCsv], { type: 'text/csv;charset=utf-8;' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = 'no_website_leads.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
 
 // Helper: Escape HTML to prevent injection
