@@ -20,31 +20,25 @@
     "derm": "https://derm-site.vercel.app/"
   },
   "email_templates": {
-
     "dental": {
-      "subject": "I audited {business_name}'s website — found some issues",
-      "body": "Hi there,\n\nMy name is Aditya — I'm an AI & automation engineer who works exclusively with dental and dermatology practices.\n\nI took a look at {business_name}'s website ({website_url}) and ran a quick audit. Here's what I found:\n\n{website_issues}\n\nThese are exactly the kinds of issues that cause dental practices to lose potential patients to competitors — most visitors will leave a site that doesn't work well on mobile, isn't secure, or doesn't let them book online.\n\nI specialise in fixing all of this for dental practices. Here's what I can build for {business_name}:\n\n  → Modern, mobile-first website redesign\n  → AI-powered online booking (patients book 24/7 — no phone calls needed)\n  → Automated appointment reminders via SMS & email (cuts no-shows by 30%)\n  → AI chat assistant that answers patient questions after hours\n  → Analytics dashboard so you can see exactly who visits your site\n  → Any custom software or automation your practice needs\n\nI'm a solo engineer — everything is built specifically for you, not off-the-shelf. Turnaround is typically 5–7 days.\n\nSee a live demo:\n{promo_url}\n\nWould you be open to a quick 10-minute call this week? I can walk you through exactly what I'd fix for {business_name}.\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer\n(Specialising in Dental & Dermatology Practices)"
-    },
-
-    "derm": {
-      "subject": "Website audit for {business_name} — a few things to flag",
-      "body": "Hi there,\n\nMy name is Aditya — I'm an AI & automation engineer specialising in dermatology and dental clinics.\n\nI audited {business_name}'s website ({website_url}) and found the following:\n\n{website_issues}\n\nFor a dermatology clinic, these gaps can directly impact how many new patients find you and whether they stay on your site long enough to make an enquiry.\n\nHere's what I can build for {business_name}:\n\n  → Modern, responsive website (works perfectly on any device)\n  → Online booking system (patients book consultations 24/7)\n  → Automated reminders via SMS & email (eliminates most no-shows)\n  → AI patient assistant — answers questions and pre-screens new patients\n  → Analytics dashboard — know your traffic, bookings, and revenue trends\n  → Any bespoke software or automation your clinic needs\n\nI'm a solo engineer so you deal directly with me — fast delivery, full customisation, typically live in 5–7 days.\n\nSee a demo:\n{promo_url}\n\nWould you have 10 minutes for a call this week? I can show you exactly what I'd improve for {business_name}.\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer\n(Specialising in Dermatology & Dental Practices)"
-    },
-
-    "dental_no_booking_ai": {
-      "subject": "Quick audit of {business_name}'s website — two gaps I spotted",
-      "body": "Hi there,\n\nMy name is Aditya — I'm an AI & automation engineer who works exclusively with dental and dermatology practices.\n\nYour website ({website_url}) looks professional, but I ran a quick audit and found the following:\n\n{website_issues}\n\nFor a dental practice, not having online booking is one of the biggest conversion killers — 67% of patients now prefer to book online rather than call, especially younger patients and working adults.\n\nHere's what I can add to {business_name}'s website — custom built, not a generic plugin:\n\n  → AI-powered booking system — patients book 24/7 directly from your site\n  → Automated SMS & email reminders — reduces no-shows by up to 30%\n  → AI chat assistant — answers patient questions instantly, including after hours\n  → New patient intake forms — automated and paperless\n  → Analytics dashboard — see exactly who visits your site and where they come from\n  → Any other AI or automation tool your practice needs\n\nI'm a solo specialist, so you work directly with me — fast communication, quick delivery, full customisation.\n\nSee a live demo:\n{promo_url}\n\nCan we get on a 10-minute call this week? I'll show you exactly what I'd build for {business_name}.\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer\n(Specialising in Dental & Dermatology Practices)"
-    },
-
-    "derm_no_booking_ai": {
-      "subject": "Spotted a few gaps on {business_name}'s website",
-      "body": "Hi there,\n\nMy name is Aditya — I'm an AI & automation engineer who builds custom software for dermatology and dental clinics.\n\nYour website ({website_url}) looks well-designed, but I ran a quick technical audit and found:\n\n{website_issues}\n\nFor a skin clinic, missing online booking and an AI assistant can mean losing patients who visit your site outside business hours and find no way to take action.\n\nHere's what I can build specifically for {business_name}:\n\n  → AI-powered online booking — 24/7 appointment scheduling without phone calls\n  → Automated reminders — SMS & email before every appointment\n  → AI patient assistant — handles FAQs, skin care queries, and new patient pre-screening\n  → Treatment tracking & reporting — know your busiest services and monthly revenue\n  → Custom software or automation your clinic needs — built to your workflow\n\nAs a solo engineer specialising in clinics, everything is made for your specific needs — not a SaaS subscription you need to adapt to.\n\nSee a live demo:\n{promo_url}\n\nI'd love a quick 10-minute call to walk you through what this would look like for {business_name}. Are you free this week?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer\n(Specialising in Dermatology & Dental Practices)"
-    },
-
-    "no_booking_ai": {
       "subject": "Quick website audit for {business_name}",
-      "body": "Hi there,\n\nMy name is Aditya — I'm an AI & automation engineer who builds custom software for medical practices.\n\nI audited {business_name}'s website ({website_url}) and found the following:\n\n{website_issues}\n\nThese are all areas I can fix or add — built specifically for your practice, not off-the-shelf tools.\n\nWhat I typically build:\n\n  → Online booking systems (24/7 scheduling from your website)\n  → Automated appointment reminders (SMS + email)\n  → AI assistants for patient enquiries\n  → Analytics and reporting dashboards\n  → Any AI or automation software your practice needs\n\nI'm a solo engineer so you get direct communication and full flexibility. Most projects are live in 5–7 days.\n\nDemo:\n{promo_url}\n\nWould you be open to a quick 10-minute call this week?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+      "body": "Hi there,\n\nI ran a quick technical audit of {business_name}'s website ({website_url}) and found a few issues:\n\n{website_issues}\n\nI'm a solo AI & automation engineer who redesigns dental websites to make them secure, mobile-friendly, and optimized for new patients.\n\nSee a live example of my work:\n{promo_url}\n\nAre you open to a quick 5-minute call this week to discuss how to fix these?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "derm": {
+      "subject": "Quick website audit for {business_name}",
+      "body": "Hi there,\n\nI ran a quick technical audit of {business_name}'s website ({website_url}) and noticed a few issues:\n\n{website_issues}\n\nI'm a solo AI & automation engineer who builds secure, mobile-first websites specifically for dermatology clinics.\n\nSee a live example of my work:\n{promo_url}\n\nAre you open to a quick 5-minute call this week to discuss how to fix these?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "dental_no_booking_ai": {
+      "subject": "Adding online booking for {business_name}",
+      "body": "Hi there,\n\nI took a look at {business_name}'s website ({website_url}) and noticed a couple of items missing:\n\n{website_issues}\n\nI'm an engineer who builds custom AI booking systems for dental clinics that allow patients to schedule appointments 24/7, automatically follow up to reduce no-shows, and answer common questions.\n\nSee a live demo of my clinic assistant:\n{promo_url}\n\nAre you open to a quick 5-minute call this week to see how it would work for {business_name}?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "derm_no_booking_ai": {
+      "subject": "Adding online booking for {business_name}",
+      "body": "Hi there,\n\nI checked {business_name}'s website ({website_url}) and ran a quick audit. Here are the gaps I found:\n\n{website_issues}\n\nI'm an engineer who builds custom AI assistants for dermatology clinics to handle appointment scheduling 24/7, answer patient questions, and automate reminders.\n\nSee a live demo of my clinic assistant:\n{promo_url}\n\nAre you open to a quick 5-minute call this week to see how it would work for {business_name}?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "no_booking_ai": {
+      "subject": "Adding online booking for {business_name}",
+      "body": "Hi there,\n\nI visited your website ({website_url}) and noticed a few technical gaps:\n\n{website_issues}\n\nI'm an AI & automation engineer who builds custom online schedulers and AI widgets that automate bookings and follow-ups for local practices.\n\nSee a live demo of my work:\n{promo_url}\n\nAre you open to a quick 5-minute call this week to see how it would work for {business_name}?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
     }
-
   }
 }
