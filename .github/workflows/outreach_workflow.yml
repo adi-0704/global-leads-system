@@ -14,9 +14,13 @@ on:
         type: choice
         options: ['true', 'false']
       limit:
-        description: 'Max Google Maps results to scrape'
+        description: 'Max Google Maps results per single search'
         required: false
-        default: '5'
+        default: '25'
+      target:
+        description: 'Target Old Website leads to collect today (0 = single run, 60 = keep looping)'
+        required: false
+        default: '60'
       city:
         description: 'City to scrape (blank = random from config)'
         required: false
@@ -32,7 +36,7 @@ permissions:
 jobs:
   run-outreach:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
 
     steps:
       - name: Checkout Repository
@@ -64,23 +68,21 @@ jobs:
           IMAP_USER:     ${{ secrets.IMAP_USER }}
           IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
         run: |
-          # Build arguments
-          ARGS="--limit ${{ github.event.inputs.limit || '15' }}"
-
-          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-            ARGS="$ARGS --dry-run"
+          # Scheduled runs: target mode — keep scraping until 60 Old Website leads collected
+          # Manual runs: use whatever inputs were selected in the UI
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            echo "Running in SCHEDULED TARGET mode (target: 60 Old Website leads)"
+            python global-outreach/scrape_and_outreach.py --target 60 --limit 25 --max-iterations 20
+          else
+            # Manual workflow_dispatch run
+            ARGS="--limit ${{ github.event.inputs.limit || '25' }}"
+            [ "${{ github.event.inputs.dry_run }}"  = "true"  ] && ARGS="$ARGS --dry-run"
+            [ -n "${{ github.event.inputs.city }}"             ] && ARGS="$ARGS --city '${{ github.event.inputs.city }}'"
+            [ -n "${{ github.event.inputs.keyword }}"          ] && ARGS="$ARGS --keyword '${{ github.event.inputs.keyword }}'"
+            [ "${{ github.event.inputs.target || '0' }}" != "0" ] && ARGS="$ARGS --target ${{ github.event.inputs.target || '0' }}"
+            echo "Running manual run with args: $ARGS"
+            eval python global-outreach/scrape_and_outreach.py $ARGS
           fi
-
-          if [ -n "${{ github.event.inputs.city }}" ]; then
-            ARGS="$ARGS --city '${{ github.event.inputs.city }}'"
-          fi
-
-          if [ -n "${{ github.event.inputs.keyword }}" ]; then
-            ARGS="$ARGS --keyword '${{ github.event.inputs.keyword }}'"
-          fi
-
-          echo "Running: python global-outreach/scrape_and_outreach.py $ARGS"
-          eval python global-outreach/scrape_and_outreach.py $ARGS
 
       - name: Export data.json for GitHub Pages Dashboard
         run: |

@@ -298,6 +298,64 @@ async def scrape_new_leads(
         conn.close()
 
     print(f"\n[Scraper] Done. {real_count} real listings found, {new_count} new leads added.")
+    return new_count   # return count so caller can track progress
+
+
+# ---------------------------------------------------------------------------
+# Target-Based Scraping Loop
+# ---------------------------------------------------------------------------
+
+async def scrape_until_target(
+    db_path:     str,
+    config:      dict,
+    target:      int  = 60,
+    limit:       int  = 25,
+    max_iters:   int  = 20,
+) -> None:
+    """
+    Repeatedly call scrape_new_leads with random city + keyword combinations
+    until `target` Old Website leads have been collected today, or until
+    `max_iters` search iterations are exhausted (safety cap).
+
+    Each iteration picks a fresh (city, keyword) pair to maximise coverage
+    and avoid repeating the same Google Maps page.
+    """
+    from datetime import date
+    today = date.today().isoformat()
+
+    def _count_today() -> int:
+        """Count Old Website leads scraped today."""
+        with sqlite3.connect(db_path) as conn:
+            return conn.execute(
+                "SELECT COUNT(*) FROM leads "
+                "WHERE status = 'Old Website' AND scraped_at LIKE ?",
+                (f"{today}%",)
+            ).fetchone()[0]
+
+    for iteration in range(1, max_iters + 1):
+        current = _count_today()
+        print(f"\n{'='*60}")
+        print(f"[Target] Iteration {iteration}/{max_iters}  |  Old Website leads today: {current}/{target}")
+        print(f"{'='*60}")
+
+        if current >= target:
+            print(f"[Target] Goal reached! {current} Old Website leads collected today. Done.")
+            break
+
+        remaining = target - current
+        print(f"[Target] Need {remaining} more Old Website leads — starting search...")
+
+        try:
+            await scrape_new_leads(db_path, config, limit=limit)
+        except Exception as err:
+            print(f"[Target] Search iteration {iteration} failed: {err}")
+
+    else:
+        final = _count_today()
+        print(f"\n[Target] Max iterations reached. Collected {final}/{target} Old Website leads today.")
+
+    final = _count_today()
+    print(f"\n[Target] Session complete. Total Old Website leads today: {final}")
 
 # ---------------------------------------------------------------------------
 # Outbound Email Campaigns
@@ -506,17 +564,21 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Global Outreach — Scraper + Email Campaign Engine"
     )
-    parser.add_argument("--dry-run",   action="store_true",
+    parser.add_argument("--dry-run",      action="store_true",
                         help="Log emails to console instead of sending")
-    parser.add_argument("--limit",     type=int, default=20,
-                        help="Max Google Maps results per search (default: 20)")
-    parser.add_argument("--keyword",   type=str, default=None,
+    parser.add_argument("--limit",        type=int, default=25,
+                        help="Max Google Maps results per single search (default: 25)")
+    parser.add_argument("--target",       type=int, default=0,
+                        help="Keep scraping until this many Old Website leads are collected today (0 = single run)")
+    parser.add_argument("--max-iterations", type=int, default=20,
+                        help="Safety cap: max search loops when using --target (default: 20)")
+    parser.add_argument("--keyword",      type=str, default=None,
                         help="Override keyword (e.g. 'dentist')")
-    parser.add_argument("--city",      type=str, default=None,
+    parser.add_argument("--city",         type=str, default=None,
                         help="Override city (e.g. 'London')")
-    parser.add_argument("--no-scrape", action="store_true",
+    parser.add_argument("--no-scrape",    action="store_true",
                         help="Skip scraping; run email + reply stages only")
-    parser.add_argument("--no-email",  action="store_true",
+    parser.add_argument("--no-email",     action="store_true",
                         help="Skip email + reply stages; run scraper only")
     args = parser.parse_args()
 
@@ -533,14 +595,27 @@ if __name__ == "__main__":
     # Stage 1: Scrape
     if not args.no_scrape:
         try:
-            asyncio.run(
-                scrape_new_leads(
-                    DB_PATH, config,
-                    keyword_override=args.keyword,
-                    city_override=args.city,
-                    limit=args.limit,
+            if args.target > 0:
+                # Target mode: loop until daily Old Website goal is met
+                print(f"\n[Mode] TARGET mode — scraping until {args.target} Old Website leads collected today")
+                asyncio.run(
+                    scrape_until_target(
+                        DB_PATH, config,
+                        target=args.target,
+                        limit=args.limit,
+                        max_iters=args.max_iterations,
+                    )
                 )
-            )
+            else:
+                # Single run mode
+                asyncio.run(
+                    scrape_new_leads(
+                        DB_PATH, config,
+                        keyword_override=args.keyword,
+                        city_override=args.city,
+                        limit=args.limit,
+                    )
+                )
         except Exception as err:
             print(f"[Fatal] Scraping failed: {err}")
 
