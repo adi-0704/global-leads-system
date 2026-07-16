@@ -72,7 +72,7 @@ def main():
         "generated_at": _now(),
     }
     _write(payload)
-    print(f"[data-export] Exported {len(leads)} leads → data.json  |  Stats: {stats}")
+    print(f"[data-export] Exported {len(leads)} leads -> data.json  |  Stats: {stats}")
 
 
 def _empty_stats():
