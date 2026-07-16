@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 40,
+      "name": "Scott Arms Dental Practice",
+      "phone": "+44 121 357 5000",
+      "address": "\ue0c8\n914-916 Walsall Rd, Great Barr, Birmingham B42 1TG, United Kingdom",
+      "website": "http://www.scottarmsdentalpractice.com/?utm_source=gmb&utm_medium=organic",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dentist",
+      "location": "Birmingham",
+      "scraped_at": "2026-07-16T19:39:51.542167",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2025,
+      "website_notes": "Website appears fully optimised.",
+      "email_error": null
+    },
+    {
       "id": 39,
       "name": "Acorn Dental",
       "phone": "+44 121 777 1537",
@@ -288,8 +308,8 @@
       "website": "http://www.stjohnsdentalpractice.com/",
       "status": "Old Website",
       "email": "%c2%a0reception@stjohnsdentalpractice.com",
-      "email_status": "Not Sent",
-      "sent_at": null,
+      "email_status": "Sent",
+      "sent_at": "2026-07-16T19:41:14.514334",
       "replied_at": null,
       "query": "dentist",
       "location": "Birmingham",
@@ -762,15 +782,15 @@
     }
   ],
   "stats": {
-    "total": 38,
+    "total": 39,
     "no_website": 0,
     "old_website": 14,
-    "modern_website": 24,
-    "sent": 3,
+    "modern_website": 25,
+    "sent": 4,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At",
-  "generated_at": "2026-07-16T13:52:24.096569+00:00"
+  "generated_at": "2026-07-16T14:21:51.984186+00:00"
 }
