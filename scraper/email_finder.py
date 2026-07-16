@@ -32,7 +32,11 @@ _EMAIL_PATTERN = re.compile(
 )
 
 # Sub-pages most likely to contain contact info
-_CONTACT_PATHS = ["/contact", "/contact-us", "/about", "/about-us", "/reach-us"]
+_CONTACT_PATHS = [
+    "/contact", "/contact-us", "/about", "/about-us", "/reach-us",
+    "/contact-us/", "/contact/", "/about-us/", "/about/",
+    "/info", "/info/", "/help", "/help/", "/privacy", "/privacy-policy"
+]
 
 # Domains we never want to return (noise/common false-positives)
 _IGNORED_DOMAINS = {

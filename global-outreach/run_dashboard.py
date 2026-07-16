@@ -80,7 +80,7 @@ def get_leads():
 
     sql    = "SELECT * FROM leads"
     params = []
-    where  = []
+    where  = ["status != 'Filtered (No Email)'"]
 
     if status_filter:
         where.append("status = ?")
@@ -109,12 +109,13 @@ def get_stats():
         SELECT
             COUNT(*)                                              AS total,
             SUM(status = 'No Website')                           AS no_website,
-            SUM(status = 'Old Website')                          AS old_website,
+            SUM(status IN ('Old Website', 'No Booking/AI'))       AS old_website,
             SUM(status = 'Modern Website')                       AS modern_website,
             SUM(email_status IN ('Sent','Sent (Dry Run)'))       AS sent,
             SUM(email_status = 'Replied')                        AS replied,
             SUM(email_status = 'Failed')                         AS failed
         FROM leads
+        WHERE status != 'Filtered (No Email)'
     """
     with _get_conn() as conn:
         row = conn.execute(sql).fetchone()

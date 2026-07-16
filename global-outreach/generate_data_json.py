@@ -29,7 +29,7 @@ def main():
         leads = [
             dict(r)
             for r in conn.execute(
-                "SELECT * FROM leads ORDER BY scraped_at DESC"
+                "SELECT * FROM leads WHERE status != 'Filtered (No Email)' ORDER BY scraped_at DESC"
             ).fetchall()
         ]
 
@@ -43,6 +43,7 @@ def main():
                 SUM(email_status = 'Replied')                        AS replied,
                 SUM(email_status = 'Failed')                         AS failed
             FROM leads
+            WHERE status != 'Filtered (No Email)'
         """).fetchone()
 
     stats = {k: (row[k] or 0) for k in row.keys()}
