@@ -1,68 +1,43 @@
 name: Global Lead Outreach Campaign
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Triggers
-# ─────────────────────────────────────────────────────────────────────────────
 on:
   schedule:
-    # Runs every day at 09:00 UTC (2:30 PM IST)
+    # Runs daily at 09:00 UTC (2:30 PM IST)
     - cron: '0 9 * * *'
 
   workflow_dispatch:
-    # Manual trigger from the GitHub Actions tab — lets you test safely
     inputs:
       dry_run:
-        description: 'Dry-run only (log emails, do NOT send)'
+        description: 'Dry-run only? (true = log emails, false = send real emails)'
         required: false
         default: 'true'
         type: choice
-        options:
-          - 'true'
-          - 'false'
+        options: ['true', 'false']
       limit:
-        description: 'Max Google Maps results to scrape (default: 15)'
+        description: 'Max Google Maps results to scrape'
         required: false
-        default: '15'
+        default: '5'
       city:
-        description: 'Specific city to scrape (leave blank for random from config)'
+        description: 'City to scrape (blank = random from config)'
         required: false
         default: ''
       keyword:
-        description: 'Specific keyword (dentist / dermatologist / etc.)'
+        description: 'Keyword override (blank = random from config)'
         required: false
         default: ''
-      no_scrape:
-        description: 'Skip scraping — run email + reply check only'
-        required: false
-        default: 'false'
-        type: choice
-        options:
-          - 'false'
-          - 'true'
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Permissions
-# ─────────────────────────────────────────────────────────────────────────────
 permissions:
-  contents: write   # needed to git-push the updated leads.db
+  contents: write
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Job
-# ─────────────────────────────────────────────────────────────────────────────
 jobs:
   run-outreach:
     runs-on: ubuntu-latest
-    timeout-minutes: 60   # Safety limit — kills the job if it hangs
+    timeout-minutes: 60
 
     steps:
-      # ── 1. Checkout ────────────────────────────────────────────────────────
       - name: Checkout Repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 1        # Shallow clone is faster
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      # ── 2. Python ──────────────────────────────────────────────────────────
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
@@ -70,51 +45,14 @@ jobs:
           cache: 'pip'
           cache-dependency-path: 'global-outreach/requirements.txt'
 
-      # ── 3. pip dependencies ────────────────────────────────────────────────
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r global-outreach/requirements.txt
 
-      # ── 4. Playwright browser (cached across runs) ─────────────────────────
-      - name: Cache Playwright Browsers
-        id: playwright-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('global-outreach/requirements.txt') }}
-
       - name: Install Playwright Chromium
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: python -m playwright install --with-deps chromium
 
-      - name: Install Playwright System Deps (cached hit)
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: python -m playwright install-deps chromium
-
-      # ── 5. Resolve CLI flags ───────────────────────────────────────────────
-      #   Scheduled runs always use defaults (dry_run=false, limit=15).
-      #   Manual runs use whatever was selected in the UI above.
-      - name: Build Script Arguments
-        id: args
-        run: |
-          # Default values (used on scheduled cron runs)
-          DRY_RUN="${{ github.event.inputs.dry_run || 'false' }}"
-          LIMIT="${{ github.event.inputs.limit || '15' }}"
-          CITY="${{ github.event.inputs.city || '' }}"
-          KEYWORD="${{ github.event.inputs.keyword || '' }}"
-          NO_SCRAPE="${{ github.event.inputs.no_scrape || 'false' }}"
-
-          ARGS="--limit $LIMIT"
-          [ "$DRY_RUN"  = "true"  ] && ARGS="$ARGS --dry-run"
-          [ "$NO_SCRAPE" = "true" ] && ARGS="$ARGS --no-scrape"
-          [ -n "$CITY"            ] && ARGS="$ARGS --city \"$CITY\""
-          [ -n "$KEYWORD"         ] && ARGS="$ARGS --keyword \"$KEYWORD\""
-
-          echo "SCRIPT_ARGS=$ARGS" >> $GITHUB_OUTPUT
-          echo "Resolved args: $ARGS"
-
-      # ── 6. Run the outreach engine ─────────────────────────────────────────
       - name: Run Scraper & Outreach Campaign
         env:
           SMTP_HOST:     ${{ secrets.SMTP_HOST }}
@@ -126,23 +64,32 @@ jobs:
           IMAP_USER:     ${{ secrets.IMAP_USER }}
           IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
         run: |
-          echo "▶ Starting outreach engine…"
-          eval python global-outreach/scrape_and_outreach.py ${{ steps.args.outputs.SCRIPT_ARGS }}
-          echo "✅ Engine finished."
+          # Build arguments
+          ARGS="--limit ${{ github.event.inputs.limit || '15' }}"
 
-      # ── 7. Commit updated leads.db back to repo ────────────────────────────
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+
+          if [ -n "${{ github.event.inputs.city }}" ]; then
+            ARGS="$ARGS --city '${{ github.event.inputs.city }}'"
+          fi
+
+          if [ -n "${{ github.event.inputs.keyword }}" ]; then
+            ARGS="$ARGS --keyword '${{ github.event.inputs.keyword }}'"
+          fi
+
+          echo "Running: python global-outreach/scrape_and_outreach.py $ARGS"
+          eval python global-outreach/scrape_and_outreach.py $ARGS
+
       - name: Commit & Push Updated Database
         run: |
           git config --global user.name  "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
           git add global-outreach/leads.db
-
-          # Only commit if the file actually changed
           if git diff --staged --quiet; then
             echo "No database changes to commit."
           else
             git commit -m "chore: auto-sync leads.db [skip ci]"
             git push
-            echo "✅ leads.db committed and pushed."
           fi
