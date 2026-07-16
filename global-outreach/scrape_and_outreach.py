@@ -413,13 +413,16 @@ async def scrape_new_leads(
                 # Audit website
                 analysis = analyze_website(website)
                 print(f"      -> {analysis['status']}  {analysis['notes'].strip()}")
-
                 # Discover email only for Old Website/No Booking leads
                 email = ""
-                if website and analysis["status"] in ["Old Website", "No Booking/AI"]:
+                lead_status = analysis["status"]
+                if website and lead_status in ["Old Website", "No Booking/AI"]:
                     print("      -> Searching for contact email...")
                     email = email_finder.find(website)
                     print(f"      -> Email: {email or 'not found'}")
+                    if not email:
+                        lead_status = "Filtered (No Email)"
+                        print("      -> Skipped from outreach queue (no email found)")
 
                 # Persist
                 try:
@@ -432,7 +435,7 @@ async def scrape_new_leads(
                         ) VALUES (?,?,?,?,?,?,'Not Sent',?,?,?,?,?,?,?)
                     """, (
                         name, record.phone, record.address,
-                        website, analysis["status"], email,
+                        website, lead_status, email,
                         target_kw, city, datetime.now().isoformat(),
                         analysis["viewport"], analysis["ssl"],
                         analysis["copyright_year"],
@@ -475,11 +478,13 @@ async def scrape_until_target(
     today = date.today().isoformat()
 
     def _count_today() -> int:
-        """Count Old Website leads scraped today."""
+        """Count Old Website/No Booking leads WITH EMAILS scraped today."""
         with sqlite3.connect(db_path) as conn:
             return conn.execute(
                 "SELECT COUNT(*) FROM leads "
-                "WHERE status = 'Old Website' AND scraped_at LIKE ?",
+                "WHERE status IN ('Old Website', 'No Booking/AI') "
+                "  AND email IS NOT NULL AND email != '' "
+                "  AND scraped_at LIKE ?",
                 (f"{today}%",)
             ).fetchone()[0]
 
@@ -490,11 +495,11 @@ async def scrape_until_target(
         print(f"{'='*60}")
 
         if current >= target:
-            print(f"[Target] Goal reached! {current} Old Website leads collected today. Done.")
+            print(f"[Target] Goal reached! {current} outreach targets with email collected today. Done.")
             break
 
         remaining = target - current
-        print(f"[Target] Need {remaining} more Old Website leads — starting search...")
+        print(f"[Target] Need {remaining} more outreach targets with email — starting search...")
 
         try:
             await scrape_new_leads(db_path, config, limit=limit)
