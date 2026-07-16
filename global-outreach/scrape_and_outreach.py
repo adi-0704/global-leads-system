@@ -93,13 +93,67 @@ def init_db(db_path: str) -> None:
 
 _VIEWPORT_RE  = re.compile(r'<meta\s+name=["\']viewport["\']', re.IGNORECASE)
 _COPYRIGHT_RE = re.compile(
-    r'(?:copyright|©|&copy;)\s*(?:20[0-2]\d\s*-\s*)?(20[0-2]\d)',
+    r'(?:copyright|\u00a9|&copy;)\s*(?:20[0-2]\d\s*-\s*)?(20[0-2]\d)',
     re.IGNORECASE
 )
 _COPYRIGHT_FB = re.compile(
     r'copyright.*?\b(20[0-2]\d)\b',
     re.IGNORECASE | re.DOTALL
 )
+
+# --- Booking system detection patterns ---
+_BOOKING_PATTERNS = [
+    r'calendly\.com',
+    r'acuityscheduling\.com',
+    r'booksy\.com',
+    r'zocdoc\.com',
+    r'doctolib',
+    r'practo\.com',
+    r'appointy\.com',
+    r'simplybook\.me',
+    r'square\.site.*book',
+    r'setmore\.com',
+    r'fresha\.com',
+    r'vagaro\.com',
+    r'mindbodyonline\.com',
+    r'10to8\.com',
+    r'picktime\.com',
+    r'class="book',        # generic booking button/widget class
+    r'id="book',
+    r'book.?now',
+    r'book.?appointment',
+    r'schedule.?appointment',
+    r'online.?booking',
+    r'request.?appointment',
+    r'type="submit"[^>]*book',
+    r'<button[^>]*>\s*book',
+]
+_BOOKING_RE = re.compile('|'.join(_BOOKING_PATTERNS), re.IGNORECASE)
+
+# --- AI / chatbot detection patterns ---
+_AI_PATTERNS = [
+    r'intercom\.io',
+    r'intercomcdn\.com',
+    r'drift\.com',
+    r'driftt\.com',
+    r'tidio\.com',
+    r'crisp\.chat',
+    r'freshchat',
+    r'zendesk',
+    r'hubspot.*chat',
+    r'livechat',
+    r'tawk\.to',
+    r'chatbot',
+    r'openai',
+    r'gpt',
+    r'dialogflow',
+    r'botpress',
+    r'manychat',
+    r'ai.?assistant',
+    r'ai.?chat',
+    r'virtual.?assistant',
+]
+_AI_RE = re.compile('|'.join(_AI_PATTERNS), re.IGNORECASE)
 
 _HEADERS = {
     "User-Agent": (
@@ -113,22 +167,24 @@ _HEADERS = {
 
 def analyze_website(url: str) -> dict:
     """
-    Fetch *url* and check for three modernity signals:
-      1. HTTPS / SSL redirect
-      2. Mobile viewport meta-tag
-      3. Copyright year <= 2022
+    Fetch *url* and check for modernity signals, booking system, and AI chat.
 
-    Returns a dict:
-        ssl           : int  (1 = HTTPS, 0 = HTTP)
-        viewport      : int  (1 = found, 0 = missing)
-        copyright_year: int | None
-        status        : str  ('No Website' | 'Old Website' | 'Modern Website')
-        notes         : str  (human-readable reasons)
+    Status hierarchy:
+      'No Website'    — no URL present
+      'Old Website'   — HTTP-only, no viewport, or copyright <= 2022
+      'No Booking/AI' — modern site but lacks online booking AND AI chatbot
+      'Modern Website'— modern site WITH booking system or AI chat
+
+    Returns dict with keys:
+        ssl, viewport, copyright_year, has_booking, has_ai,
+        status, notes
     """
     result = {
         "ssl": 0,
         "viewport": 0,
         "copyright_year": None,
+        "has_booking": 0,
+        "has_ai": 0,
         "status": "Old Website",
         "notes": "",
     }
@@ -147,7 +203,7 @@ def analyze_website(url: str) -> dict:
             fetch_url, timeout=8, headers=_HEADERS, allow_redirects=True
         )
 
-        # SSL determined by final URL after redirects
+        # SSL
         if resp.url.startswith("https://"):
             result["ssl"] = 1
         elif not url.startswith("https://"):
@@ -159,13 +215,13 @@ def analyze_website(url: str) -> dict:
 
         html = resp.text
 
-        # --- Viewport check ---
+        # Viewport
         if _VIEWPORT_RE.search(html):
             result["viewport"] = 1
         else:
             result["notes"] += "Missing mobile viewport meta tag. "
 
-        # --- Copyright year check ---
+        # Copyright year
         m = _COPYRIGHT_RE.search(html) or _COPYRIGHT_FB.search(html[:100_000])
         if m:
             year = int(m.group(1))
@@ -173,7 +229,15 @@ def analyze_website(url: str) -> dict:
             if year <= 2022:
                 result["notes"] += f"Outdated copyright year ({year}). "
 
-        # --- Determine final status ---
+        # Booking system detection
+        if _BOOKING_RE.search(html):
+            result["has_booking"] = 1
+
+        # AI / chatbot detection
+        if _AI_RE.search(html):
+            result["has_ai"] = 1
+
+        # ── Status decision ────────────────────────────────────────────────
         is_old = (
             result["ssl"] == 0
             or result["viewport"] == 0
@@ -183,9 +247,16 @@ def analyze_website(url: str) -> dict:
             result["status"] = "Old Website"
             if not result["notes"].strip():
                 result["notes"] = "Outdated design indicators found."
+        elif not result["has_booking"] and not result["has_ai"]:
+            # Modern site but missing booking system AND AI assistant
+            result["status"] = "No Booking/AI"
+            result["notes"]  = "Modern website but no online booking or AI assistant detected."
         else:
             result["status"] = "Modern Website"
-            result["notes"]  = "Website is secure and responsive."
+            features = []
+            if result["has_booking"]: features.append("booking system")
+            if result["has_ai"]:      features.append("AI/chat widget")
+            result["notes"] = f"Website is secure and responsive. Has: {', '.join(features)}."
 
     except requests.exceptions.Timeout:
         result["notes"]  = "Website request timed out."
@@ -263,9 +334,9 @@ async def scrape_new_leads(
                 analysis = analyze_website(website)
                 print(f"      → {analysis['status']}  {analysis['notes'].strip()}")
 
-                # Discover email only for Old Website leads (they are our email targets)
+                # Discover email only for Old Website/No Booking leads
                 email = ""
-                if website and analysis["status"] == "Old Website":
+                if website and analysis["status"] in ["Old Website", "No Booking/AI"]:
                     print("      → Searching for contact email…")
                     email = email_finder.find(website)
                     print(f"      → Email: {email or 'not found'}")
@@ -361,44 +432,91 @@ async def scrape_until_target(
 # Outbound Email Campaigns
 # ---------------------------------------------------------------------------
 
-def send_outreach_emails(db_path: str, config: dict, dry_run: bool = False) -> None:
-    """Send up to `daily_email_limit` outreach emails for Old Website leads."""
+def send_outreach_emails(
+    db_path: str,
+    config:  dict,
+    dry_run: bool = False,
+) -> None:
+    """
+    Send outreach emails to:
+      - 'Old Website' leads  (pitch: modern redesign)
+      - 'No Booking/AI' leads (pitch: AI booking assistant)
 
+    Rules:
+      - Auto-start only when >= 10 new leads exist (freshness gate)
+      - Send at most 50 emails per day (today's sent count tracked in DB)
+      - Wait 10 minutes between each real send (avoids spam flags)
+      - Dry-run: log to console, no wait, mark 'Sent (Dry Run)'
+    """
+    is_dry_run = dry_run
+
+    smtp_host     = os.environ.get("SMTP_HOST",     "smtp.gmail.com").strip()
+    smtp_port     = int(os.environ.get("SMTP_PORT",  "587"))
     smtp_user     = os.environ.get("SMTP_USER",     "").strip()
     smtp_password = os.environ.get("SMTP_PASSWORD", "").strip()
-    smtp_host     = os.environ.get("SMTP_HOST",     "smtp.gmail.com").strip()
-    smtp_port     = int(os.environ.get("SMTP_PORT", "587"))
     smtp_from     = os.environ.get("SMTP_FROM",     smtp_user).strip()
 
-    is_dry_run = dry_run or not (smtp_user and smtp_password)
-
-    with sqlite3.connect(db_path) as conn:
-        cursor = conn.cursor()
-        cursor.execute("""
-            SELECT id, name, email, website, query, location
-            FROM leads
-            WHERE status       = 'Old Website'
-              AND email_status = 'Not Sent'
-              AND email        IS NOT NULL
-              AND email        != ''
-            LIMIT ?
-        """, (config["daily_email_limit"],))
-        leads_to_email = cursor.fetchall()
-
-    if not leads_to_email:
-        print("\n[Outreach] No eligible leads in queue.")
+    if not (smtp_user and smtp_password) and not is_dry_run:
+        print("\n[Outreach] SMTP credentials missing — skipping email stage.")
         return
 
-    print(f"\n[Outreach] {len(leads_to_email)} leads to contact today.")
+    DAILY_CAP    = config.get("daily_email_limit", 50)
+    MIN_NEW_LEADS = 10   # don't start emailing until at least 10 new leads exist today
+    SEND_GAP_SEC  = 600  # 10 minutes between real emails
+    today         = datetime.now().strftime("%Y-%m-%d")
+
+    with sqlite3.connect(db_path) as conn:
+        # How many emails already sent today?
+        sent_today = conn.execute(
+            "SELECT COUNT(*) FROM leads WHERE sent_at LIKE ?",
+            (f"{today}%",)
+        ).fetchone()[0]
+
+        # How many new leads scraped today? (freshness gate)
+        new_today = conn.execute(
+            "SELECT COUNT(*) FROM leads WHERE scraped_at LIKE ?",
+            (f"{today}%",)
+        ).fetchone()[0]
+
+        print(f"\n[Outreach] Leads scraped today: {new_today}  |  Emails sent today: {sent_today}/{DAILY_CAP}")
+
+        if new_today < MIN_NEW_LEADS:
+            print(f"[Outreach] Freshness gate: only {new_today} new leads today "
+                  f"(need {MIN_NEW_LEADS}). Skipping email stage.")
+            return
+
+        if sent_today >= DAILY_CAP:
+            print(f"[Outreach] Daily cap of {DAILY_CAP} emails already reached. Done.")
+            return
+
+        remaining_slots = DAILY_CAP - sent_today
+
+        # Pull eligible leads: Old Website + No Booking/AI — unsent, have email
+        leads_to_email = conn.execute("""
+            SELECT id, name, email, website, query, location, status
+            FROM   leads
+            WHERE  status       IN ('Old Website', 'No Booking/AI')
+              AND  email_status  = 'Not Sent'
+              AND  email         IS NOT NULL
+              AND  email         != ''
+            ORDER BY scraped_at DESC
+            LIMIT ?
+        """, (remaining_slots,)).fetchall()
+
+    if not leads_to_email:
+        print("[Outreach] No eligible leads in queue.")
+        return
+
+    print(f"[Outreach] {len(leads_to_email)} leads to contact (cap remaining: {remaining_slots}).")
     if is_dry_run:
-        print("  [DRY-RUN] Emails will be logged, not dispatched.")
+        print("  [DRY-RUN] Emails will be logged, not dispatched (no 10-min wait).")
 
     sent_count = 0
 
     with sqlite3.connect(db_path) as conn:
         cursor = conn.cursor()
 
-        for lead_id, name, email, website, query_term, location in leads_to_email:
+        for lead_id, name, email, website, query_term, location, lead_status in leads_to_email:
 
             # Resolve niche from keyword
             niche = "dental"
@@ -407,8 +525,19 @@ def send_outreach_emails(db_path: str, config: dict, dry_run: bool = False) -> N
                     niche = kw["niche"]
                     break
 
-            template  = config["email_templates"][niche]
-            promo_url = config["promo_urls"][niche]
+            # Choose template based on lead type
+            if lead_status == "No Booking/AI":
+                template_key = f"{niche}_no_booking_ai"
+                # Fall back to generic no_booking_ai if niche-specific missing
+                template = (
+                    config["email_templates"].get(template_key)
+                    or config["email_templates"].get("no_booking_ai")
+                    or config["email_templates"].get(niche)   # ultimate fallback
+                )
+            else:
+                template = config["email_templates"].get(niche) or list(config["email_templates"].values())[0]
+
+            promo_url = config["promo_urls"].get(niche, config["promo_urls"].get("dental", ""))
             subject   = template["subject"].format(business_name=name)
             body      = template["body"].format(
                 business_name=name,
@@ -417,17 +546,18 @@ def send_outreach_emails(db_path: str, config: dict, dry_run: bool = False) -> N
             )
 
             if is_dry_run:
-                print(f"\n  [DRY-RUN] → {email}  |  {name}")
+                print(f"\n  [DRY-RUN][{lead_status}] -> {email}  |  {name}")
                 print(f"  Subject : {subject}")
-                print(f"  Preview : {body[:180]}…")
+                print(f"  Preview : {body[:180]}...")
                 cursor.execute(
                     "UPDATE leads SET email_status='Sent (Dry Run)', sent_at=? WHERE id=?",
                     (datetime.now().isoformat(), lead_id),
                 )
+                conn.commit()
                 sent_count += 1
-                continue
+                continue  # no wait in dry-run
 
-            # FIX #5: Use context manager so the socket is always closed
+            # Real send
             try:
                 msg = MIMEMultipart()
                 msg["From"]    = smtp_from
@@ -445,21 +575,30 @@ def send_outreach_emails(db_path: str, config: dict, dry_run: bool = False) -> N
                     "UPDATE leads SET email_status='Sent', sent_at=? WHERE id=?",
                     (datetime.now().isoformat(), lead_id),
                 )
-                print(f"  [Sent] {email}  |  {name}")
+                conn.commit()
+                print(f"  [Sent][{lead_status}] {email}  |  {name}")
                 sent_count += 1
-                time.sleep(1.5)   # polite delay between sends
+
+                # Check if daily cap now reached
+                if sent_count + sent_today >= DAILY_CAP:
+                    print(f"  [Cap] Daily limit of {DAILY_CAP} reached. Stopping.")
+                    break
+
+                # 10-minute gap between sends (avoids spam flags)
+                remaining = len(leads_to_email) - sent_count
+                if remaining > 0:
+                    print(f"  [Wait] Pausing 10 minutes before next email ({remaining} remaining)...")
+                    time.sleep(SEND_GAP_SEC)
 
             except Exception as mail_err:
-                # FIX #4: write error to dedicated email_error column, preserve website_notes
                 print(f"  [Error] {email}: {mail_err}")
                 cursor.execute(
                     "UPDATE leads SET email_status='Failed', email_error=? WHERE id=?",
                     (str(mail_err), lead_id),
                 )
+                conn.commit()
 
-        conn.commit()
-
-    print(f"[Outreach] Finished. {sent_count} emails dispatched.")
+    print(f"[Outreach] Finished. {sent_count} emails dispatched today (total: {sent_count + sent_today}).")
 
 # ---------------------------------------------------------------------------
 # Inbound Reply Tracking

@@ -27,6 +27,18 @@
     "derm": {
       "subject": "Modernizing patient bookings & reminders at {business_name}",
       "body": "Hi there,\n\nI was browsing your clinic's web page ({website_url}) and noticed that it doesn't currently offer real-time patient booking or automatic appointment reminders.\n\nWe've built a premium patient scheduler and reminder engine specifically tailored for dermatology clinics. It simplifies scheduling for your staff and automatically texts/emails patients before their appointment to eliminate no-shows.\n\nHave a look at our dermatological system demo here:\n{promo_url}\n\nI'd love to chat briefly about how we can integrate this into {business_name}. Do you have 5 minutes for a call sometime this week?\n\nBest regards,\nAditya Tyagi"
+    },
+    "dental_no_booking_ai": {
+      "subject": "AI booking assistant for {business_name}",
+      "body": "Hi there,\n\nI came across {business_name} online — your website looks great, but I noticed you don't currently have an online booking system or AI assistant for patients.\n\nIn today's market, 67% of patients prefer to book appointments online rather than call. We've built an AI-powered booking assistant specifically for dental practices that:\n\n  - Lets patients book 24/7 from your website\n  - Sends automatic SMS & email reminders (reduces no-shows by 30%)\n  - Answers common patient questions instantly via AI chat\n  - Integrates with your existing calendar in under 48 hours\n\nYou can see a live demo here:\n{promo_url}\n\nWould you be open to a quick 5-minute call to see how it would work for {business_name}?\n\nBest regards,\nAditya Tyagi"
+    },
+    "derm_no_booking_ai": {
+      "subject": "AI appointment booking for {business_name}",
+      "body": "Hi there,\n\nI found {business_name} online — your clinic's website looks professional, but I noticed there's no online booking or AI assistant for your patients.\n\nDermatology clinics that add AI-powered booking see on average 40% more appointment requests from their website. Our system:\n\n  - Allows patients to book consultations 24/7 without calling\n  - Automatically reminds patients via SMS & email before appointments\n  - Uses an AI assistant to answer FAQs and pre-screen new patients\n  - Takes less than 48 hours to set up — no tech knowledge needed\n\nSee our live dermatology booking demo:\n{promo_url}\n\nWould love to show you how this could work for {business_name} — do you have 5 minutes this week?\n\nBest regards,\nAditya Tyagi"
+    },
+    "no_booking_ai": {
+      "subject": "AI booking assistant for {business_name}",
+      "body": "Hi there,\n\nI came across {business_name} online — your website looks great, but I noticed you don't currently have an online booking system or AI assistant.\n\nIn today's market, patients expect to book appointments online 24/7. We've built an AI-powered booking assistant that:\n\n  - Lets patients book instantly from your website\n  - Sends automatic appointment reminders (reduces no-shows by 30%)\n  - Answers common questions via AI chat — even after hours\n  - Integrates with your schedule in under 48 hours\n\nLive demo:\n{promo_url}\n\nCould we jump on a quick 5-minute call to walk you through it?\n\nBest regards,\nAditya Tyagi"
     }
   }
 }
