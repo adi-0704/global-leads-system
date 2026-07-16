@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smile Dental Care — Gentle, Modern Dentistry in Mumbai</title>
+  <meta name="description" content="Smile Dental Care is a modern dental clinic in Bandra, Mumbai offering painless dentistry, implants, braces, teeth whitening and family dental care. Book your appointment today."/>
+  <meta name="keywords" content="dentist Mumbai, dental clinic Bandra, dental implants, braces, teeth whitening, root canal, family dentist"/>
+  <meta property="og:title" content="Smile Dental Care — Gentle, Modern Dentistry"/>
+  <meta property="og:description" content="Your smile, our priority. Painless, modern dental care for the whole family in Bandra, Mumbai."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ═══════════ TOP BAR ════════════════════════════════════════ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <div class="tb-left">
+      <span class="tb-item">📍 12 Turner Road, Bandra West, Mumbai</span>
+      <span class="tb-sep">·</span>
+      <span class="tb-item">🕘 Mon–Sat: 9am – 8pm</span>
+    </div>
+    <div class="tb-right">
+      <a href="tel:+912266778899" class="tb-item">📞 +91 22 6677 8899</a>
+      <span class="tb-sep">·</span>
+      <a href="#book" class="tb-emergency">🦷 Dental Emergency? Call us now</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ NAV ════════════════════════════════════════════ -->
+<nav class="nav" id="navbar">
+  <div class="container nav-inner">
+    <a href="#home" class="logo" aria-label="Smile Dental Care Home">
+      <span class="logo-mark" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 3c-2.5 0-3.5 1-5 1S4 3.2 3 4.5C1.8 6 2 9 2.8 12.2c.6 2.5 1.4 6.3 3 6.8 1.2.4 1.7-1.5 2.2-3 .5-1.4.9-2.5 2-2.5s1.5 1.1 2 2.5c.5 1.5 1 3.4 2.2 3 1.6-.5 2.4-4.3 3-6.8C22 9 22.2 6 21 4.5 20 3.2 18.5 4 17 4s-2.5-1-5-1Z" fill="currentColor"/></svg>
+      </span>
+      <span class="logo-text">Smile <b>Dental Care</b></span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#why">Why Us</a></li>
+      <li><a href="#doctors">Our Team</a></li>
+      <li><a href="#reviews">Reviews</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="tel:+912266778899" class="btn btn-ghost btn-sm nav-call">📞 Call</a>
+      <a href="#book" class="btn btn-primary btn-sm">Book Appointment</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">☰</button>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#home" onclick="closeMobile()">Home</a>
+    <a href="#services" onclick="closeMobile()">Services</a>
+    <a href="#why" onclick="closeMobile()">Why Us</a>
+    <a href="#doctors" onclick="closeMobile()">Our Team</a>
+    <a href="#reviews" onclick="closeMobile()">Reviews</a>
+    <a href="#contact" onclick="closeMobile()">Contact</a>
+    <a href="#book" class="btn btn-primary btn-sm" onclick="closeMobile()" style="margin-top:8px">Book Appointment</a>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ════════════════════════════════════════════ -->
+<header class="hero" id="home">
+  <div class="hero-blob" aria-hidden="true"></div>
+  <div class="container hero-inner">
+    <div class="hero-content reveal">
+      <div class="hero-badge"><span class="hb-stars">★★★★★</span> 4.9 · 320+ Google reviews</div>
+      <h1 class="hero-h1">Your Smile,<br/><span class="accent">Our Priority.</span></h1>
+      <p class="hero-p">Gentle, modern and painless dentistry for the whole family. From routine check-ups to implants and smile makeovers — we make every visit comfortable, transparent and stress-free.</p>
+      <div class="hero-actions">
+        <a href="#book" class="btn btn-primary btn-lg">Book Appointment →</a>
+        <a href="tel:+912266778899" class="btn btn-outline btn-lg">📞 +91 22 6677 8899</a>
+      </div>
+      <div class="hero-trust">
+        <div class="ht-item"><span class="ht-ic">🦷</span> Painless treatments</div>
+        <div class="ht-item"><span class="ht-ic">🛡️</span> Strict sterilisation</div>
+        <div class="ht-item"><span class="ht-ic">💳</span> 0% EMI available</div>
+      </div>
+    </div>
+
+    <div class="hero-visual reveal">
+      <div class="hero-photo" role="img" aria-label="Smiling dental patient">
+        <svg class="hp-illus" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+          <circle cx="100" cy="78" r="42" fill="#fff"/>
+          <path d="M70 74c0-6 60-6 60 0 0 20-13 34-30 34S70 94 70 74Z" fill="#0f766e" opacity=".12"/>
+          <path d="M74 78h52c-2 16-13 28-26 28S76 94 74 78Z" fill="#fff"/>
+          <path d="M74 78h52l-2 6H76l-2-6Z" fill="#e2e8f0"/>
+          <circle cx="86" cy="66" r="4" fill="#0f766e"/>
+          <circle cx="114" cy="66" r="4" fill="#0f766e"/>
+          <path d="M100 118c26 0 42 14 46 34H54c4-20 20-34 46-34Z" fill="#14b8a6"/>
+        </svg>
+      </div>
+      <div class="hero-card hc-1">
+        <span class="hc-ic">📅</span>
+        <div><strong>Same-day appointments</strong><small>Walk-ins welcome</small></div>
+      </div>
+      <div class="hero-card hc-2">
+        <span class="hc-ic tealbg">👨‍⚕️</span>
+        <div><strong>15+ years experience</strong><small>MDS specialists</small></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature strip -->
+  <div class="container">
+    <div class="hero-strip reveal">
+      <div class="hs-item"><span class="hs-ic">🕘</span><div><strong>Open 6 Days</strong><small>Mon–Sat, 9am–8pm</small></div></div>
+      <div class="hs-item"><span class="hs-ic">🚗</span><div><strong>Easy Parking</strong><small>Metro & valet nearby</small></div></div>
+      <div class="hs-item"><span class="hs-ic">🧾</span><div><strong>Transparent Pricing</strong><small>No hidden costs</small></div></div>
+      <div class="hs-item"><span class="hs-ic">👶</span><div><strong>Kid-Friendly</strong><small>Gentle pediatric care</small></div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ SERVICES ═══════════════════════════════════════ -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Our Services</span>
+      <h2 class="sec-h2">Complete Dental Care Under One Roof</h2>
+      <p class="sec-p">Whatever your smile needs, our specialists have you covered — with the latest technology and a gentle, patient-first approach.</p>
+    </div>
+    <div class="serv-grid">
+      <article class="serv-card reveal">
+        <div class="serv-ic">🦷</div>
+        <h3>General Dentistry</h3>
+        <p>Routine check-ups, cleanings, fillings and preventive care to keep your teeth healthy for life.</p>
+        <span class="serv-from">From ₹500</span>
+      </article>
+      <article class="serv-card reveal">
+        <div class="serv-ic">⚙️</div>
+        <h3>Dental Implants</h3>
+        <p>Permanent, natural-looking tooth replacement with premium implants and a 5-year warranty.</p>
+        <span class="serv-from">From ₹25,000</span>
+      </article>
+      <article class="serv-card reveal">
+        <div class="serv-ic">😁</div>
+        <h3>Braces & Aligners</h3>
+        <p>Straighten your smile with metal, ceramic or clear invisible aligners for teens and adults.</p>
+        <span class="serv-from">From ₹35,000</span>
+      </article>
+      <article class="serv-card reveal">
+        <div class="serv-ic">✨</div>
+        <h3>Teeth Whitening</h3>
+        <p>Brighten your smile up to 8 shades in a single sitting with safe, professional whitening.</p>
+        <span class="serv-from">From ₹8,000</span>
+      </article>
+      <article class="serv-card reveal">
+        <div class="serv-ic">🩹</div>
+        <h3>Root Canal</h3>
+        <p>Painless, single-visit root canal treatment using advanced rotary endodontics.</p>
+        <span class="serv-from">From ₹4,500</span>
+      </article>
+      <article class="serv-card reveal">
+        <div class="serv-ic">👶</div>
+        <h3>Kids Dentistry</h3>
+        <p>Gentle, fear-free dental care designed to make your child's first visits a happy one.</p>
+        <span class="serv-from">From ₹600</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ WHY US ═════════════════════════════════════════ -->
+<section class="section why-section" id="why">
+  <div class="container why-grid">
+    <div class="why-visual reveal">
+      <div class="why-photo">
+        <div class="why-badge-float">
+          <div class="wbf-num">4.9★</div>
+          <div class="wbf-lbl">Google Rating<br/>320+ reviews</div>
+        </div>
+        <svg class="why-illus" viewBox="0 0 240 260" fill="none" aria-hidden="true">
+          <rect x="20" y="30" width="200" height="200" rx="20" fill="#fff"/>
+          <rect x="40" y="55" width="160" height="14" rx="7" fill="#ccfbf1"/>
+          <rect x="40" y="85" width="120" height="10" rx="5" fill="#e2e8f0"/>
+          <rect x="40" y="105" width="140" height="10" rx="5" fill="#e2e8f0"/>
+          <circle cx="70" cy="165" r="24" fill="#14b8a6"/>
+          <path d="M60 165l7 7 13-14" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="110" y="150" width="90" height="10" rx="5" fill="#e2e8f0"/>
+          <rect x="110" y="170" width="70" height="10" rx="5" fill="#e2e8f0"/>
+        </svg>
+      </div>
+    </div>
+    <div class="why-content reveal">
+      <span class="eyebrow">Why Choose Us</span>
+      <h2 class="sec-h2">Dentistry That Actually Feels Comfortable</h2>
+      <p class="sec-p">We combine world-class clinical expertise with genuine warmth — so you leave with a healthier smile and zero anxiety.</p>
+      <ul class="why-list">
+        <li><span class="wl-ic">✓</span><div><strong>Painless, anxiety-free care</strong><span>Advanced numbing and sedation options for a truly comfortable visit.</span></div></li>
+        <li><span class="wl-ic">✓</span><div><strong>Hospital-grade sterilisation</strong><span>Every instrument autoclaved; single-use disposables as standard.</span></div></li>
+        <li><span class="wl-ic">✓</span><div><strong>Transparent, upfront pricing</strong><span>You approve every treatment plan and cost before we begin — no surprises.</span></div></li>
+        <li><span class="wl-ic">✓</span><div><strong>Latest digital technology</strong><span>Digital X-rays, intraoral scanners and same-day crowns.</span></div></li>
+      </ul>
+      <a href="#book" class="btn btn-primary btn-lg">Schedule Your Visit →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STATS ══════════════════════════════════════════ -->
+<section class="stats-band">
+  <div class="container stats-inner">
+    <div class="stat reveal"><div class="stat-n" data-target="15">0</div><span class="stat-suf">+</span><div class="stat-l">Years of Care</div></div>
+    <div class="stat reveal"><div class="stat-n" data-target="25000">0</div><span class="stat-suf">+</span><div class="stat-l">Happy Patients</div></div>
+    <div class="stat reveal"><div class="stat-n" data-target="6">0</div><div class="stat-l">Specialist Doctors</div></div>
+    <div class="stat reveal"><div class="stat-n" data-target="320">0</div><span class="stat-suf">+</span><div class="stat-l">5★ Reviews</div></div>
+  </div>
+</section>
+
+<!-- ═══════════ DOCTORS ════════════════════════════════════════ -->
+<section class="section" id="doctors">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Meet Our Team</span>
+      <h2 class="sec-h2">Caring Specialists You Can Trust</h2>
+      <p class="sec-p">Our dentists are highly qualified, gentle, and genuinely passionate about your comfort.</p>
+    </div>
+    <div class="doc-grid">
+      <article class="doc-card reveal">
+        <div class="doc-photo dp-1"><span>AM</span></div>
+        <div class="doc-info">
+          <h3>Dr. Aditi Mehta</h3>
+          <div class="doc-role">MDS · Implantologist & Founder</div>
+          <p>15+ years placing implants and crafting smile makeovers with an ultra-gentle touch.</p>
+        </div>
+      </article>
+      <article class="doc-card reveal">
+        <div class="doc-photo dp-2"><span>RK</span></div>
+        <div class="doc-info">
+          <h3>Dr. Rahul Kapoor</h3>
+          <div class="doc-role">MDS · Orthodontist</div>
+          <p>Specialist in braces and clear aligners, transforming smiles for teens and adults.</p>
+        </div>
+      </article>
+      <article class="doc-card reveal">
+        <div class="doc-photo dp-3"><span>SN</span></div>
+        <div class="doc-info">
+          <h3>Dr. Sneha Nair</h3>
+          <div class="doc-role">BDS · Pediatric & Preventive</div>
+          <p>Makes every child's dental visit fun, friendly and completely fear-free.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ REVIEWS ════════════════════════════════════════ -->
+<section class="section reviews-section" id="reviews">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Patient Reviews</span>
+      <h2 class="sec-h2">Loved by Thousands of Smiles</h2>
+      <p class="sec-p">We're proud to be one of Mumbai's highest-rated dental clinics.</p>
+    </div>
+    <div class="rev-grid">
+      <blockquote class="rev-card reveal">
+        <div class="rev-stars">★★★★★</div>
+        <p>"I used to dread the dentist. Dr. Mehta and her team were so gentle and patient — I honestly felt zero pain during my root canal. Highly recommend!"</p>
+        <footer><span class="rev-av av-1">PM</span><div><strong>Priya M.</strong><small>Google Review</small></div></footer>
+      </blockquote>
+      <blockquote class="rev-card reveal">
+        <div class="rev-stars">★★★★★</div>
+        <p>"Got my implants done here and the results are amazing. Everything was explained clearly and the pricing was exactly what they quoted. Spotlessly clean clinic."</p>
+        <footer><span class="rev-av av-2">RS</span><div><strong>Rahul S.</strong><small>Google Review</small></div></footer>
+      </blockquote>
+      <blockquote class="rev-card reveal">
+        <div class="rev-stars">★★★★★</div>
+        <p>"My 6-year-old actually asks to go back! The kids' area and Dr. Sneha are wonderful. Finally a dentist the whole family loves."</p>
+        <footer><span class="rev-av av-3">AK</span><div><strong>Anita K.</strong><small>Google Review</small></div></footer>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ BOOKING / CONTACT ══════════════════════════════ -->
+<section class="section book-section" id="book">
+  <div class="container">
+    <div class="book-wrap reveal">
+      <div class="book-left" id="contact">
+        <span class="eyebrow light">Book an Appointment</span>
+        <h2>Ready for a Healthier, Happier Smile?</h2>
+        <p>Book online in under a minute, or give us a call. New patients always welcome — we'll confirm your slot within a couple of hours.</p>
+
+        <div class="book-contacts">
+          <a href="tel:+912266778899" class="bc-item">
+            <span class="bc-ic">📞</span>
+            <div><small>Call the clinic</small><strong>+91 22 6677 8899</strong></div>
+          </a>
+          <a href="https://wa.me/912266778899" class="bc-item">
+            <span class="bc-ic">💬</span>
+            <div><small>WhatsApp us</small><strong>+91 22 6677 8899</strong></div>
+          </a>
+          <div class="bc-item">
+            <span class="bc-ic">📍</span>
+            <div><small>Visit us</small><strong>12 Turner Road, Bandra West, Mumbai</strong></div>
+          </div>
+          <div class="bc-item">
+            <span class="bc-ic">🕘</span>
+            <div><small>Opening hours</small><strong>Mon–Sat: 9am – 8pm · Sun: Closed</strong></div>
+          </div>
+        </div>
+
+        <!-- Reminder badge -->
+        <div class="reminder-badge">
+          <span class="rb-icon">⏰</span>
+          <div>
+            <strong>Automatic Reminders Included</strong>
+            <span>You'll receive email reminders 24 hours and 2 hours before your appointment — so you never miss a slot.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-right">
+        <form id="bookForm" onsubmit="handleBooking(event)" novalidate>
+          <h3>Request Your Appointment</h3>
+
+          <div class="form-row-2">
+            <div class="fg">
+              <label for="bName">Full Name</label>
+              <input type="text" id="bName" placeholder="e.g. Priya Sharma" required/>
+            </div>
+            <div class="fg">
+              <label for="bPhone">Phone Number</label>
+              <input type="tel" id="bPhone" placeholder="+91 98765 43210" required/>
+            </div>
+          </div>
+
+          <div class="fg">
+            <label for="bEmail">Email <span class="opt">(for reminders)</span></label>
+            <input type="email" id="bEmail" placeholder="you@example.com"/>
+          </div>
+
+          <div class="form-row-2">
+            <div class="fg">
+              <label for="bService">Service</label>
+              <select id="bService" required>
+                <option value="">Select service</option>
+                <option>General Check-up</option>
+                <option>Teeth Cleaning</option>
+                <option>Dental Implants</option>
+                <option>Braces / Aligners</option>
+                <option>Teeth Whitening</option>
+                <option>Root Canal</option>
+                <option>Kids Dentistry</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label for="bDate">Preferred Date</label>
+              <input type="date" id="bDate" required/>
+            </div>
+          </div>
+
+          <div class="fg">
+            <label for="bTime">Preferred Time</label>
+            <select id="bTime">
+              <option value="09:00">9:00 AM</option>
+              <option value="10:00">10:00 AM</option>
+              <option value="11:00">11:00 AM</option>
+              <option value="12:00">12:00 PM</option>
+              <option value="14:00" selected>2:00 PM</option>
+              <option value="15:00">3:00 PM</option>
+              <option value="16:00">4:00 PM</option>
+              <option value="17:00">5:00 PM</option>
+              <option value="18:00">6:00 PM</option>
+              <option value="19:00">7:00 PM</option>
+            </select>
+          </div>
+
+          <div class="fg">
+            <label for="bNotes">Notes <span class="opt">(optional)</span></label>
+            <textarea id="bNotes" rows="2" placeholder="Anything we should know?"></textarea>
+          </div>
+
+          <div class="form-error hidden" id="bookError">
+            ⚠️ Please fill in all required fields (Name, Phone, Date).
+          </div>
+          <div class="form-server-error hidden" id="serverError"></div>
+
+          <button type="submit" class="btn btn-primary btn-full btn-lg" id="bookBtn">
+            <span id="bookBtnText">Book Appointment →</span>
+            <span id="bookBtnLoading" class="hidden">⏳ Booking…</span>
+          </button>
+          <p class="form-note">🔒 Your details are kept private. Automatic reminders will be sent before your visit.</p>
+        </form>
+
+        <div class="book-success hidden" id="bookSuccess">
+          <div class="bs-ic">🎉</div>
+          <h3>Request received!</h3>
+          <p>Thank you — our front desk will call you shortly to confirm your appointment time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="container footer-grid">
+    <div class="f-brand">
+      <a href="#home" class="logo logo-light">
+        <span class="logo-mark" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3c-2.5 0-3.5 1-5 1S4 3.2 3 4.5C1.8 6 2 9 2.8 12.2c.6 2.5 1.4 6.3 3 6.8 1.2.4 1.7-1.5 2.2-3 .5-1.4.9-2.5 2-2.5s1.5 1.1 2 2.5c.5 1.5 1 3.4 2.2 3 1.6-.5 2.4-4.3 3-6.8C22 9 22.2 6 21 4.5 20 3.2 18.5 4 17 4s-2.5-1-5-1Z" fill="currentColor"/></svg>
+        </span>
+        <span class="logo-text">Smile <b>Dental Care</b></span>
+      </a>
+      <p>Gentle, modern dentistry for the whole family in Bandra, Mumbai. Your comfort is our priority.</p>
+      <div class="f-social">
+        <a href="#" aria-label="Instagram"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.72 0 3.06.01 4.12.06 1.07.05 1.8.22 2.43.47.66.26 1.22.6 1.77 1.15.55.55.9 1.11 1.15 1.77.25.63.42 1.36.47 2.43.05 1.06.06 1.4.06 4.12s-.01 3.06-.06 4.12c-.05 1.07-.22 1.8-.47 2.43a4.9 4.9 0 0 1-1.15 1.77c-.55.55-1.11.9-1.77 1.15-.63.25-1.36.42-2.43.47-1.06.05-1.4.06-4.12.06s-3.06-.01-4.12-.06c-1.07-.05-1.8-.22-2.43-.47a4.9 4.9 0 0 1-1.77-1.15 4.9 4.9 0 0 1-1.15-1.77c-.25-.63-.42-1.36-.47-2.43C2.01 15.06 2 14.72 2 12s.01-3.06.06-4.12c.05-1.07.22-1.8.47-2.43.26-.66.6-1.22 1.15-1.77.55-.55 1.11-.9 1.77-1.15.63-.25 1.36-.42 2.43-.47C8.94 2.01 9.28 2 12 2Zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 8.25a3.25 3.25 0 1 1 0-6.5 3.25 3.25 0 0 1 0 6.5Zm5.2-8.4a1.17 1.17 0 1 0 0-2.34 1.17 1.17 0 0 0 0 2.34Z"/></svg></a>
+        <a href="#" aria-label="Facebook"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z"/></svg></a>
+        <a href="#" aria-label="WhatsApp"><svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49s1.07 2.89 1.22 3.09c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35ZM12 2a10 10 0 0 0-8.5 15.28L2 22l4.83-1.47A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-2.98-.4-4.27-1.17l-.3-.18-2.87.87.87-2.8-.2-.31A8.2 8.2 0 1 1 12 20.2Z"/></svg></a>
+      </div>
+    </div>
+    <div class="f-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">General Dentistry</a></li>
+        <li><a href="#services">Dental Implants</a></li>
+        <li><a href="#services">Braces & Aligners</a></li>
+        <li><a href="#services">Teeth Whitening</a></li>
+        <li><a href="#services">Root Canal</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <h4>Clinic</h4>
+      <ul>
+        <li><a href="#why">Why Choose Us</a></li>
+        <li><a href="#doctors">Our Team</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#book">Book Appointment</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <h4>Visit Us</h4>
+      <ul class="f-contact">
+        <li>📍 12 Turner Road, Bandra West, Mumbai 400050</li>
+        <li>📞 +91 22 6677 8899</li>
+        <li>✉️ hello@smiledentalcare.in</li>
+        <li>🕘 Mon–Sat: 9am – 8pm</li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <p>© 2026 Smile Dental Care. All rights reserved.</p>
+    <div class="fb-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms</a>
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Sticky mobile CTA -->
+<div class="sticky-bar" id="stickyBar">
+  <a href="tel:+912266778899" class="btn btn-outline btn-sm">📞 Call</a>
+  <a href="#book" class="btn btn-primary" style="flex:1">Book Appointment</a>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Exports / temp files
+exports/
+*.csv
+*.log
+
+# Keep leads.db tracked in git (the Actions bot writes it back)
+# If a future .gitignore template tries to ignore *.db, override it here:
+!global-outreach/leads.db

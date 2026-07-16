@@ -1,0 +1,32 @@
+{
+  "keywords": [
+    { "term": "dentist", "niche": "dental" },
+    { "term": "dental clinic", "niche": "dental" },
+    { "term": "dermatologist", "niche": "derm" },
+    { "term": "skin clinic", "niche": "derm" }
+  ],
+  "cities": [
+    "London", "Birmingham", "Manchester", "Leeds", "Glasgow", "Liverpool", "Newcastle", "Bristol", "Sheffield",
+    "New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "San Diego", "Dallas",
+    "Toronto", "Montreal", "Vancouver", "Calgary", "Ottawa", "Edmonton", "Winnipeg",
+    "Sydney", "Melbourne", "Brisbane", "Perth", "Adelaide",
+    "Dublin", "Auckland", "Singapore", "Cape Town",
+    "Oxford", "Cambridge", "Bath", "York", "Edinburgh", "Cardiff",
+    "Seattle", "Boston", "Denver", "Miami", "San Francisco", "Austin", "Atlanta"
+  ],
+  "daily_email_limit": 50,
+  "promo_urls": {
+    "dental": "https://adityatyagi.github.io/startup/website/dental-website/",
+    "derm": "https://adityatyagi.github.io/startup/website/derm-site/"
+  },
+  "email_templates": {
+    "dental": {
+      "subject": "Online patient booking for {business_name}",
+      "body": "Hi there,\n\nI was looking at your practice online and noticed that your website ({website_url}) might be running on an older platform and doesn't offer a smooth online booking experience for mobile patients.\n\nWe recently developed a responsive, premium booking and automatic patient reminder system designed specifically for dental practices. It helps capture more patient bookings and reduces no-shows by up to 30%.\n\nYou can see our live booking demo here:\n{promo_url}\n\nIf you'd be open to seeing how this can be tailored to {business_name}, let me know when is a good time to speak.\n\nBest regards,\nAditya Tyagi"
+    },
+    "derm": {
+      "subject": "Modernizing patient bookings & reminders at {business_name}",
+      "body": "Hi there,\n\nI was browsing your clinic's web page ({website_url}) and noticed that it doesn't currently offer real-time patient booking or automatic appointment reminders.\n\nWe've built a premium patient scheduler and reminder engine specifically tailored for dermatology clinics. It simplifies scheduling for your staff and automatically texts/emails patients before their appointment to eliminate no-shows.\n\nHave a look at our dermatological system demo here:\n{promo_url}\n\nI'd love to chat briefly about how we can integrate this into {business_name}. Do you have 5 minutes for a call sometime this week?\n\nBest regards,\nAditya Tyagi"
+    }
+  }
+}

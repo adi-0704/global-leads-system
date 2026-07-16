@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Presence Audit Report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="audit.css">
+</head>
+<body>
+
+  <!-- Floating glowing orbs (hidden on print) -->
+  <div class="bg-glow print-hidden" aria-hidden="true">
+    <div class="orb orb-blue"></div>
+    <div class="orb orb-purple"></div>
+  </div>
+
+  <!-- Action Bar (hidden on print) -->
+  <div class="action-bar print-hidden">
+    <div class="action-bar-container">
+      <div class="status-indicator">
+        <span class="pulse-dot"></span> Live Personalized Report
+      </div>
+      <div class="action-buttons">
+        <button class="btn btn-secondary" onclick="copyReportLink()">
+          <span>🔗</span> Copy Report Link
+        </button>
+        <button class="btn btn-primary" onclick="window.print()">
+          <span>🖨️</span> Save PDF / Print
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Report Container -->
+  <main class="audit-report-container">
+    
+    <!-- HEADER -->
+    <header class="report-header">
+      <div class="header-main">
+        <div class="report-badge">DIGITAL ANALYSIS REPORT</div>
+        <h1 id="rpt-clinic-name">Anand Dental Clinic</h1>
+        <p class="report-subtitle">
+          Practice Growth & Patient Acquisition Audit | <span id="rpt-city">Mumbai</span>
+        </p>
+      </div>
+      <div class="header-meta">
+        <div class="meta-item">
+          <span class="meta-label">Date Generated</span>
+          <span class="meta-value" id="rpt-date">12-Jul-2026</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Audited Category</span>
+          <span class="meta-value" id="rpt-specialty">Dental Medicine</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- CORE AUDIT ROW -->
+    <div class="audit-grid">
+      
+      <!-- SCORE CARD -->
+      <div class="audit-card score-card">
+        <h3>Visibility & Onboarding Score</h3>
+        <div class="gauge-container">
+          <svg viewBox="0 0 100 100" class="gauge">
+            <circle cx="50" cy="50" r="40" class="gauge-bg" />
+            <circle cx="50" cy="50" r="40" class="gauge-fill" id="gauge-fill-circle" stroke-dasharray="251.2" stroke-dashoffset="251.2" />
+          </svg>
+          <div class="gauge-text">
+            <span class="gauge-number" id="rpt-score">32</span>
+            <span class="gauge-max">/100</span>
+          </div>
+        </div>
+        <div class="score-badge critical" id="rpt-score-badge">
+          ⚠️ CRITICAL PATIENT LOSS RISK
+        </div>
+        <p class="score-desc">
+          Your Google profile is active, but you are losing approximately <strong>82% of local search intent</strong> because you do not have a dedicated mobile booking landing page.
+        </p>
+      </div>
+
+      <!-- GAP CHECKLIST -->
+      <div class="audit-card gaps-card">
+        <h3>Patient Journey Gap Analysis</h3>
+        <div class="gap-list">
+          
+          <div class="gap-item pass">
+            <div class="gap-status">✔</div>
+            <div class="gap-info">
+              <h4>Google Business Listing</h4>
+              <p>Verified on Google Maps with <strong id="rpt-rating">⭐ 4.2</strong> (based on <span id="rpt-reviews">32</span> patient reviews).</p>
+            </div>
+          </div>
+
+          <div class="gap-item fail">
+            <div class="gap-status">✕</div>
+            <div class="gap-info">
+              <h4>Official Practice Website</h4>
+              <p>No website linked. Patients cannot read doctor bios, treatment details, or check consultation rates before visiting.</p>
+            </div>
+          </div>
+
+          <div class="gap-item fail">
+            <div class="gap-status">✕</div>
+            <div class="gap-info">
+              <h4>24/7 Online Appointment Scheduler</h4>
+              <p>Patients are forced to call during busy clinic hours. 70% of dental and skincare searches occur after-hours when calls go unanswered.</p>
+            </div>
+          </div>
+
+          <div class="gap-item fail">
+            <div class="gap-status">✕</div>
+            <div class="gap-info">
+              <h4>Patient Qualification Funnel</h4>
+              <p>No screening or quiz. Leads cannot share their concerns (PCOS, Acne, Implants) before arriving, increasing receptionist friction.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PATIENT LOSS CALCULATOR -->
+    <section class="audit-card calc-card">
+      <h3>Estimated Patient & Revenue Loss Calculator</h3>
+      <div class="calc-grid">
+        
+        <div class="calc-stat">
+          <span class="calc-stat-label">Monthly Searches in <span class="lbl-city">Mumbai</span></span>
+          <span class="calc-stat-value" id="calc-searches">1,500+</span>
+          <span class="calc-stat-sub">For local specialists</span>
+        </div>
+
+        <div class="calc-stat">
+          <span class="calc-stat-label">Your Share of Traffic</span>
+          <span class="calc-stat-value warning">&lt; 3%</span>
+          <span class="calc-stat-sub">Due to missing link</span>
+        </div>
+
+        <div class="calc-stat">
+          <span class="calc-stat-label">Lost Consultation Leads</span>
+          <span class="calc-stat-value danger" id="calc-leads">45 - 80</span>
+          <span class="calc-stat-sub">Patients / month</span>
+        </div>
+
+        <div class="calc-stat">
+          <span class="calc-stat-label">Est. Monthly Revenue Loss</span>
+          <span class="calc-stat-value danger" id="calc-revenue">₹45k - ₹1.2L</span>
+          <span class="calc-stat-sub">Based on average consults</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PROPOSED SOLUTION -->
+    <section class="audit-card solution-card">
+      <div class="solution-header">
+        <div>
+          <h3>Proposed Solution: Interactive Patient Acquisition Flow</h3>
+          <p>We designed a high-converting, mobile-friendly landing page customized for your clinic to solve these gaps.</p>
+        </div>
+        <a href="https://smile-dental.vercel.app" target="_blank" class="btn btn-primary demo-link-btn" id="rpt-demo-btn">
+          👁️ View Your Live Demo
+        </a>
+      </div>
+      <div class="solution-features">
+        <div class="feat-box">
+          <h5>📱 24/7 Mobile Self-Booking</h5>
+          <p>Patients select slots on their phone. Booking details sync to your phone instantly.</p>
+        </div>
+        <div class="feat-box" id="rpt-feat-quiz">
+          <h5>🧬 Skin Concern Screener</h5>
+          <p>Pre-qualifies concerns (Acne, Glow, PCOS) with a 5-question quiz to triple bookings.</p>
+        </div>
+        <div class="feat-box">
+          <h5>⚡ Lightning Fast & Mobile First</h5>
+          <p>Loads in under 0.8 seconds. Designed specifically for WhatsApp and mobile visitors.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER SIGN OFF -->
+    <footer class="report-footer-signoff">
+      <div class="signoff-note">
+        <h4>Claim Your Custom Website Layout</h4>
+        <p>We can launch this live preview under your own domain name (e.g. <code>www.yourclinic.com</code>) in under 24 hours.</p>
+      </div>
+      <div class="contact-info">
+        <div class="contact-details">
+          <span>Prepared by:</span>
+          <strong>LeadReach Partner Team</strong>
+          <span style="font-size: 0.8rem; color: var(--text-dim);">launch91.co</span>
+        </div>
+        <a href="#" id="rpt-whatsapp-btn" target="_blank" class="btn btn-emerald print-hidden">
+          💬 Start Setup on WhatsApp
+        </a>
+      </div>
+    </footer>
+
+  </main>
+
+  <script>
+    // ── Parse Query Parameters ──
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get("name") || "Dr Aher's Dental Care";
+    const city = params.get("city") || "Nashik";
+    const specialty = params.get("specialty") || "Dental";
+    const ratingVal = parseFloat(params.get("rating") || "4.2");
+    const reviewsVal = parseInt(params.get("reviews") || "32");
+
+    // Format Date
+    const today = new Date().toLocaleDateString("en-IN", {
+      day: "2-digit", month: "short", year: "numeric"
+    });
+    document.getElementById("rpt-date").textContent = today;
+
+    // Fill Basic Details
+    document.getElementById("rpt-clinic-name").textContent = name;
+    document.getElementById("rpt-city").textContent = city;
+    document.querySelectorAll(".lbl-city").forEach(el => el.textContent = city);
+    document.getElementById("rpt-specialty").textContent = specialty === "Dermatology" ? "Dermatology / Cosmetology" : "Dental Medicine";
+    document.getElementById("rpt-rating").textContent = "⭐ " + ratingVal.toFixed(1);
+    document.getElementById("rpt-reviews").textContent = reviewsVal;
+
+    // Calculate Custom Visibility Score
+    // Formula: Google Rating points (up to 40) + Reviews points (up to 10) + Website existence (flat 0 since they don't have one)
+    const ratingPoints = ratingVal * 8; // Max 40 points
+    const reviewPoints = Math.min(reviewsVal / 6, 10); // Max 10 points
+    const finalScore = Math.round(ratingPoints + reviewPoints); // Max 50 without website
+
+    document.getElementById("rpt-score").textContent = finalScore;
+    
+    // Draw SVG circle gauge fill
+    const circle = document.getElementById("gauge-fill-circle");
+    const maxOffset = 251.2; // 2 * pi * radius (40)
+    const offsetVal = maxOffset - (finalScore / 100) * maxOffset;
+    circle.style.strokeDashoffset = offsetVal;
+
+    // Estimate Monthly searches based on City tier
+    let baseSearches = 1200;
+    // Guess search volumes based on common city names
+    const cityLower = city.toLowerCase();
+    if (cityLower.includes("mumbai") || cityLower.includes("delhi") || cityLower.includes("bangalore") || cityLower.includes("ahmedabad") || cityLower.includes("pune") || cityLower.includes("chennai") || cityLower.includes("kolkata")) {
+      baseSearches = 2500;
+    } else if (cityLower.includes("nashik") || cityLower.includes("jaipur") || cityLower.includes("lucknow") || cityLower.includes("kanpur")) {
+      baseSearches = 1500;
+    } else {
+      baseSearches = 800;
+    }
+    document.getElementById("calc-searches").textContent = baseSearches.toLocaleString("en-IN") + "+";
+
+    // Estimate lost patient consults (3% to 5% CTR of total searches)
+    const minLost = Math.round(baseSearches * 0.03);
+    const maxLost = Math.round(baseSearches * 0.055);
+    document.getElementById("calc-leads").textContent = `${minLost} - ${maxLost}`;
+
+    // Estimate lost revenue (Consultation fee avg ~₹400 for Tier-2, ₹600 for Tier-1 + treatments)
+    const consultRate = baseSearches > 2000 ? 800 : 500;
+    const minLossVal = Math.round(minLost * consultRate * 2.5); // assumes some convert to treatments
+    const maxLossVal = Math.round(maxLost * consultRate * 3);
+    
+    const formatCurrency = (val) => {
+      if (val >= 100000) return "₹" + (val / 100000).toFixed(1) + "L";
+      return "₹" + Math.round(val/1000) + "k";
+    };
+    document.getElementById("calc-revenue").textContent = `${formatCurrency(minLossVal)} - ${formatCurrency(maxLossVal)}`;
+
+    // Customise proposal details based on Specialty (Dental vs Dermatology)
+    const demoBtn = document.getElementById("rpt-demo-btn");
+    const quizFeat = document.getElementById("rpt-feat-quiz");
+    
+    let whatsappText = "";
+    if (specialty === "Dermatology") {
+      demoBtn.href = "https://derm-site.vercel.app";
+      quizFeat.style.display = "block";
+      whatsappText = `Hello, I'd like to get my dermatology clinic website setup using the ClearSkin layout for: ${name} (${city})`;
+    } else {
+      demoBtn.href = "https://smile-dental.vercel.app";
+      quizFeat.style.display = "none"; // Hide skin quiz for dentist
+      whatsappText = `Hello, I'd like to get my dental clinic website setup using the Smile Dental layout for: ${name} (${city})`;
+    }
+
+    // Set WhatsApp share link
+    const waLink = "https://wa.me/918178022572?text=" + encodeURIComponent(whatsappText);
+    document.getElementById("rpt-whatsapp-btn").href = waLink;
+
+    // Helper functions
+    function copyReportLink() {
+      navigator.clipboard.writeText(window.location.href);
+      alert("Personalized audit link copied to clipboard! You can now send this link directly to the doctor over WhatsApp.");
+    }
+  </script>
+</body>
+</html>

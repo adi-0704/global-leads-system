@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Google Maps Scraper — Any Niche, Instant Data</title>
+  <meta name="description" content="Scrape Google Maps business listings — extract Name, Phone, Email, Website and Address for any niche in seconds." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+
+<body>
+
+  <!-- ─── Animated background ──────────────────────────────────────────── -->
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- ─── Main app container ───────────────────────────────────────────── -->
+  <div class="app-container">
+
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-icon">🗺️</div>
+      <div class="header-text">
+        <h1>Maps Scraper</h1>
+        <p>Extract business data from Google Maps — any niche, any city</p>
+      </div>
+    </header>
+
+    <!-- Search card -->
+    <section class="glass-card search-card" aria-label="Search configuration">
+      <h2 class="card-title">🔍 Configure Your Search</h2>
+
+      <div class="form-grid">
+
+        <!-- Query -->
+        <div class="form-group">
+          <label for="query">Search Niche</label>
+          <input
+            id="query"
+            type="text"
+            placeholder="e.g. dentists, coffee shops, lawyers…"
+            autocomplete="off"
+          />
+        </div>
+
+        <!-- Location -->
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input
+            id="location"
+            type="text"
+            placeholder="e.g. Mumbai, New York, London…"
+            autocomplete="off"
+          />
+        </div>
+
+        <!-- Max Results -->
+        <div class="form-group">
+          <label for="max-results">
+            Max Results
+            <span class="badge" id="results-badge">50</span>
+          </label>
+          <input
+            id="max-results"
+            type="range"
+            min="5"
+            max="500"
+            value="50"
+            step="5"
+            aria-label="Max results"
+          />
+          <div class="range-labels"><span>5</span><span>500</span></div>
+        </div>
+
+        <!-- Find Emails toggle -->
+        <div class="form-group toggle-group">
+          <label for="find-emails-toggle">
+            Find Emails
+            <span class="toggle-hint">Visits each website to discover email</span>
+          </label>
+          <label class="toggle-switch" aria-label="Find emails toggle">
+            <input type="checkbox" id="find-emails-toggle" checked />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button id="btn-scrape" class="btn btn-primary" onclick="startScrape()">
+          <span class="btn-icon">⚡</span>
+          Start Scraping
+        </button>
+        <button id="btn-stop" class="btn btn-danger hidden" onclick="stopScrape()">
+          <span class="btn-icon">⛔</span>
+          Stop
+        </button>
+      </div>
+
+    </section>
+
+    <!-- Progress section (hidden until job starts) -->
+    <section id="progress-section" class="glass-card progress-card hidden" aria-live="polite">
+      <div class="progress-header">
+        <span id="progress-label">Scraping…</span>
+        <span id="progress-count" class="progress-count">0 / 0</span>
+      </div>
+      <div class="progress-bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="progress-aria">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+      <p id="progress-status" class="progress-status">🔍 Searching Google Maps…</p>
+    </section>
+
+    <!-- Results section -->
+    <section id="results-section" class="glass-card results-card hidden">
+      <div class="results-header">
+        <h2 class="card-title">📋 Results
+          <span class="badge" id="result-count-badge">0</span>
+        </h2>
+        <div class="download-group" id="download-group">
+          <span class="download-label">Download as:</span>
+          <button class="btn btn-sm btn-csv"   id="btn-csv"   onclick="download('csv')"  >CSV</button>
+          <button class="btn btn-sm btn-json"  id="btn-json"  onclick="download('json')" >JSON</button>
+          <button class="btn btn-sm btn-excel" id="btn-excel" onclick="download('excel')">Excel</button>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table id="results-table" aria-label="Scraped business listings">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Website</th>
+              <th>Address</th>
+            </tr>
+          </thead>
+          <tbody id="results-tbody">
+            <!-- Rows inserted by app.js -->
+          </tbody>
+        </table>
+      </div>
+
+      <p id="empty-state" class="empty-state">No results yet — start a scrape above.</p>
+    </section>
+
+  </div><!-- /.app-container -->
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

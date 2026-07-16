@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LeadReach — Dental & Dermatology Lead Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- Standalone Chart.js and Supabase Client CDNs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- Floating glowing orbs for premium UI background -->
+  <div class="bg-glow" aria-hidden="true">
+    <div class="orb orb-purple"></div>
+    <div class="orb orb-cyan"></div>
+    <div class="orb orb-emerald"></div>
+  </div>
+
+  <div class="dashboard-wrapper">
+    
+    <!-- ─── HEADER ─── -->
+    <header class="main-header">
+      <div class="header-brand">
+        <div class="logo">🚀</div>
+        <div class="titles">
+          <h1>LeadReach</h1>
+          <p>Dental & Dermatology All-India Outreach & Lead Tracker</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-secondary" onclick="toggleAnalytics()">
+          <span>📈</span> Analytics
+        </button>
+        <button class="btn btn-secondary" onclick="openSettingsModal()">
+          <span>⚙️</span> Templates
+        </button>
+        <button class="btn btn-secondary" onclick="document.getElementById('csv-file-input').click()">
+          <span>📤</span> Import CSV
+        </button>
+        <input type="file" id="csv-file-input" accept=".csv" style="display: none;" onchange="handleCsvImport(event)">
+        <button class="btn btn-primary" onclick="openAddLeadModal()">
+          <span>➕</span> Add Lead
+        </button>
+        <button class="btn btn-emerald" onclick="exportToCsv()">
+          <span>📥</span> Export CSV
+        </button>
+      </div>
+    </header>
+
+    <!-- ─── STATS GRID ─── -->
+    <section class="stats-grid">
+      
+      <div class="stat-card">
+        <div class="stat-icon">🏥</div>
+        <div class="stat-info">
+          <h3>Total Leads</h3>
+          <p class="stat-value" id="stat-total">0</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-info">
+          <h3>Contacted</h3>
+          <p class="stat-value" id="stat-contacted">0</p>
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="stat-progress-bar" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon icon-phone">🆕</div>
+        <div class="stat-info">
+          <h3>New Leads</h3>
+          <p class="stat-value" id="stat-new">0</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon icon-wa">✅</div>
+        <div class="stat-info">
+          <h3>Deals Won</h3>
+          <p class="stat-value" id="stat-won">0</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ─── VIEW MODE TAB SELECTOR ─── -->
+    <div class="view-tabs">
+      <button class="view-tab active" id="tab-btn-prospects" onclick="switchViewMode('prospects')">
+        📋 All Prospects List
+      </button>
+      <button class="view-tab" id="tab-btn-followups" onclick="switchViewMode('followups')">
+        ⏳ Follow-up Queue <span id="followup-queue-count" class="tab-badge">0</span>
+      </button>
+    </div>
+
+    <!-- ─── ANALYTICS PANEL (Collapsible) ─── -->
+    <section class="glass-panel analytics-panel hidden" id="analytics-section">
+      <div class="analytics-header">
+        <h2>📈 Performance & Conversion Analytics</h2>
+        <button class="btn-close-panel" onclick="toggleAnalytics()">✕ Close</button>
+      </div>
+      <div class="chart-grid">
+        <div class="chart-card">
+          <h4>Lead Pipeline Distribution</h4>
+          <div class="canvas-wrapper">
+            <canvas id="pipelineChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <h4>Leads by Top Cities</h4>
+          <div class="canvas-wrapper">
+            <canvas id="cityChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── FILTER CONTROL BAR ─── -->
+    <section class="filter-bar glass-panel" id="filter-bar-container">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="Search by Name, Phone, Email or Address..." oninput="applyFilters()">
+      </div>
+      
+      <div class="filters-group">
+        <div class="select-wrapper">
+          <select id="filter-city" onchange="applyFilters()">
+            <option value="">All Cities</option>
+          </select>
+        </div>
+
+        <div class="select-wrapper">
+          <select id="filter-specialty" onchange="applyFilters()">
+            <option value="">All Specialties</option>
+            <option value="Dental">Dental</option>
+            <option value="Dermatology">Dermatology</option>
+          </select>
+        </div>
+
+        <div class="select-wrapper" id="status-filter-wrapper">
+          <select id="filter-status" onchange="applyFilters()">
+            <option value="">All Statuses</option>
+            <option value="New">🆕 New</option>
+            <option value="Called">📞 Called</option>
+            <option value="Demo Sent">💻 Demo Sent</option>
+            <option value="Follow-up">🔄 Follow-up</option>
+            <option value="Won">✅ Won</option>
+            <option value="Lost">❌ Lost</option>
+          </select>
+        </div>
+
+        <div class="select-wrapper">
+          <select id="filter-priority" onchange="applyFilters()">
+            <option value="">All Priorities</option>
+            <option value="High">🔥 High Priority</option>
+            <option value="Medium">⚡ Medium Priority</option>
+            <option value="Low">💤 Low Priority</option>
+          </select>
+        </div>
+
+        <div class="select-wrapper">
+          <select id="sort-by" onchange="applyFilters()">
+            <option value="priority-desc">🔥 Priority: High to Low</option>
+            <option value="priority-asc">💤 Priority: Low to High</option>
+            <option value="name-asc">🔤 Name: A to Z</option>
+            <option value="reviews-desc">⭐ Most Reviews</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── TABLE VIEW: PROSPECTS ─── -->
+    <section class="leads-container glass-panel" id="prospects-view-section">
+      <div class="table-header">
+        <h2>All Prospects <span id="showing-count" class="count-badge">0 / 0</span></h2>
+        
+        <div class="bulk-actions" id="bulk-actions" style="display: none;">
+          <span id="selected-count">0 selected</span>
+          <button class="btn btn-sm btn-secondary" onclick="bulkMark('New')">🆕 Mark New</button>
+          <button class="btn btn-sm btn-secondary" onclick="bulkMark('Called')">📞 Mark Called</button>
+          <button class="btn btn-sm btn-secondary" onclick="bulkMark('Demo Sent')">💻 Demo Sent</button>
+          <button class="btn btn-sm btn-secondary" onclick="bulkMark('Won')">✅ Mark Won</button>
+          <button class="btn btn-sm btn-danger" onclick="bulkDelete()">❌ Delete</button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th width="40"><input type="checkbox" id="select-all-checkbox" onchange="toggleSelectAll(this)"></th>
+              <th>Name & Google Rating</th>
+              <th width="120">Phone</th>
+              <th>Email</th>
+              <th>City</th>
+              <th>Priority Score</th>
+              <th width="160">Pipeline Status</th>
+              <th>Remarks & Notes</th>
+              <th width="110" style="text-align: center;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="leads-tbody">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="pagination-bar">
+        <div class="page-info" id="pagination-info">
+          Showing 1 to 25 of 348 leads
+        </div>
+        <div class="page-controls">
+          <button class="btn-page" id="btn-prev" onclick="prevPage()">‹ Previous</button>
+          <div class="page-numbers" id="page-numbers-container">
+            <!-- Dynamic page numbers -->
+          </div>
+          <button class="btn-page" id="btn-next" onclick="nextPage()">Next ›</button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ─── TABLE VIEW: FOLLOW-UP QUEUE ─── -->
+    <section class="leads-container glass-panel hidden" id="followups-view-section">
+      <div class="table-header">
+        <h2>⏳ Follow-up Scheduler
+          <span class="count-badge" id="followup-badge">0 active in queue</span>
+        </h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; width: 100%;">
+          Leads show up here after the first message is sent. We track their last contacted timestamp and followup stage.
+        </p>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Clinic / Doctor Name</th>
+              <th>City / Niche</th>
+              <th width="120">Phone</th>
+              <th>Last Contacted</th>
+              <th>Outreach Stage</th>
+              <th>Remarks / Notes</th>
+              <th width="160" style="text-align: center;">Next Follow-up</th>
+            </tr>
+          </thead>
+          <tbody id="followups-tbody">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ─── ADD LEAD MODAL ─── -->
+  <div class="modal-overlay" id="add-lead-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>➕ Add New Prospect</h2>
+        <button class="modal-close" onclick="closeAddLeadModal()">✕</button>
+      </div>
+      <form id="add-lead-form" onsubmit="handleAddLead(event)">
+        <div class="form-grid">
+          
+          <div class="form-group">
+            <label for="lead-name">Clinic / Doctor Name *</label>
+            <input type="text" id="lead-name" required placeholder="e.g. Dr. Roy Dental Clinic">
+          </div>
+
+          <div class="form-group">
+            <label for="lead-phone">Phone Number *</label>
+            <input type="tel" id="lead-phone" required placeholder="e.g. 9876543210">
+          </div>
+
+          <div class="form-group">
+            <label for="lead-email">Email Address</label>
+            <input type="email" id="lead-email" placeholder="e.g. contact@royclinic.com">
+          </div>
+
+          <div class="form-group">
+            <label for="lead-specialty">Specialty *</label>
+            <select id="lead-specialty" required>
+              <option value="Dental">Dental</option>
+              <option value="Dermatology">Dermatology</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="lead-city">City *</label>
+            <input type="text" id="lead-city" required placeholder="e.g. Mumbai">
+          </div>
+
+          <div class="form-group">
+            <label for="lead-tier">Tier *</label>
+            <select id="lead-tier" required>
+              <option value="Metro">Metro</option>
+              <option value="Tier-2">Tier-2</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="lead-rating">Google Rating (1.0 - 5.0)</label>
+            <input type="number" id="lead-rating" min="1.0" max="5.0" step="0.1" value="4.5">
+          </div>
+
+          <div class="form-group">
+            <label for="lead-reviews">Review Count</label>
+            <input type="number" id="lead-reviews" min="0" value="50">
+          </div>
+
+          <div class="form-group full-width">
+            <label for="lead-address">Full Address</label>
+            <textarea id="lead-address" rows="2" placeholder="Street, landmark, pin code..."></textarea>
+          </div>
+
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeAddLeadModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Lead</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ─── SETTINGS / TEMPLATE EDITOR MODAL ─── -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal-card" style="max-width: 680px;">
+      <div class="modal-header">
+        <h2>⚙️ WhatsApp Outreach Templates</h2>
+        <button class="modal-close" onclick="closeSettingsModal()">✕</button>
+      </div>
+      <div class="modal-body" style="padding: 20px; max-height: 70vh; overflow-y: auto;">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+          Customize templates. Placeholders: <strong>[Doctor_Name]</strong>, <strong>[Clinic_Name]</strong>, and <strong>[City]</strong>.
+        </p>
+
+        <!-- Tabs inside Settings -->
+        <div style="display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border-glass); padding-bottom: 8px; flex-wrap: wrap;">
+          <button class="btn btn-sm btn-secondary" id="btn-set-tab-initial" onclick="switchSettingsTab('initial')">1️⃣ Initial Pitches</button>
+          <button class="btn btn-sm btn-secondary" id="btn-set-tab-follow1" onclick="switchSettingsTab('follow1')">2️⃣ Follow-up 1</button>
+          <button class="btn btn-sm btn-secondary" id="btn-set-tab-follow2" onclick="switchSettingsTab('follow2')">3️⃣ Follow-up 2</button>
+          <button class="btn btn-sm btn-secondary" id="btn-set-tab-db" onclick="switchSettingsTab('db')">⚙️ Supabase Database</button>
+        </div>
+
+        <!-- Initial Pitches -->
+        <div id="settings-section-initial" class="settings-sec-tab">
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="template-dental">🦷 Dental Initial Pitch</label>
+            <textarea id="template-dental" rows="5" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="template-derma">🌿 Dermatology Initial Pitch</label>
+            <textarea id="template-derma" rows="5" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
+          </div>
+        </div>
+
+        <!-- Follow-up 1 -->
+        <div id="settings-section-follow1" class="settings-sec-tab hidden">
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="template-dental-f1">🦷 Dental Follow-up 1 (Send after 2 days)</label>
+            <textarea id="template-dental-f1" rows="5" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="template-derma-f1">🌿 Dermatology Follow-up 1 (Send after 2 days)</label>
+            <textarea id="template-derma-f1" rows="5" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
+          </div>
+        </div>
+
+        <!-- Follow-up 2 -->
+        <div id="settings-section-follow2" class="settings-sec-tab hidden">
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="template-dental-f2">🦷 Dental Follow-up 2 (Send after 4 days)</label>
+            <textarea id="template-dental-f2" rows="5" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="template-derma-f2">🌿 Dermatology Follow-up 2 (Send after 4 days)</label>
+            <textarea id="template-derma-f2" rows="5" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
+          </div>
+        </div>
+
+        <!-- Database Settings -->
+        <div id="settings-section-db" class="settings-sec-tab hidden">
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 14px;">
+            Connect your Lead Tracker directly to a free cloud database (Supabase) to keep data synchronized and prevent data loss.
+          </p>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="db-supabase-url">Supabase Project URL</label>
+            <input type="text" id="db-supabase-url" placeholder="https://your-project.supabase.co" style="width: 100%;">
+          </div>
+          <div class="form-group">
+            <label for="db-supabase-key">Supabase Anon API Key</label>
+            <input type="password" id="db-supabase-key" placeholder="your-anon-key-here" style="width: 100%;">
+          </div>
+          <div style="margin-top: 14px; padding: 10px; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 6px; font-size: 0.76rem;">
+            💡 <strong>Setup Step:</strong> Go to <code>Supabase.com</code> ➔ Create a free project ➔ Click <code>SQL Editor</code> ➔ Run the setup query shown in <code>walkthrough.md</code> to create the table structure. Paste URL & Key above to sync!
+          </div>
+        </div>
+
+        <div class="form-actions" style="margin-top: 20px;">
+          <button class="btn btn-secondary" onclick="closeSettingsModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="saveSettings()">Save Configuration</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load files -->
+  <script src="leads.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

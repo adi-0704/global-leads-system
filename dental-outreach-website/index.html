@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DentalReach — #1 Patient Growth Platform for Dental Clinics in India</title>
+  <meta name="description" content="DentalReach helps dental clinics get more patients through Google Maps domination, AI-powered outreach, automated reviews and smart scheduling. Trusted by 500+ clinics across India."/>
+  <meta name="keywords" content="dental marketing, dental patient acquisition, Google Maps SEO dental, dental clinic growth, dentist marketing India"/>
+  <meta property="og:title" content="DentalReach — #1 Patient Growth Platform"/>
+  <meta property="og:description" content="Fill your appointment book with the only patient acquisition platform built exclusively for dental clinics."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ═══════════ ANNOUNCEMENT BAR ═══════════════════════════════ -->
+<div class="ann-bar" id="annBar">
+  <span class="ann-emoji">🚀</span>
+  <span>New: AI-powered review responses now available. Reply to every Google review instantly in your brand voice.</span>
+  <a href="#contact">Try it free →</a>
+  <button class="ann-close" onclick="document.getElementById('annBar').remove()">✕</button>
+</div>
+
+<!-- ═══════════ NAV ════════════════════════════════════════════ -->
+<nav class="nav" id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="logo" aria-label="DentalReach Home">
+      <div class="logo-mark" aria-hidden="true">DR</div>
+      <span class="logo-text">DentalReach</span>
+    </a>
+
+    <ul class="nav-links" role="navigation">
+      <li class="has-dropdown">
+        <a href="#features">Platform <span class="nav-chevron">▾</span></a>
+        <div class="nav-dropdown" role="menu">
+          <a href="#features" class="dd-item" role="menuitem">
+            <span class="dd-icon">📍</span>
+            <div><div class="dd-title">Google Maps SEO</div><div class="dd-sub">Dominate local search rankings</div></div>
+          </a>
+          <a href="#features" class="dd-item" role="menuitem">
+            <span class="dd-icon">⭐</span>
+            <div><div class="dd-title">Review Automation</div><div class="dd-sub">Build reputation on autopilot</div></div>
+          </a>
+          <a href="#features" class="dd-item" role="menuitem">
+            <span class="dd-icon">📧</span>
+            <div><div class="dd-title">AI Outreach</div><div class="dd-sub">Email & WhatsApp campaigns</div></div>
+          </a>
+          <a href="#features" class="dd-item" role="menuitem">
+            <span class="dd-icon">🤖</span>
+            <div><div class="dd-title">AI Scheduler</div><div class="dd-sub">Book patients 24/7 automatically</div></div>
+          </a>
+        </div>
+      </li>
+      <li><a href="#results">Case Studies</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#compare">Compare</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="#" class="btn btn-ghost btn-ghost-nav">Log In</a>
+      <a href="#contact" class="btn-primary-nav">Get Free Audit →</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">☰</button>
+  </div>
+  <div class="mobile-nav" id="mobileNav" role="navigation">
+    <a href="#features" onclick="closeMobile()">Platform</a>
+    <a href="#results" onclick="closeMobile()">Case Studies</a>
+    <a href="#pricing" onclick="closeMobile()">Pricing</a>
+    <a href="#compare" onclick="closeMobile()">Compare</a>
+    <a href="#faq" onclick="closeMobile()">FAQ</a>
+    <a href="#contact" class="btn btn-primary btn-sm" onclick="closeMobile()" style="width:fit-content;margin-top:8px">Get Free Audit →</a>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ════════════════════════════════════════════ -->
+<section class="hero" id="home" aria-label="Hero section">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-noise" aria-hidden="true"></div>
+  <div class="hero-grid" aria-hidden="true"></div>
+
+  <div class="hero-main">
+    <!-- Left: Content -->
+    <div class="hero-content reveal-left">
+      <div class="hero-badges">
+        <span class="hbadge"><span class="hbadge-star">★★★★★</span> 4.9 on G2 · 200+ reviews</span>
+        <span class="hbadge"><span class="hbadge-green">🏆</span> #1 Dental Marketing Platform 2025</span>
+      </div>
+
+      <h1 class="hero-h1">
+        More Patients.<br/>
+        Less&nbsp;<span class="hero-underline gradient-text">Guesswork.</span>
+      </h1>
+
+      <p class="hero-p">DentalReach is the all-in-one growth platform built exclusively for dental clinics. Rank #1 on Google Maps, automate reviews, and fill your appointment book — without hiring a marketing team.</p>
+
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary btn-xl" id="heroCta">
+          Start Free — No Credit Card
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <button class="btn-play" onclick="document.getElementById('demoModal').style.display='flex'">
+          <span class="play-circle">▶</span>
+          Watch 2-min Demo
+        </button>
+      </div>
+
+      <div class="hero-trust">
+        <div class="trust-row">
+          <div class="trust-item"><span class="trust-icon">✓</span> Live in 48 hours</div>
+          <div class="trust-item"><span class="trust-icon">✓</span> No contracts, cancel anytime</div>
+          <div class="trust-item"><span class="trust-icon">✓</span> HIPAA + DPDPA compliant</div>
+          <div class="trust-item"><span class="trust-icon">✓</span> 30-day guarantee</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Dashboard -->
+    <div class="hero-visual reveal-right">
+      <!-- Floating notifications -->
+      <div class="notif notif-1">
+        <span class="notif-icon">⭐</span>
+        <div class="notif-text"><strong>New 5★ Review!</strong><small>from Priya M. · 2 min ago</small></div>
+      </div>
+      <div class="notif notif-2">
+        <div class="notif-av" style="background:#0ea5e9">AR</div>
+        <div class="notif-text"><strong>New Booking</strong><small>Implant Consult · Tomorrow 11am</small></div>
+      </div>
+      <div class="notif notif-3">
+        <span class="notif-icon">📈</span>
+        <div class="notif-text"><strong>#1 on Maps</strong><small>"dentist near me" · Bandra</small></div>
+      </div>
+
+      <!-- Main dashboard card -->
+      <div class="dash-card">
+        <div class="dash-titlebar">
+          <div class="dash-dots"><span class="dtb-dot r"></span><span class="dtb-dot y"></span><span class="dtb-dot g"></span></div>
+          <div class="dash-url">app.dentalreach.in — Dashboard</div>
+        </div>
+        <div class="dash-content">
+          <div class="dash-kpis">
+            <div class="dash-kpi">
+              <div class="dk-val mint">+142%</div>
+              <div class="dk-lbl">New Patients</div>
+              <div class="dk-trend">↑ vs last month</div>
+            </div>
+            <div class="dash-kpi">
+              <div class="dk-val gold">4.9 ★</div>
+              <div class="dk-lbl">Google Rating</div>
+              <div class="dk-trend">127 reviews</div>
+            </div>
+            <div class="dash-kpi">
+              <div class="dk-val indigo">#1</div>
+              <div class="dk-lbl">Maps Position</div>
+              <div class="dk-trend">"dentist near me"</div>
+            </div>
+          </div>
+
+          <div class="dash-chart-area">
+            <div class="dca-header">
+              <span class="dca-title">Patient Bookings — 2026</span>
+              <span class="dca-badge">↑ 142% YoY</span>
+            </div>
+            <div class="chart-bars">
+              <div class="cb"><div class="cb-bar" style="height:38%"></div><span class="cb-lbl">Jan</span></div>
+              <div class="cb"><div class="cb-bar" style="height:52%"></div><span class="cb-lbl">Feb</span></div>
+              <div class="cb"><div class="cb-bar" style="height:47%"></div><span class="cb-lbl">Mar</span></div>
+              <div class="cb"><div class="cb-bar" style="height:71%"></div><span class="cb-lbl">Apr</span></div>
+              <div class="cb"><div class="cb-bar" style="height:64%"></div><span class="cb-lbl">May</span></div>
+              <div class="cb"><div class="cb-bar hl" style="height:100%"></div><span class="cb-lbl">Jun</span></div>
+            </div>
+          </div>
+
+          <div class="dash-alerts">
+            <div class="dash-alert">
+              <div class="da-pulse"></div>
+              <span><strong>3 new patients</strong> booked via Google Maps this hour</span>
+            </div>
+            <div class="dash-alert">
+              <div class="da-pulse"></div>
+              <span><strong>Review request sent</strong> to 8 patients automatically</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- City proof strip -->
+  <div class="hero-proof">
+    <div class="proof-inner">
+      <span class="proof-label">500+ clinics across</span>
+      <div class="proof-cities">
+        <span class="proof-city">Mumbai</span><span class="proof-sep">·</span>
+        <span class="proof-city">Delhi</span><span class="proof-sep">·</span>
+        <span class="proof-city">Bangalore</span><span class="proof-sep">·</span>
+        <span class="proof-city">Chennai</span><span class="proof-sep">·</span>
+        <span class="proof-city">Hyderabad</span><span class="proof-sep">·</span>
+        <span class="proof-city">Pune</span><span class="proof-sep">·</span>
+        <span class="proof-city">Ahmedabad</span><span class="proof-sep">·</span>
+        <span class="proof-city">Kolkata</span><span class="proof-sep">·</span>
+        <span class="proof-city">Jaipur</span><span class="proof-sep">·</span>
+        <span class="proof-city">Surat</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STATS ═══════════════════════════════════════════ -->
+<section class="stats-strip" aria-label="Key statistics">
+  <div class="container">
+    <div class="stats-inner">
+      <div class="stat-block reveal">
+        <div class="stat-num-wrap"><div class="stat-n" data-target="500">0</div><span class="stat-s">+</span></div>
+        <div class="stat-l">Dental Clinics</div>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat-block reveal">
+        <div class="stat-num-wrap"><div class="stat-n" data-target="2">0</div><span class="stat-s">M+</span></div>
+        <div class="stat-l">Patient Touchpoints/yr</div>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat-block reveal">
+        <div class="stat-num-wrap"><div class="stat-n" data-target="340">0</div><span class="stat-s">%</span></div>
+        <div class="stat-l">Avg. Patient Growth</div>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat-block reveal">
+        <div class="stat-num-wrap"><div class="stat-n" data-target="48">0</div><span class="stat-s">h</span></div>
+        <div class="stat-l">To First Results</div>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat-block reveal">
+        <div class="stat-num-wrap"><div class="stat-n" data-target="4">0</div><span class="stat-s">.9★</span></div>
+        <div class="stat-l">G2 Rating</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PROBLEM ════════════════════════════════════════ -->
+<section class="section problem-section" id="problem">
+  <div class="container">
+    <div class="section-header center reveal">
+      <div class="tag"><span class="tag-dot"></span>The Problem</div>
+      <h2 class="section-h2">Why Most Dental Clinics Struggle to Grow</h2>
+      <p class="section-p">72% of patients choose the first dental clinic they see on Google. If you're not in the top 3, you're invisible — and losing patients to competitors every single day.</p>
+    </div>
+
+    <div class="problem-grid">
+      <div class="prob-card reveal">
+        <div class="prob-icon-wrap">🔍</div>
+        <h3>Low Google Visibility</h3>
+        <p>Competitors with worse service outrank you because they've optimised their Google Business Profile with the right keywords, photos, and review strategy.</p>
+        <div class="prob-stat">You're losing 60+ patients/month</div>
+      </div>
+      <div class="prob-card reveal">
+        <div class="prob-icon-wrap">⭐</div>
+        <h3>Stagnant Review Count</h3>
+        <p>Happy patients don't leave reviews unless asked at the right moment. Without a system, you need 50+ fresh reviews — collecting them manually takes endless hours.</p>
+        <div class="prob-stat">Clinics with 100+ reviews get 3x clicks</div>
+      </div>
+      <div class="prob-card reveal">
+        <div class="prob-icon-wrap">📞</div>
+        <h3>Missed Calls, Lost Revenue</h3>
+        <p>72% of patients who can't reach a clinic immediately move to the next. Every missed call is ₹3,000–₹15,000 in lost revenue — and they never call back.</p>
+        <div class="prob-stat">₹2–5L lost per month on average</div>
+      </div>
+      <div class="prob-card reveal">
+        <div class="prob-icon-wrap">📉</div>
+        <h3>Zero Marketing Data</h3>
+        <p>You spend on ads but can't tell what's working. Without source tracking, you're guessing — and wasting budget on channels that bring zero return.</p>
+        <div class="prob-stat">78% of clinics have no tracking system</div>
+      </div>
+    </div>
+
+    <div class="problem-bridge reveal">
+      <div class="pb-text">
+        <h3>DentalReach solves all four — automatically.</h3>
+        <p>One platform. Zero guesswork. Results in 48 hours.</p>
+      </div>
+      <a href="#features" class="btn btn-primary btn-lg">See How It Works →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FEATURES TABS ══════════════════════════════════ -->
+<section class="section features-section" id="features">
+  <div class="container">
+    <div class="section-header center reveal">
+      <div class="tag"><span class="tag-dot"></span>The Platform</div>
+      <h2 class="section-h2">Every Tool Your Clinic Needs.<br/>One Dashboard.</h2>
+      <p class="section-p">Built exclusively for dental clinics — not a generic marketing tool bolted onto a dental wrapper.</p>
+    </div>
+
+    <!-- Tab navigation -->
+    <div class="feat-tabs" role="tablist">
+      <button class="feat-tab active" role="tab" aria-selected="true" onclick="switchTab(0)"><span class="ft-icon">📍</span> Google Maps</button>
+      <button class="feat-tab" role="tab" onclick="switchTab(1)"><span class="ft-icon">⭐</span> Reviews</button>
+      <button class="feat-tab" role="tab" onclick="switchTab(2)"><span class="ft-icon">📧</span> Outreach</button>
+      <button class="feat-tab" role="tab" onclick="switchTab(3)"><span class="ft-icon">🤖</span> AI Booking</button>
+    </div>
+
+    <!-- Tab 0: Google Maps -->
+    <div class="feat-panel active" id="tab0" role="tabpanel">
+      <div class="fp-text reveal-left">
+        <div class="tag"><span class="tag-dot"></span>Feature 01</div>
+        <h3>Rank #1 for "Dentist Near Me"</h3>
+        <p>We use dental-specific Google Maps optimisation strategies to get you into the coveted top-3 map pack — where 70% of all clinic clicks happen.</p>
+        <div class="fp-list">
+          <div class="fp-li">
+            <div class="fp-li-icon">✓</div>
+            <div class="fp-li-text"><strong>Dental-specific GBP keyword strategy</strong><span>Target "dentist near me", "teeth whitening", "dental implants" and 40+ other high-intent searches</span></div>
+          </div>
+          <div class="fp-li">
+            <div class="fp-li-icon">✓</div>
+            <div class="fp-li-text"><strong>Photo SEO & optimised posting schedule</strong><span>Weekly geo-tagged photos and posts that signal activity to Google's algorithm</span></div>
+          </div>
+          <div class="fp-li">
+            <div class="fp-li-icon">✓</div>
+            <div class="fp-li-text"><strong>Competitor gap analysis</strong><span>We identify exactly what your top competitors are doing right and outmanoeuvre them</span></div>
+          </div>
+          <div class="fp-li">
+            <div class="fp-li-icon">✓</div>
+            <div class="fp-li-text"><strong>Weekly ranking reports</strong><span>Track your position for 20+ target keywords with live dashboard access</span></div>
+          </div>
+        </div>
+        <div class="fp-result">
+          <span class="fpr-badge">Avg Result</span>
+          <span class="fpr-text">Top 3 ranking within <span class="fpr-val">8 weeks</span> for "dentist near me" in your area</span>
+        </div>
+      </div>
+      <div class="fp-visual reveal-right">
+        <div class="maps-mock">
+          <div class="mm-header">
+            <div class="mm-searchbar">🔍 dentist near me · Bandra, Mumbai</div>
+          </div>
+          <div class="mm-results">
+            <div class="mm-result r1">
+              <div class="mm-rank top">1</div>
+              <div>
+                <div class="mm-name you">✦ Your Clinic Name</div>
+                <div class="mm-stars"><span class="gold">★★★★★</span> 4.9 (127 reviews)</div>
+                <div class="mm-stars">Dental Clinic · Open now · Bandra West</div>
+              </div>
+              <div class="mm-open">Open</div>
+            </div>
+            <div class="mm-result">
+              <div class="mm-rank grey">2</div>
+              <div>
+                <div class="mm-name" style="color:var(--text-2)">Competitor A Dental</div>
+                <div class="mm-stars"><span style="color:var(--gold)">★★★★☆</span> 4.1 (34 reviews)</div>
+                <div class="mm-stars">Dentist · Bandra West</div>
+              </div>
+            </div>
+            <div class="mm-result">
+              <div class="mm-rank grey">3</div>
+              <div>
+                <div class="mm-name" style="color:var(--text-2)">Competitor B Clinic</div>
+                <div class="mm-stars"><span style="color:var(--gold)">★★★★☆</span> 3.8 (21 reviews)</div>
+                <div class="mm-stars">Dental Clinic · Khar West</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 1: Reviews -->
+    <div class="feat-panel" id="tab1" role="tabpanel">
+      <div class="fp-text reveal-left">
+        <div class="tag"><span class="tag-dot"></span>Feature 02</div>
+        <h3>80+ New Reviews in 90 Days</h3>
+        <p>Automatically send a perfectly timed WhatsApp message after every appointment. Happy patients review. Unhappy patients get privately redirected to your team before they post publicly.</p>
+        <div class="fp-list">
+          <div class="fp-li">
+            <div class="fp-li-icon">✓</div>
+            <div class="fp-li-text"><strong>Post-appointment auto-trigger</strong><span>Request sent the moment a patient is marked as "completed" in your schedule</span></div>
+          </div>
+          <div class="fp-li">
+            <div class="fp-li-icon">✓</div>
+            <div class="fp-li-text"><strong>Negative review interception</strong><span>Patients who indicate they're unhappy are redirected privately — protecting your public rating</span></div>
+          </div>
+          <div class="fp-li">
+            <div class="fp-li-icon">✓</div>
+            <div class="fp-li-text"><strong>AI response drafts</strong><span>Every new review gets an auto-drafted response in your clinic's brand voice for your approval</span></div>
+          </div>
+          <div class="fp-li">
+            <div class="fp-li-icon">✓</div>
+            <div class="fp-li-text"><strong>Multi-platform collection</strong><span>Google, Practo, JustDial, Healthgrades — all from one dashboard</span></div>
+          </div>
+        </div>
+        <div class="fp-result">
+          <span class="fpr-badge">Avg Result</span>
+          <span class="fpr-text"><span class="fpr-val">40–80</span> new Google reviews in first 90 days</span>
+        </div>
+      </div>
+      <div class="fp-visual reveal-right">
+        <div class="review-mock">
+          <div class="rm-header">
+            <div class="rm-avatar">DR</div>
+            <div><div class="rm-name">DentalReach · Patient Follow-up</div><div class="rm-sub">Automated · End-to-End Encrypted</div></div>
+          </div>
+          <div class="rm-body">
+            <div class="rm-msg in">Hi Priya! 😊 Hope you're feeling great after your visit with Dr. Mehta today.<br/>Could you spare 30 seconds to leave us a review? It means the world! 🙏<br/><a href="#" class="rm-link" onclick="return false">g.page/drmehta-dental</a></div>
+            <div class="rm-time">2:31 PM ✓✓</div>
+            <div class="rm-msg out">Of course! Just done 😁 You guys were amazing!</div>
+            <div class="rm-time" style="text-align:right">2:33 PM</div>
+            <div class="rm-review-box">
+              <div class="rm-review-stars">★★★★★</div>
+              <div class="rm-review-text">"Dr. Mehta is absolutely brilliant. Painless, professional, and genuinely caring. Best dentist I've ever been to!"</div>
+              <div class="rm-review-author">— Priya M. · Google · 2 minutes ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Outreach -->
+    <div class="feat-panel" id="tab2" role="tabpanel">
+      <div class="fp-text reveal-left">
+        <div class="tag"><span class="tag-dot"></span>Feature 03</div>
+        <h3>Reach 1,000+ Patients Weekly — Automatically</h3>
+        <p>AI-personalised email and WhatsApp campaigns targeted by treatment type, patient history, and location. Set it once, watch the bookings roll in.</p>
+        <div class="fp-list">
+          <div class="fp-li">
+            <div class="fp-li-icon">✓</div>
+            <div class="fp-li-text"><strong>Treatment-specific campaigns</strong><span>Separate campaigns for implants, orthodontics, whitening, and general check-ups</span></div>
+          </div>
+          <div class="fp-li">
+            <div class="fp-li-icon">✓</div>
+            <div class="fp-li-text"><strong>Patient recall automation</strong><span>Automatically reach out to patients due for their 6-month or annual check-up</span></div>
+          </div>
+          <div class="fp-li">
+            <div class="fp-li-icon">✓</div>
+            <div class="fp-li-text"><strong>AI send-time optimisation</strong><span>Messages sent when each individual patient is most likely to open — boosting open rates to 60%+</span></div>
+          </div>
+          <div class="fp-li">
+            <div class="fp-li-icon">✓</div>
+            <div class="fp-li-text"><strong>No-show reduction SMS</strong><span>Automated appointment reminders that cut no-show rates by up to 82%</span></div>
+          </div>
+        </div>
+        <div class="fp-result">
+          <span class="fpr-badge">Avg Result</span>
+          <span class="fpr-text"><span class="fpr-val">30–60</span> reactivated patients/month from recall campaigns alone</span>
+        </div>
+      </div>
+      <div class="fp-visual reveal-right">
+        <div class="outreach-mock">
+          <div class="om-header">
+            <div class="om-live"></div>
+            Campaign Live · Teeth Whitening Summer Promo
+          </div>
+          <div class="om-body">
+            <div class="om-kpis">
+              <div class="om-kpi"><div class="om-kv">1,240</div><div class="om-kl">Sent</div></div>
+              <div class="om-kpi"><div class="om-kv" style="color:var(--gold)">68%</div><div class="om-kl">Opened</div></div>
+              <div class="om-kpi"><div class="om-kv">142</div><div class="om-kl">Replies</div></div>
+              <div class="om-kpi"><div class="om-kv" style="color:var(--success)">38</div><div class="om-kl">Booked</div></div>
+            </div>
+            <div class="om-flow">
+              <div class="om-step done"><span class="om-step-icon">📧</span>Email sent to 1,240 patients</div>
+              <div class="om-step-line"></div>
+              <div class="om-step done"><span class="om-step-icon">📖</span>892 opened within 24 hours</div>
+              <div class="om-step-line"></div>
+              <div class="om-step done"><span class="om-step-icon">🖱️</span>312 clicked the booking link</div>
+              <div class="om-step-line"></div>
+              <div class="om-step active"><span class="om-step-icon">✅</span>38 appointments confirmed — ₹1.14L revenue</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: AI Booking -->
+    <div class="feat-panel" id="tab3" role="tabpanel">
+      <div class="fp-text reveal-left">
+        <div class="tag"><span class="tag-dot"></span>Feature 04</div>
+        <h3>Book Patients While You Sleep</h3>
+        <p>An intelligent WhatsApp and website chat bot that handles new patient enquiries, answers FAQs, and books appointments 24/7 — without staff involvement.</p>
+        <div class="fp-list">
+          <div class="fp-li">
+            <div class="fp-li-icon">✓</div>
+            <div class="fp-li-text"><strong>24/7 intelligent booking</strong><span>Patients book at midnight, weekends, or holidays — your calendar fills automatically</span></div>
+          </div>
+          <div class="fp-li">
+            <div class="fp-li-icon">✓</div>
+            <div class="fp-li-text"><strong>Smart FAQ handling</strong><span>Answers "how much do implants cost?", "are you open on Sundays?" and 200+ common questions</span></div>
+          </div>
+          <div class="fp-li">
+            <div class="fp-li-icon">✓</div>
+            <div class="fp-li-text"><strong>Digital pre-intake forms</strong><span>Collect patient details, medical history, and insurance info before they arrive — saving 20 min per visit</span></div>
+          </div>
+          <div class="fp-li">
+            <div class="fp-li-icon">✓</div>
+            <div class="fp-li-text"><strong>Seamless human handoff</strong><span>Complex queries are instantly routed to your receptionist with full conversation history</span></div>
+          </div>
+        </div>
+        <div class="fp-result">
+          <span class="fpr-badge">Avg Result</span>
+          <span class="fpr-text">Saves <span class="fpr-val">15–20 staff hours/week</span> and books 20+ extra patients per month</span>
+        </div>
+      </div>
+      <div class="fp-visual reveal-right">
+        <div class="review-mock">
+          <div class="rm-header" style="background:#1A1A2E">
+            <div class="rm-avatar" style="background:var(--mint);color:var(--midnight)">DR</div>
+            <div><div class="rm-name">DentalReach AI Assistant</div><div class="rm-sub">Powered by GPT-4 · Your Clinic</div></div>
+          </div>
+          <div class="rm-body">
+            <div class="rm-msg in">Hi! I'd like to know more about dental implants. How much does it cost?</div>
+            <div class="rm-msg out">Great question! Our implant treatment starts from ₹25,000 per tooth. We offer<br/>✅ Free consultation with Dr. Mehta<br/>✅ 0% EMI options available<br/>✅ 5-year warranty on implants<br/><br/>Would you like to book your free consultation? I can check availability right now! 😊</div>
+            <div class="rm-msg in">Yes please! Saturday morning works?</div>
+            <div class="rm-msg out">✅ Saturday, July 12 at 10:30 AM is available!<br/><br/>Shall I book it for you? I just need your name and phone number.</div>
+            <div class="rm-review-box" style="margin-top:4px">
+              <div style="font-size:12px;color:var(--success);font-weight:700">📅 Appointment Confirmed!</div>
+              <div class="rm-review-text">Rahul S. · Implant Consultation · Sat 10:30 AM · Added to calendar</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════ ROI CALCULATOR ═════════════════════════════════ -->
+<section class="section roi-section" id="roi">
+  <div class="container">
+    <div class="section-header center reveal">
+      <div class="tag"><span class="tag-dot"></span>ROI Calculator</div>
+      <h2 class="section-h2">Calculate Your Revenue Potential</h2>
+      <p class="section-p">See exactly how much additional revenue DentalReach can generate for your specific clinic size and specialty.</p>
+    </div>
+    <div class="roi-wrapper reveal">
+      <div class="roi-grid">
+        <div class="roi-inputs">
+          <h3>Your Clinic Today</h3>
+          <p>Adjust the sliders to match your current situation</p>
+
+          <div class="roi-field">
+            <div class="roi-label"><span>Monthly patients</span><strong id="patsDisplay">80 patients</strong></div>
+            <input type="range" class="roi-range" id="patsRange" min="20" max="500" value="80" oninput="updateROI()"/>
+          </div>
+          <div class="roi-field">
+            <div class="roi-label"><span>Avg. revenue per patient</span><strong id="revDisplay">₹3,000</strong></div>
+            <input type="range" class="roi-range" id="revRange" min="500" max="20000" step="500" value="3000" oninput="updateROI()"/>
+          </div>
+          <div class="roi-field">
+            <div class="roi-label"><span>Current Google reviews</span><strong id="reviewDisplay">15 reviews</strong></div>
+            <input type="range" class="roi-range" id="reviewRange" min="0" max="500" value="15" oninput="updateROI()"/>
+          </div>
+          <div class="roi-field">
+            <div class="roi-label"><span>Google Maps position</span><strong id="rankDisplay">Position #6</strong></div>
+            <input type="range" class="roi-range" id="rankRange" min="1" max="20" value="6" oninput="updateROI()"/>
+          </div>
+        </div>
+
+        <div class="roi-results">
+          <h3>Your Growth Potential with DentalReach</h3>
+          <div class="roi-output primary">
+            <div class="ro-label">Projected Additional Revenue / Month</div>
+            <div class="ro-val" id="addRevOutput">₹96,000</div>
+            <div class="ro-sub">After DentalReach subscription fee</div>
+          </div>
+          <div class="roi-output">
+            <div class="ro-label">Projected New Patients / Month</div>
+            <div class="ro-val" id="addPatsOutput">+32 patients</div>
+          </div>
+          <div class="roi-output">
+            <div class="ro-label">Expected ROI</div>
+            <div class="ro-val" id="roiOutput" style="color:var(--mint)">534%</div>
+          </div>
+          <div class="roi-cta-wrap">
+            <a href="#contact" class="btn btn-primary btn-full btn-lg">Get My Personalised Growth Plan</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CASE STUDIES ═══════════════════════════════════ -->
+<section class="section cases-section" id="results">
+  <div class="container">
+    <div class="section-header center reveal">
+      <div class="tag"><span class="tag-dot"></span>Case Studies</div>
+      <h2 class="section-h2">Real Clinics. Verified Results.</h2>
+      <p class="section-p">Every number is verified by our clients. No estimates, no projections — actual results from actual dental clinics.</p>
+    </div>
+    <div class="cases-grid">
+
+      <div class="case-card reveal">
+        <div class="case-clinic-info">
+          <div class="case-av" style="background:linear-gradient(135deg,#0ea5e9,#6366f1)">SM</div>
+          <div><div class="case-name">SmilePro Dental</div><div class="case-loc">Andheri West, Mumbai · 2 dentists</div></div>
+          <div class="case-stars">★★★★★</div>
+        </div>
+        <div class="case-challenge"><strong>Challenge:</strong> 12 Google reviews, rank #8, 60 patients/month, no website</div>
+        <div class="case-metrics">
+          <div class="cm"><div class="cm-val">+340%</div><div class="cm-lbl">Patient Growth</div></div>
+          <div class="cm"><div class="cm-val">#1</div><div class="cm-lbl">Maps Rank</div></div>
+          <div class="cm"><div class="cm-val">180+</div><div class="cm-lbl">New Reviews</div></div>
+        </div>
+        <blockquote class="case-quote">"We went from 60 to 264 patients/month in 6 months. Had to hire 2 new assistants and expand our clinic. Incredible."</blockquote>
+        <div class="case-time">Results achieved in 6 months</div>
+      </div>
+
+      <div class="case-card case-featured reveal">
+        <div class="case-label">⭐ Featured Case Study</div>
+        <div class="case-clinic-info">
+          <div class="case-av" style="background:linear-gradient(135deg,var(--mint),#0ea5e9)">DM</div>
+          <div><div class="case-name">Dr. Mehta's Dental Care</div><div class="case-loc">Bandra West, Mumbai · Solo practice</div></div>
+          <div class="case-stars">★★★★★</div>
+        </div>
+        <div class="case-challenge"><strong>Challenge:</strong> Brand new clinic, zero reviews, zero visibility, no patient base</div>
+        <div class="case-metrics">
+          <div class="cm"><div class="cm-val">₹8.2L</div><div class="cm-lbl">Extra Revenue/yr</div></div>
+          <div class="cm"><div class="cm-val">4.9★</div><div class="cm-lbl">Rating</div></div>
+          <div class="cm"><div class="cm-val">127</div><div class="cm-lbl">Reviews in 4mo</div></div>
+        </div>
+        <blockquote class="case-quote">"DentalReach made my clinic discoverable from day one. I hit full appointment capacity just 4 months after opening. Unbelievable ROI."</blockquote>
+        <div class="case-time">Results achieved in 4 months</div>
+      </div>
+
+      <div class="case-card reveal">
+        <div class="case-clinic-info">
+          <div class="case-av" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">FD</div>
+          <div><div class="case-name">Family Dental Thane</div><div class="case-loc">Thane West, Maharashtra · 3 dentists</div></div>
+          <div class="case-stars">★★★★★</div>
+        </div>
+        <div class="case-challenge"><strong>Challenge:</strong> 35% no-show rate, poor patient recall, declining Google rating</div>
+        <div class="case-metrics">
+          <div class="cm"><div class="cm-val">-82%</div><div class="cm-lbl">No-Shows</div></div>
+          <div class="cm"><div class="cm-val">190+</div><div class="cm-lbl">Recalled Patients</div></div>
+          <div class="cm"><div class="cm-val">₹4.8L</div><div class="cm-lbl">Revenue Recovered</div></div>
+        </div>
+        <blockquote class="case-quote">"The recall automation alone recovered ₹4.8 lakh in the first year that we would have otherwise missed. Extraordinary ROI."</blockquote>
+        <div class="case-time">Results achieved in 3 months</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ COMPARE ════════════════════════════════════════ -->
+<section class="section compare-section" id="compare">
+  <div class="container">
+    <div class="section-header center reveal">
+      <div class="tag"><span class="tag-dot"></span>Why DentalReach</div>
+      <h2 class="section-h2">Purpose-Built for Dentists.</h2>
+      <p class="section-p">Generic marketing tools weren't built for dental clinics. The difference shows — in results.</p>
+    </div>
+    <div class="compare-wrap reveal">
+      <table class="compare-tbl" role="table">
+        <thead>
+          <tr>
+            <th>Feature / Capability</th>
+            <th class="col-dr">DentalReach</th>
+            <th>Generic CRM</th>
+            <th>Freelance Agency</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Dental-specific Google Maps SEO</td><td class="c-dr c-yes">✅ Specialist</td><td class="c-no">❌ None</td><td class="c-part">⚡ Sometimes</td></tr>
+          <tr><td>Automated post-appointment reviews</td><td class="c-dr c-yes">✅ Included</td><td class="c-no">❌ No</td><td class="c-no">❌ No</td></tr>
+          <tr><td>Negative review interception</td><td class="c-dr c-yes">✅ Included</td><td class="c-no">❌ No</td><td class="c-no">❌ No</td></tr>
+          <tr><td>Patient recall (6/12-month)</td><td class="c-dr c-yes">✅ Automated</td><td class="c-part">⚡ Basic</td><td class="c-no">❌ No</td></tr>
+          <tr><td>AI appointment booking (WhatsApp)</td><td class="c-dr c-yes">✅ Included</td><td class="c-no">❌ No</td><td class="c-no">❌ No</td></tr>
+          <tr><td>Treatment-specific campaigns</td><td class="c-dr c-yes">✅ Included</td><td class="c-no">❌ No</td><td class="c-part">⚡ Custom cost</td></tr>
+          <tr><td>No-show reduction automation</td><td class="c-dr c-yes">✅ Included</td><td class="c-part">⚡ SMS only</td><td class="c-no">❌ No</td></tr>
+          <tr><td>Live patient analytics dashboard</td><td class="c-dr c-yes">✅ Real-time</td><td class="c-part">⚡ Generic</td><td class="c-no">❌ Manual reports</td></tr>
+          <tr><td>Setup time</td><td class="c-dr c-yes">✅ 48 hours</td><td class="c-no">⏳ Weeks</td><td class="c-no">⏳ 1–2 months</td></tr>
+          <tr><td>Dental industry expertise</td><td class="c-dr c-yes">✅ 100% dental</td><td class="c-no">❌ Generic</td><td class="c-part">⚡ Varies</td></tr>
+          <tr><td>30-day money-back guarantee</td><td class="c-dr c-yes">✅ Yes</td><td class="c-no">❌ No</td><td class="c-no">❌ No</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TESTIMONIALS ═══════════════════════════════════ -->
+<section class="section testi-section" id="testimonials">
+  <div class="container">
+    <div class="section-header center reveal">
+      <div class="tag"><span class="tag-dot"></span>Testimonials</div>
+      <h2 class="section-h2">500+ Dentists Can't Be Wrong</h2>
+      <p class="section-p">From solo practitioners to multi-branch chains — here's what our clients say.</p>
+    </div>
+
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="tc-stars">★★★★★</div>
+        <p class="tc-quote">"We were burning ₹40,000/month on ads with zero trackable results. DentalReach brought 38 new patients in month one at a fraction of the cost. I wish I'd found this sooner."</p>
+        <div class="tc-author">
+          <div class="tc-av" style="background:linear-gradient(135deg,#0ea5e9,#6366f1)">RI</div>
+          <div><div class="tc-name">Dr. Ramesh Iyer</div><div class="tc-clinic">Ivory Dental, Chennai · 200+ reviews</div></div>
+          <div class="tc-platform">Google</div>
+        </div>
+      </div>
+
+      <div class="testi-card testi-featured reveal">
+        <div class="tc-stars">★★★★★</div>
+        <p class="tc-quote">"The WhatsApp review bot is pure magic. We went from 18 to 214 Google reviews in 3 months. Now we're the most reviewed dental clinic in all of Borivali. New patients mention our reviews constantly."</p>
+        <div class="tc-author">
+          <div class="tc-av" style="background:linear-gradient(135deg,var(--mint),#0ea5e9)">SP</div>
+          <div><div class="tc-name">Dr. Sneha Parekh, MDS</div><div class="tc-clinic">SmileFirst Clinic, Mumbai · 214 reviews</div></div>
+          <div class="tc-platform">G2</div>
+        </div>
+      </div>
+
+      <div class="testi-card reveal">
+        <div class="tc-stars">★★★★★</div>
+        <p class="tc-quote">"The recall campaigns bring back patients I thought were gone forever. Last month, 22 lapsed patients booked after our 6-month reminder. That's ₹1.1L in revenue we would have completely missed."</p>
+        <div class="tc-author">
+          <div class="tc-av" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">AK</div>
+          <div><div class="tc-name">Dr. Anita Kumar, BDS</div><div class="tc-clinic">FamilyCare Dental, Pune · 156 reviews</div></div>
+          <div class="tc-platform">Capterra</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-scores reveal">
+      <div class="rs-item"><div class="rs-score">4.9★</div><div class="rs-name">G2</div></div>
+      <div class="rs-sep"></div>
+      <div class="rs-item"><div class="rs-score">4.8★</div><div class="rs-name">Capterra</div></div>
+      <div class="rs-sep"></div>
+      <div class="rs-item"><div class="rs-score">4.9★</div><div class="rs-name">Google</div></div>
+      <div class="rs-sep"></div>
+      <div class="rs-item"><div class="rs-score">500+</div><div class="rs-name">Active Clinics</div></div>
+      <div class="rs-sep"></div>
+      <div class="rs-item"><div class="rs-score">200+</div><div class="rs-name">Verified Reviews</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PRICING ════════════════════════════════════════ -->
+<section class="section pricing-section" id="pricing">
+  <div class="container">
+    <div class="section-header center reveal">
+      <div class="tag"><span class="tag-dot"></span>Pricing</div>
+      <h2 class="section-h2">Predictable Pricing. Outsized Returns.</h2>
+      <p class="section-p">Every plan includes onboarding, a dedicated account manager, and a 30-day money-back guarantee on Growth plans.</p>
+    </div>
+
+    <div class="billing-toggle reveal">
+      <span class="bt-label">Monthly</span>
+      <label class="toggle-sw" aria-label="Toggle annual billing">
+        <input type="checkbox" id="billingToggle" onchange="toggleBilling()"/>
+        <span class="toggle-track"></span>
+        <span class="toggle-thumb"></span>
+      </label>
+      <span class="bt-label">Annual <span class="bt-save">Save 20%</span></span>
+    </div>
+
+    <div class="plans-grid">
+      <div class="plan-card reveal">
+        <div class="plan-tier">Starter</div>
+        <div class="plan-price-wrap">
+          <span class="plan-currency">₹</span><span class="plan-amount" id="starterPrice">7,999</span><span class="plan-period">/mo</span>
+        </div>
+        <div class="plan-desc">For solo practitioners and new clinics establishing their online presence</div>
+        <div class="plan-divider"></div>
+        <div class="plan-feats">
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Full Google Business Profile setup & SEO</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Monthly photo & Google Posts schedule</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Automated WhatsApp review requests</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Negative review interception</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Local ranking tracker (20 keywords)</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Monthly performance report</div>
+          <div class="plan-feat"><div class="pf-icon no">—</div><span style="color:var(--text-3)">Outreach campaigns</span></div>
+          <div class="plan-feat"><div class="pf-icon no">—</div><span style="color:var(--text-3)">AI booking bot</span></div>
+        </div>
+        <a href="#contact" class="btn btn-outline btn-full">Start Free Trial</a>
+      </div>
+
+      <div class="plan-card plan-featured-card reveal">
+        <div class="plan-popular">⭐ Most Popular</div>
+        <div class="plan-tier">Growth</div>
+        <div class="plan-price-wrap">
+          <span class="plan-currency">₹</span><span class="plan-amount" id="growthPrice">17,999</span><span class="plan-period">/mo</span>
+        </div>
+        <div class="plan-desc">For clinics serious about local dominance and filling every appointment slot</div>
+        <div class="plan-divider"></div>
+        <div class="plan-feats">
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Everything in Starter</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Email + WhatsApp outreach campaigns</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Patient recall automation (6/12-month)</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>AI appointment booking bot (24/7)</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>No-show reduction SMS reminders</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Google Ads management (₹10k budget included)</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Live analytics dashboard</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Dedicated account manager</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Priority WhatsApp support</div>
+        </div>
+        <a href="#contact" class="btn btn-primary btn-full">Start Free Trial</a>
+        <div class="plan-guarantee"><span>🛡️</span> 30-day money-back guarantee — no questions asked</div>
+      </div>
+
+      <div class="plan-card reveal">
+        <div class="plan-tier">Multi-Clinic</div>
+        <div class="plan-price-wrap">
+          <span class="plan-custom">Custom</span>
+        </div>
+        <div class="plan-desc">For dental chains, hospital groups, and multi-location franchises</div>
+        <div class="plan-divider"></div>
+        <div class="plan-feats">
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Everything in Growth</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Multi-location unified dashboard</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Custom CRM & PMS integration</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>White-label patient portal</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Dedicated success team (3+ people)</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Quarterly strategy sessions</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Custom SLA & reporting</div>
+          <div class="plan-feat"><div class="pf-icon yes">✓</div>Executive business reviews</div>
+        </div>
+        <a href="#contact" class="btn btn-outline btn-full">Talk to Sales →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FAQ ════════════════════════════════════════════ -->
+<section class="section faq-section" id="faq">
+  <div class="container">
+    <div class="section-header center reveal">
+      <div class="tag"><span class="tag-dot"></span>FAQ</div>
+      <h2 class="section-h2">Frequently Asked Questions</h2>
+      <p class="section-p">Everything you need to know before getting started. Can't find your answer? <a href="#contact" style="color:var(--mint)">Chat with us →</a></p>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item reveal" onclick="toggleFaq(this)">
+        <div class="faq-q">How quickly will I see results? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Most clinics see their first new patients within 2–3 weeks. Google ranking improvements appear in 4–8 weeks. Review growth starts in the first week as automated requests go out immediately after setup.</div>
+      </div>
+      <div class="faq-item reveal" onclick="toggleFaq(this)">
+        <div class="faq-q">Do I need to do anything myself? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Minimal involvement required. We handle setup, content creation, campaigns, and reporting. You'll spend about 30 minutes per month on a check-in call with your account manager. Everything else runs automatically.</div>
+      </div>
+      <div class="faq-item reveal" onclick="toggleFaq(this)">
+        <div class="faq-q">Is my patient data safe and HIPAA compliant? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Absolutely. We are fully HIPAA and DPDPA compliant. All patient data is encrypted at rest (AES-256) and in transit (TLS 1.3). We never share data with third parties, and you retain full ownership. We sign a BAA with every clinic before going live.</div>
+      </div>
+      <div class="faq-item reveal" onclick="toggleFaq(this)">
+        <div class="faq-q">Do you work with specialist dental clinics? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Yes. We work with general dentists, orthodontists, oral surgeons, periodontists, implant specialists, cosmetic dentists, and pediatric dentists. Each specialty gets a customised strategy — implant practices need very different campaigns from general dentists.</div>
+      </div>
+      <div class="faq-item reveal" onclick="toggleFaq(this)">
+        <div class="faq-q">What if I'm already using another tool? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">DentalReach integrates with Dentally, Practo, ClinicSoftware, Zoho, and most dental PMS platforms. We offer a free migration service to move your existing data over — usually completed within 48 hours of onboarding.</div>
+      </div>
+      <div class="faq-item reveal" onclick="toggleFaq(this)">
+        <div class="faq-q">What if I don't see results in 30 days? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Growth plan subscribers get a full refund — no questions asked — if they don't see measurable improvements in Google visibility or patient enquiries within 30 days. We're that confident in our results.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA / CONTACT ════════════════════════════════ -->
+<section class="section cta-section" id="contact">
+  <div class="container">
+    <div class="cta-wrapper reveal">
+      <div class="cta-left">
+        <div class="tag"><span class="tag-dot"></span>Get Started — Free</div>
+        <h2>Ready to Fill Your Appointment Book?</h2>
+        <p>Get a free, personalised audit of your clinic's online presence. We'll show you exactly how many patients you're losing every month — and how to fix it in 48 hours.</p>
+
+        <div class="cta-perks">
+          <div class="cta-perk"><div class="cta-perk-icon">✓</div>Free 30-min call with a dental growth specialist</div>
+          <div class="cta-perk"><div class="cta-perk-icon">✓</div>Competitor analysis — see how you rank vs. nearby clinics</div>
+          <div class="cta-perk"><div class="cta-perk-icon">✓</div>Google ranking gap report for your specialty</div>
+          <div class="cta-perk"><div class="cta-perk-icon">✓</div>Custom 90-day patient growth roadmap</div>
+          <div class="cta-perk"><div class="cta-perk-icon">✓</div>No credit card required. No obligations.</div>
+        </div>
+
+        <div class="cta-social">
+          <div class="cta-avatars">
+            <div class="cta-av" style="background:#0ea5e9">A</div>
+            <div class="cta-av" style="background:#8b5cf6">R</div>
+            <div class="cta-av" style="background:#f59e0b">S</div>
+            <div class="cta-av" style="background:#10b981">D</div>
+            <div class="cta-av" style="background:#ef4444">M</div>
+          </div>
+          <span class="cta-social-text">Join 500+ dentists already growing with DentalReach</span>
+        </div>
+      </div>
+
+      <div class="cta-right">
+        <div class="cta-form-wrap">
+          <form id="mainForm" onsubmit="handleFormSubmit(event)">
+            <h3>Get Your Free Clinic Audit</h3>
+            <p>We respond within 2 business hours</p>
+            <div class="form-row-2">
+              <div class="fg"><label>Clinic Name</label><input type="text" placeholder="Dr. Sharma's Dental Clinic" required/></div>
+              <div class="fg"><label>Your Name</label><input type="text" placeholder="Dr. Priya Sharma" required/></div>
+            </div>
+            <div class="fg"><label>Phone Number</label><input type="tel" placeholder="+91 98765 43210" required/></div>
+            <div class="fg"><label>Email Address</label><input type="email" placeholder="doctor@clinic.com" required/></div>
+            <div class="fg">
+              <label>Specialty</label>
+              <select>
+                <option value="">Select your specialty</option>
+                <option>General Dentistry</option>
+                <option>Orthodontics / Braces</option>
+                <option>Dental Implants</option>
+                <option>Cosmetic Dentistry</option>
+                <option>Pediatric Dentistry</option>
+                <option>Oral Surgery</option>
+                <option>Multi-specialty</option>
+              </select>
+            </div>
+            <div class="fg"><label>City</label><input type="text" placeholder="Mumbai, Delhi, Bangalore..." required/></div>
+            <button type="submit" class="btn btn-primary btn-full btn-xl" id="mainFormBtn">
+              <span id="mainFormTxt">Get My Free Audit — No Credit Card</span>
+            </button>
+            <p class="form-disclaimer">🔒 Your data is 100% secure and never shared. HIPAA compliant.</p>
+          </form>
+
+          <div class="form-success hidden" id="mainFormSuccess">
+            <div class="fs-icon">🎉</div>
+            <h3>You're in!</h3>
+            <p>Our dental growth specialist will call you within 2 business hours.</p>
+            <p style="font-size:14px;color:var(--text-3)">Check your WhatsApp — a confirmation has been sent.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═════════════════════════════════════════ -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="fg-brand">
+        <a href="#" class="logo"><div class="logo-mark">DR</div><span class="logo-text">DentalReach</span></a>
+        <p>India's #1 patient acquisition platform built exclusively for dental clinics. Trusted by 500+ dentists across 20+ cities.</p>
+        <div class="f-badges">
+          <div class="f-badge">🔒 HIPAA + DPDPA Compliant</div>
+          <div class="f-badge">★ 4.9 G2 Rating · 200+ Reviews</div>
+          <div class="f-badge">🏆 #1 Dental Marketing Platform 2025</div>
+        </div>
+      </div>
+
+      <div class="fg-col">
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="#features">Google Maps SEO</a></li>
+          <li><a href="#features">Review Automation</a></li>
+          <li><a href="#features">Patient Outreach</a></li>
+          <li><a href="#features">AI Appointment Bot</a></li>
+          <li><a href="#features">Analytics Dashboard</a></li>
+          <li><a href="#features">No-Show Reduction</a></li>
+        </ul>
+      </div>
+
+      <div class="fg-col">
+        <h4>Specialties</h4>
+        <ul>
+          <li><a href="#">General Dentistry</a></li>
+          <li><a href="#">Orthodontics</a></li>
+          <li><a href="#">Dental Implants</a></li>
+          <li><a href="#">Cosmetic Dentistry</a></li>
+          <li><a href="#">Pediatric Dentistry</a></li>
+          <li><a href="#">Multi-specialty Chains</a></li>
+        </ul>
+      </div>
+
+      <div class="fg-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#results">Case Studies</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 DentalReach Technologies Pvt. Ltd. CIN: U74999MH2024PTC123456. All rights reserved.</p>
+      <div class="fb-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">HIPAA Notice</a>
+        <a href="#">Refund Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Sticky mobile CTA bar -->
+<div class="sticky-bar" id="stickyBar" aria-label="Mobile call-to-action">
+  <a href="tel:+919876543210" class="btn btn-ghost btn-sm">📞 Call Now</a>
+  <a href="#contact" class="btn btn-primary" style="flex:1">Get Free Audit →</a>
+</div>
+
+<!-- Demo Modal -->
+<div id="demoModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);align-items:center;justify-content:center;padding:24px" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:var(--navy-2);border:1px solid var(--border-2);border-radius:20px;padding:32px;max-width:600px;width:100%;text-align:center;position:relative">
+    <button onclick="document.getElementById('demoModal').style.display='none'" style="position:absolute;top:16px;right:16px;color:var(--text-3);font-size:24px;cursor:pointer;background:none;border:none">✕</button>
+    <div style="font-size:64px;margin-bottom:16px">🎬</div>
+    <h3 style="font-size:24px;font-weight:800;margin-bottom:8px">Product Demo</h3>
+    <p style="color:var(--text-2);margin-bottom:24px">See DentalReach in action — from Google ranking to automated reviews to patient booking.</p>
+    <div style="background:rgba(0,200,150,0.08);border:1px solid rgba(0,200,150,0.2);border-radius:12px;padding:40px 20px;color:var(--text-3);font-size:14px">
+      📽️ Demo video would play here<br/>(Embed your Loom or Vimeo link)
+    </div>
+    <div style="margin-top:20px">
+      <a href="#contact" class="btn btn-primary" onclick="document.getElementById('demoModal').style.display='none'">Book a Live Demo Instead →</a>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
