@@ -360,8 +360,10 @@ async def scrape_new_leads(
     keyword_override: str | None = None,
     city_override:   str | None = None,
     limit: int = 20,
-) -> None:
-    """Run one Google Maps search and persist results to SQLite."""
+    immediate_outreach: bool = False,
+    dry_run: bool = False,
+) -> tuple[int, int, bool]:
+    """Run one Google Maps search, close scraper, then audit websites, persist results, and optionally send outreach immediately."""
 
     # Resolve keyword + niche
     if keyword_override:
@@ -381,78 +383,145 @@ async def scrape_new_leads(
     init_db(db_path)
     email_finder = EmailFinder(delay=0.5, check_contact_pages=True)
 
-    real_count = 0      # FIX #9: counter only increments for real (non-noise) listings
-    new_count  = 0
+    records = []
+    # Collect all records from Maps scraper first and close browser context to avoid idle browser timeouts
+    async with GoogleMapsScraper(headless=True, delay_ms=1800) as scraper:
+        async for record in scraper.search(target_kw, city, max_results=limit):
+            records.append(record)
 
-    # FIX #11: use try/finally to guarantee connection closure
+    real_count = 0
+    new_count  = 0
+    emails_sent = 0
+    cap_reached = False
+
+    DAILY_CAP    = config.get("daily_email_limit", 50)
+    SEND_GAP_SEC  = 600  # 10 minutes between real emails
+
+    # Process collected records
     conn = sqlite3.connect(db_path)
     try:
         cursor = conn.cursor()
+        for idx, record in enumerate(records, 1):
+            name = record.name.strip()
 
-        async with GoogleMapsScraper(headless=True, delay_ms=1800) as scraper:
-            async for record in scraper.search(target_kw, city, max_results=limit):
-                name = record.name.strip()
+            # Filter noise
+            if name.lower() in _NOISE_NAMES:
+                continue
 
-                # FIX #9: Filter noise BEFORE incrementing counter
-                if name.lower() in _NOISE_NAMES:
-                    continue
+            real_count += 1
 
-                real_count += 1
+            # Duplicate check (fast via idx_leads_name index)
+            cursor.execute(
+                "SELECT id FROM leads WHERE name = ?", (name,)
+            )
+            if cursor.fetchone():
+                print(f"  [Skip] Duplicate: '{name}'")
+                continue
 
-                # Duplicate check (fast via idx_leads_name index)
-                cursor.execute(
-                    "SELECT id FROM leads WHERE name = ?", (name,)
+            website = (record.website or "").strip()
+            print(f"\n  [{real_count}] '{name}'  |  {website or 'no website'}  |  {record.phone or 'no phone'}")
+
+            # Audit website
+            analysis = analyze_website(website)
+            print(f"      -> {analysis['status']}  {analysis['notes'].strip()}")
+
+            # Discover email only for Old Website/No Booking leads
+            email = ""
+            lead_status = analysis["status"]
+            if website and lead_status in ["Old Website", "No Booking/AI"]:
+                print("      -> Searching for contact email...")
+                email = email_finder.find(website)
+                print(f"      -> Email: {email or 'not found'}")
+                if not email:
+                    lead_status = "Filtered (No Email)"
+                    print("      -> Skipped from outreach queue (no email found)")
+
+            # Check if we should immediately do outreach
+            should_email = (
+                immediate_outreach
+                and lead_status in ["Old Website", "No Booking/AI"]
+                and email
+            )
+
+            email_status = 'Not Sent'
+            if should_email:
+                # Check daily cap before attempting send
+                today_date = datetime.now().strftime("%Y-%m-%d")
+                sent_today = conn.execute(
+                    "SELECT COUNT(*) FROM leads WHERE sent_at LIKE ?",
+                    (f"{today_date}%",)
+                ).fetchone()[0]
+
+                if sent_today >= DAILY_CAP:
+                    print(f"      -> [Cap] Daily limit of {DAILY_CAP} emails reached. Skipping immediate outreach.")
+                    cap_reached = True
+
+            # Persist lead to DB
+            lead_id = None
+            try:
+                cursor.execute("""
+                    INSERT INTO leads (
+                        name, phone, address, website, status, email,
+                        email_status, query, location, scraped_at,
+                        website_viewport, website_ssl,
+                        website_copyright_year, website_notes
+                    ) VALUES (?,?,?,?,?,?,'Not Sent',?,?,?,?,?,?,?)
+                """, (
+                    name, record.phone, record.address,
+                    website, lead_status, email,
+                    target_kw, city, datetime.now().isoformat(),
+                    analysis["viewport"], analysis["ssl"],
+                    analysis["copyright_year"],
+                    analysis["notes"].strip(),
+                ))
+                conn.commit()
+                lead_id = cursor.lastrowid
+                new_count += 1
+            except sqlite3.IntegrityError:
+                print(f"      → Integrity conflict skipped for '{name}'")
+                continue
+            except sqlite3.Error as db_err:
+                print(f"      → DB error: {db_err}")
+                continue
+
+            # Send email immediately if eligible
+            if should_email and lead_id and not cap_reached:
+                success = send_single_email(
+                    db_path=db_path,
+                    lead_id=lead_id,
+                    name=name,
+                    email=email,
+                    website=website,
+                    query_term=target_kw,
+                    lead_status=lead_status,
+                    website_notes=analysis["notes"].strip(),
+                    config=config,
+                    dry_run=dry_run,
                 )
-                if cursor.fetchone():
-                    print(f"  [Skip] Duplicate: '{name}'")
-                    continue
+                if success:
+                    emails_sent += 1
+                    # Check if cap reached now
+                    today_date = datetime.now().strftime("%Y-%m-%d")
+                    sent_today = conn.execute(
+                        "SELECT COUNT(*) FROM leads WHERE sent_at LIKE ?",
+                        (f"{today_date}%",)
+                    ).fetchone()[0]
 
-                website = (record.website or "").strip()
-                print(f"\n  [{real_count}] '{name}'  |  {website or 'no website'}  |  {record.phone or 'no phone'}")
+                    if sent_today >= DAILY_CAP:
+                        print(f"      -> [Cap] Daily limit of {DAILY_CAP} reached after send. Stopping.")
+                        cap_reached = True
+                        break
 
-                # Audit website
-                analysis = analyze_website(website)
-                print(f"      -> {analysis['status']}  {analysis['notes'].strip()}")
-                # Discover email only for Old Website/No Booking leads
-                email = ""
-                lead_status = analysis["status"]
-                if website and lead_status in ["Old Website", "No Booking/AI"]:
-                    print("      -> Searching for contact email...")
-                    email = email_finder.find(website)
-                    print(f"      -> Email: {email or 'not found'}")
-                    if not email:
-                        lead_status = "Filtered (No Email)"
-                        print("      -> Skipped from outreach queue (no email found)")
-
-                # Persist
-                try:
-                    cursor.execute("""
-                        INSERT INTO leads (
-                            name, phone, address, website, status, email,
-                            email_status, query, location, scraped_at,
-                            website_viewport, website_ssl,
-                            website_copyright_year, website_notes
-                        ) VALUES (?,?,?,?,?,?,'Not Sent',?,?,?,?,?,?,?)
-                    """, (
-                        name, record.phone, record.address,
-                        website, lead_status, email,
-                        target_kw, city, datetime.now().isoformat(),
-                        analysis["viewport"], analysis["ssl"],
-                        analysis["copyright_year"],
-                        analysis["notes"].strip(),
-                    ))
-                    conn.commit()
-                    new_count += 1
-                except sqlite3.IntegrityError:
-                    # Race-condition duplicate (shouldn't happen but safe guard)
-                    print(f"      → Integrity conflict skipped for '{name}'")
-                except sqlite3.Error as db_err:
-                    print(f"      → DB error: {db_err}")
+                    # Wait before moving to next listing (unless dry-run or last record in results)
+                    is_last_item = (idx == len(records))
+                    if not is_last_item and not dry_run:
+                        print(f"      -> [Wait] Pausing 10 minutes before next listing...")
+                        time.sleep(SEND_GAP_SEC)
     finally:
         conn.close()
 
-    print(f"\n[Scraper] Done. {real_count} real listings found, {new_count} new leads added.")
-    return new_count   # return count so caller can track progress
+    print(f"\n[Scraper] Done. {real_count} real listings checked, {new_count} new leads added.")
+    return new_count, emails_sent, cap_reached
 
 
 # ---------------------------------------------------------------------------
@@ -517,21 +586,21 @@ async def scrape_until_target(
 # Outbound Email Campaigns
 # ---------------------------------------------------------------------------
 
-def send_outreach_emails(
+def send_single_email(
     db_path: str,
-    config:  dict,
+    lead_id: int,
+    name: str,
+    email: str,
+    website: str,
+    query_term: str,
+    lead_status: str,
+    website_notes: str,
+    config: dict,
     dry_run: bool = False,
-) -> None:
+) -> bool:
     """
-    Send outreach emails to:
-      - 'Old Website' leads  (pitch: modern redesign)
-      - 'No Booking/AI' leads (pitch: AI booking assistant)
-
-    Rules:
-      - Auto-start only when >= 10 new leads exist (freshness gate)
-      - Send at most 50 emails per day (today's sent count tracked in DB)
-      - Wait 10 minutes between each real send (avoids spam flags)
-      - Dry-run: log to console, no wait, mark 'Sent (Dry Run)'
+    Send outreach email to a single lead.
+    Returns True if sent successfully (or dry-run), False otherwise.
     """
     is_dry_run = dry_run
 
@@ -542,8 +611,110 @@ def send_outreach_emails(
     smtp_from     = os.environ.get("SMTP_FROM",     smtp_user).strip()
 
     if not (smtp_user and smtp_password) and not is_dry_run:
-        print("\n[Outreach] SMTP credentials missing — skipping email stage.")
-        return
+        print(f"  [Outreach] SMTP credentials missing — skipping email to {email}.")
+        return False
+
+    # Resolve niche from keyword
+    niche = "dental"
+    for kw in config["keywords"]:
+        if kw["term"].lower() in (query_term or "").lower():
+            niche = kw["niche"]
+            break
+
+    # Format the specific website issues as a numbered list for the email
+    raw_notes = website_notes or ""
+    if "Issues found:" in raw_notes:
+        issues_raw = raw_notes.replace("Issues found:", "").strip().rstrip(".")
+        issue_items = [i.strip() for i in issues_raw.split(";") if i.strip()]
+    else:
+        issue_items = [raw_notes] if raw_notes else ["several areas that could be improved"]
+    website_issues = "\n".join(
+        f"  {i+1}. {item.capitalize()}" for i, item in enumerate(issue_items[:5])
+    )
+
+    # Choose template based on lead type
+    if lead_status == "No Booking/AI":
+        template_key = f"{niche}_no_booking_ai"
+        template = (
+            config["email_templates"].get(template_key)
+            or config["email_templates"].get("no_booking_ai")
+            or config["email_templates"].get(niche)
+        )
+    else:
+        template = config["email_templates"].get(niche) or list(config["email_templates"].values())[0]
+
+    promo_url = config["promo_urls"].get(niche, config["promo_urls"].get("dental", ""))
+    subject   = template["subject"].format(business_name=name)
+    body      = template["body"].format(
+        business_name=name,
+        website_url=website or "your website",
+        promo_url=promo_url,
+        website_issues=website_issues,
+    )
+
+    if is_dry_run:
+        print(f"\n  [DRY-RUN][{lead_status}] -> {email}  |  {name}")
+        print(f"  Subject : {subject}")
+        print(f"  Preview : {body[:180]}...")
+        try:
+            with sqlite3.connect(db_path) as conn:
+                conn.execute(
+                    "UPDATE leads SET email_status='Sent (Dry Run)', sent_at=? WHERE id=?",
+                    (datetime.now().isoformat(), lead_id),
+                )
+                conn.commit()
+            return True
+        except sqlite3.Error as e:
+            print(f"  [Error] DB update failed: {e}")
+            return False
+
+    # Real send
+    try:
+        msg = MIMEMultipart()
+        msg["From"]    = smtp_from
+        msg["To"]      = email
+        msg["Subject"] = subject
+        msg.attach(MIMEText(body, "plain", "utf-8"))
+
+        with smtplib.SMTP(smtp_host, smtp_port) as server:
+            server.ehlo()
+            server.starttls()
+            server.login(smtp_user, smtp_password)
+            server.sendmail(smtp_from, [email], msg.as_string())
+
+        with sqlite3.connect(db_path) as conn:
+            conn.execute(
+                "UPDATE leads SET email_status='Sent', sent_at=? WHERE id=?",
+                (datetime.now().isoformat(), lead_id),
+            )
+            conn.commit()
+        print(f"  [Sent][{lead_status}] {email}  |  {name}")
+        return True
+
+    except Exception as mail_err:
+        print(f"  [Error] {email}: {mail_err}")
+        try:
+            with sqlite3.connect(db_path) as conn:
+                conn.execute(
+                    "UPDATE leads SET email_status='Failed', email_error=? WHERE id=?",
+                    (str(mail_err), lead_id),
+                )
+                conn.commit()
+        except sqlite3.Error as e:
+            print(f"  [Error] DB update failed: {e}")
+        return False
+
+
+def send_outreach_emails(
+    db_path: str,
+    config:  dict,
+    dry_run: bool = False,
+) -> int:
+    """
+    Send outreach emails to unsent leads in the database up to the daily cap.
+    Returns the number of emails successfully sent (or dry-run).
+    """
+    is_dry_run = dry_run
 
     DAILY_CAP    = config.get("daily_email_limit", 50)
     MIN_NEW_LEADS = 10   # Only start emailing when >= 10 new leads exist today
@@ -565,14 +736,16 @@ def send_outreach_emails(
 
         print(f"\n[Outreach] Leads scraped today: {new_today}  |  Emails sent today: {sent_today}/{DAILY_CAP}")
 
-        if new_today < MIN_NEW_LEADS:
+        # Check if freshness gate is bypassed (e.g. by setting MIN_NEW_LEADS to 0 in memory)
+        bypass_freshness = (globals().get("MIN_NEW_LEADS", 10) == 0)
+        if new_today < MIN_NEW_LEADS and not bypass_freshness:
             print(f"[Outreach] Freshness gate: only {new_today} new leads today "
                   f"(need {MIN_NEW_LEADS}). Skipping email stage.")
-            return
+            return 0
 
         if sent_today >= DAILY_CAP:
             print(f"[Outreach] Daily cap of {DAILY_CAP} emails already reached. Done.")
-            return
+            return 0
 
         remaining_slots = DAILY_CAP - sent_today
 
@@ -590,113 +763,41 @@ def send_outreach_emails(
 
     if not leads_to_email:
         print("[Outreach] No eligible leads in queue.")
-        return
+        return 0
 
     print(f"[Outreach] {len(leads_to_email)} leads to contact (cap remaining: {remaining_slots}).")
     if is_dry_run:
         print("  [DRY-RUN] Emails will be logged, not dispatched (no 10-min wait).")
 
     sent_count = 0
-
-    with sqlite3.connect(db_path) as conn:
-        cursor = conn.cursor()
-
-        for lead_id, name, email, website, query_term, location, lead_status, website_notes in leads_to_email:
-
-            # Resolve niche from keyword
-            niche = "dental"
-            for kw in config["keywords"]:
-                if kw["term"].lower() in (query_term or "").lower():
-                    niche = kw["niche"]
-                    break
-
-            # Format the specific website issues as a numbered list for the email
-            raw_notes = website_notes or ""
-            if "Issues found:" in raw_notes:
-                # Parse out the fault list from stored notes
-                issues_raw = raw_notes.replace("Issues found:", "").strip().rstrip(".")
-                issue_items = [i.strip() for i in issues_raw.split(";") if i.strip()]
-            else:
-                issue_items = [raw_notes] if raw_notes else ["several areas that could be improved"]
-            # Format as numbered list
-            website_issues = "\n".join(
-                f"  {i+1}. {item.capitalize()}" for i, item in enumerate(issue_items[:5])
-            )
-
-            # Choose template based on lead type
-            if lead_status == "No Booking/AI":
-                template_key = f"{niche}_no_booking_ai"
-                template = (
-                    config["email_templates"].get(template_key)
-                    or config["email_templates"].get("no_booking_ai")
-                    or config["email_templates"].get(niche)
-                )
-            else:
-                template = config["email_templates"].get(niche) or list(config["email_templates"].values())[0]
-
-            promo_url = config["promo_urls"].get(niche, config["promo_urls"].get("dental", ""))
-            subject   = template["subject"].format(business_name=name)
-            body      = template["body"].format(
-                business_name=name,
-                website_url=website or "your website",
-                promo_url=promo_url,
-                website_issues=website_issues,
-            )
-
-            if is_dry_run:
-                print(f"\n  [DRY-RUN][{lead_status}] -> {email}  |  {name}")
-                print(f"  Subject : {subject}")
-                print(f"  Preview : {body[:180]}...")
-                cursor.execute(
-                    "UPDATE leads SET email_status='Sent (Dry Run)', sent_at=? WHERE id=?",
-                    (datetime.now().isoformat(), lead_id),
-                )
-                conn.commit()
-                sent_count += 1
-                continue  # no wait in dry-run
-
-            # Real send
-            try:
-                msg = MIMEMultipart()
-                msg["From"]    = smtp_from
-                msg["To"]      = email
-                msg["Subject"] = subject
-                msg.attach(MIMEText(body, "plain", "utf-8"))
-
-                with smtplib.SMTP(smtp_host, smtp_port) as server:
-                    server.ehlo()
-                    server.starttls()
-                    server.login(smtp_user, smtp_password)
-                    server.sendmail(smtp_from, [email], msg.as_string())
-
-                cursor.execute(
-                    "UPDATE leads SET email_status='Sent', sent_at=? WHERE id=?",
-                    (datetime.now().isoformat(), lead_id),
-                )
-                conn.commit()
-                print(f"  [Sent][{lead_status}] {email}  |  {name}")
-                sent_count += 1
-
-                # Check if daily cap now reached
-                if sent_count + sent_today >= DAILY_CAP:
-                    print(f"  [Cap] Daily limit of {DAILY_CAP} reached. Stopping.")
-                    break
-
-                # 10-minute gap between sends (avoids spam flags)
-                remaining = len(leads_to_email) - sent_count
-                if remaining > 0:
+    for lead in leads_to_email:
+        lead_id, name, email, website, query_term, location, lead_status, website_notes = lead
+        success = send_single_email(
+            db_path=db_path,
+            lead_id=lead_id,
+            name=name,
+            email=email,
+            website=website,
+            query_term=query_term,
+            lead_status=lead_status,
+            website_notes=website_notes,
+            config=config,
+            dry_run=is_dry_run,
+        )
+        if success:
+            sent_count += 1
+            if sent_count + sent_today >= DAILY_CAP:
+                print(f"  [Cap] Daily limit of {DAILY_CAP} reached. Stopping.")
+                break
+            # Wait between sends
+            remaining = len(leads_to_email) - sent_count
+            if remaining > 0:
+                if not is_dry_run:
                     print(f"  [Wait] Pausing 10 minutes before next email ({remaining} remaining)...")
                     time.sleep(SEND_GAP_SEC)
 
-            except Exception as mail_err:
-                print(f"  [Error] {email}: {mail_err}")
-                cursor.execute(
-                    "UPDATE leads SET email_status='Failed', email_error=? WHERE id=?",
-                    (str(mail_err), lead_id),
-                )
-                conn.commit()
-
-    print(f"[Outreach] Finished. {sent_count} emails dispatched today (total: {sent_count + sent_today}).")
+    print(f"[Outreach] Finished. {sent_count} emails dispatched today (total today: {sent_count + sent_today}).")
+    return sent_count
 
 # ---------------------------------------------------------------------------
 # Inbound Reply Tracking
@@ -794,6 +895,105 @@ def check_for_replies(db_path: str) -> None:
         print("  No new replies detected.")
 
 # ---------------------------------------------------------------------------
+async def run_continuous_outreach_loop(
+    db_path: str,
+    config: dict,
+    limit: int = 25,
+    max_iters: int = 20,
+    dry_run: bool = False,
+    keyword_override: str | None = None,
+    city_override: str | None = None,
+    target_override: int = 0,
+) -> None:
+    """
+    Continuous loop that:
+      1. First emails any eligible unsent leads in the database up to the daily cap.
+      2. If the cap is not met, runs the scraper to extract new leads and immediately sends emails to targets.
+      3. Repeats scraping across cities/keywords until the daily cap has been met or max_iters is reached.
+    """
+    DAILY_CAP = target_override if target_override > 0 else config.get("daily_email_limit", 50)
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    # Step 1: Check how many emails have already been sent today
+    with sqlite3.connect(db_path) as conn:
+        sent_today = conn.execute(
+            "SELECT COUNT(*) FROM leads WHERE sent_at LIKE ?",
+            (f"{today}%",)
+        ).fetchone()[0]
+
+    print(f"\n[Outreach Loop] Campaign starting. Emails sent today so far: {sent_today}/{DAILY_CAP}")
+
+    if sent_today >= DAILY_CAP:
+        print(f"[Outreach Loop] Daily limit of {DAILY_CAP} already reached. Nothing to do.")
+        return
+
+    # Step 2: Email existing unsent leads from the database queue first
+    print("\n[Outreach Loop] Processing existing unsent leads in queue...")
+    # Temporarily set MIN_NEW_LEADS to 0 in globals so send_outreach_emails doesn't gate us
+    global MIN_NEW_LEADS
+    old_min_new_leads = globals().get("MIN_NEW_LEADS", 10)
+    globals()["MIN_NEW_LEADS"] = 0
+    try:
+        sent_from_queue = send_outreach_emails(db_path, config, dry_run=dry_run)
+    finally:
+        globals()["MIN_NEW_LEADS"] = old_min_new_leads
+
+    # Recalculate sent count
+    with sqlite3.connect(db_path) as conn:
+        sent_today = conn.execute(
+            "SELECT COUNT(*) FROM leads WHERE sent_at LIKE ?",
+            (f"{today}%",)
+        ).fetchone()[0]
+
+    print(f"[Outreach Loop] After queue processing, emails sent today: {sent_today}/{DAILY_CAP}")
+
+    if sent_today >= DAILY_CAP:
+        print("[Outreach Loop] Daily cap reached via queue leads. Done.")
+        return
+
+    # Step 3: Loop scraping & immediate emailing until cap is met
+    for iteration in range(1, max_iters + 1):
+        with sqlite3.connect(db_path) as conn:
+            sent_today = conn.execute(
+                "SELECT COUNT(*) FROM leads WHERE sent_at LIKE ?",
+                (f"{today}%",)
+            ).fetchone()[0]
+
+        if sent_today >= DAILY_CAP:
+            print(f"[Outreach Loop] Goal reached! {sent_today}/{DAILY_CAP} emails sent today.")
+            break
+
+        remaining = DAILY_CAP - sent_today
+        print(f"\n[Outreach Loop] Iteration {iteration}/{max_iters} — Need {remaining} more emails to hit daily cap.")
+
+        # Run scraper with immediate outreach enabled
+        try:
+            new_leads, emails_sent, cap_reached = await scrape_new_leads(
+                db_path=db_path,
+                config=config,
+                keyword_override=keyword_override,
+                city_override=city_override,
+                limit=limit,
+                immediate_outreach=True,
+                dry_run=dry_run,
+            )
+            print(f"[Outreach Loop] Iteration complete: added {new_leads} new leads, sent {emails_sent} outreach emails.")
+            if cap_reached:
+                print("[Outreach Loop] Daily email cap reached during scraping. Done.")
+                break
+        except Exception as err:
+            print(f"[Outreach Loop] Scraping iteration {iteration} failed: {err}")
+
+    else:
+        with sqlite3.connect(db_path) as conn:
+            final_sent = conn.execute(
+                "SELECT COUNT(*) FROM leads WHERE sent_at LIKE ?",
+                (f"{today}%",)
+            ).fetchone()[0]
+        print(f"\n[Outreach Loop] Max iterations ({max_iters}) reached. Final daily count: {final_sent}/{DAILY_CAP}")
+
+
+# ---------------------------------------------------------------------------
 # CLI Entry Point
 # ---------------------------------------------------------------------------
 
@@ -806,9 +1006,9 @@ if __name__ == "__main__":
     parser.add_argument("--limit",        type=int, default=25,
                         help="Max Google Maps results per single search (default: 25)")
     parser.add_argument("--target",       type=int, default=0,
-                        help="Keep scraping until this many Old Website leads are collected today (0 = single run)")
+                        help="Keep scraping until this many outreach emails are sent today (0 = use daily_email_limit)")
     parser.add_argument("--max-iterations", type=int, default=20,
-                        help="Safety cap: max search loops when using --target (default: 20)")
+                        help="Safety cap: max search loops to hit target (default: 20)")
     parser.add_argument("--keyword",      type=str, default=None,
                         help="Override keyword (e.g. 'dentist')")
     parser.add_argument("--city",         type=str, default=None,
@@ -829,37 +1029,43 @@ if __name__ == "__main__":
 
     init_db(DB_PATH)
 
-    # Stage 1: Scrape
-    if not args.no_scrape:
-        try:
-            if args.target > 0:
-                # Target mode: loop until daily Old Website goal is met
-                print(f"\n[Mode] TARGET mode — scraping until {args.target} Old Website leads collected today")
-                asyncio.run(
-                    scrape_until_target(
-                        DB_PATH, config,
-                        target=args.target,
-                        limit=args.limit,
-                        max_iters=args.max_iterations,
-                    )
-                )
-            else:
-                # Single run mode
-                asyncio.run(
-                    scrape_new_leads(
-                        DB_PATH, config,
-                        keyword_override=args.keyword,
-                        city_override=args.city,
-                        limit=args.limit,
-                    )
-                )
-        except Exception as err:
-            print(f"[Fatal] Scraping failed: {err}")
-
-    # Stage 2: Check replies (before emailing, keeps state fresh)
+    # Stage 1: Check replies (keeps state fresh)
     if not args.no_email:
         check_for_replies(DB_PATH)
 
-    # Stage 3: Send outbound emails
-    if not args.no_email:
-        send_outreach_emails(DB_PATH, config, dry_run=args.dry_run)
+    # Stage 2: Main workflow execution
+    if args.no_scrape:
+        # Email only mode
+        if not args.no_email:
+            send_outreach_emails(DB_PATH, config, dry_run=args.dry_run)
+    elif args.no_email:
+        # Scrape only mode
+        try:
+            asyncio.run(
+                scrape_new_leads(
+                    DB_PATH, config,
+                    keyword_override=args.keyword,
+                    city_override=args.city,
+                    limit=args.limit,
+                    immediate_outreach=False,
+                    dry_run=args.dry_run,
+                )
+            )
+        except Exception as err:
+            print(f"[Fatal] Scraping failed: {err}")
+    else:
+        # Default: combined continuous outreach loop
+        try:
+            asyncio.run(
+                run_continuous_outreach_loop(
+                    DB_PATH, config,
+                    limit=args.limit,
+                    max_iters=args.max_iterations,
+                    dry_run=args.dry_run,
+                    keyword_override=args.keyword,
+                    city_override=args.city,
+                    target_override=args.target,
+                )
+            )
+        except Exception as err:
+            print(f"[Fatal] Continuous outreach loop failed: {err}")

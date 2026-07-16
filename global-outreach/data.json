@@ -1,6 +1,46 @@
 {
   "leads": [
     {
+      "id": 42,
+      "name": "Green Park Dental Practice",
+      "phone": "+44 1225 421096",
+      "address": "\ue0c8\n40 Green Park, Bath BA1 1HZ, United Kingdom",
+      "website": "http://www.bathdentists.co.uk/",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dentist",
+      "location": "Bath",
+      "scraped_at": "2026-07-16T20:42:30.606425",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours); no social media links visible on the website.",
+      "email_error": null
+    },
+    {
+      "id": 41,
+      "name": "Edgar Buildings Dental & Implant Clinic",
+      "phone": "+44 1225 466086",
+      "address": "\ue0c8\n7 Edgar Buildings, Bath BA1 2EE, United Kingdom",
+      "website": "https://www.smileofconfidence.com/?utm_source=googlemaps&utm_medium=organic&utm_campaign=primary",
+      "status": "Filtered (No Email)",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dentist",
+      "location": "Bath",
+      "scraped_at": "2026-07-16T20:42:28.687966",
+      "website_viewport": 0,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: not mobile-friendly (broken layout on phones and tablets); no AI assistant or live chat (no way to answer patient questions after hours); no contact form or online enquiry form.",
+      "email_error": null
+    },
+    {
       "id": 40,
       "name": "Scott Arms Dental Practice",
       "phone": "+44 121 357 5000",
@@ -782,15 +822,15 @@
     }
   ],
   "stats": {
-    "total": 39,
+    "total": 41,
     "no_website": 0,
     "old_website": 14,
-    "modern_website": 25,
+    "modern_website": 26,
     "sent": 4,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At",
-  "generated_at": "2026-07-16T14:30:57.022946+00:00"
+  "generated_at": "2026-07-16T15:13:11.263883+00:00"
 }
