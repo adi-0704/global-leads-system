@@ -307,7 +307,7 @@
       "address": "\ue0c8\n18 Bennetts Hill, Birmingham B2 5QJ, United Kingdom",
       "website": "http://www.stjohnsdentalpractice.com/",
       "status": "Old Website",
-      "email": "%c2%a0reception@stjohnsdentalpractice.com",
+      "email": "reception@stjohnsdentalpractice.com",
       "email_status": "Sent",
       "sent_at": "2026-07-16T19:41:14.514334",
       "replied_at": null,
@@ -792,5 +792,5 @@
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At",
-  "generated_at": "2026-07-16T14:21:51.984186+00:00"
+  "generated_at": "2026-07-16T14:30:57.022946+00:00"
 }

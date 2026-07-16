@@ -188,15 +188,16 @@ class EmailFinder:
         source_domain = self._base_domain(source_url)
 
         # ── Priority 1: mailto: links ─────────────────────────────────────
+        import urllib.parse
         mailto_pattern = re.compile(r'mailto:([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})')
         for match in mailto_pattern.finditer(html):
-            email = match.group(1).strip().lower()
+            email = urllib.parse.unquote(match.group(1)).strip().lower()
             if self._is_valid(email):
                 return email
 
         # ── Priority 2: Generic regex scan ───────────────────────────────
         for match in _EMAIL_PATTERN.finditer(html):
-            email = match.group(0).strip().lower()
+            email = urllib.parse.unquote(match.group(0)).strip().lower()
             if self._is_valid(email):
                 return email
 
