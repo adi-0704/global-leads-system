@@ -541,7 +541,7 @@ def send_outreach_emails(
         return
 
     DAILY_CAP    = config.get("daily_email_limit", 50)
-    MIN_NEW_LEADS = 0   # Allow sending immediately without minimum threshold
+    MIN_NEW_LEADS = 10   # Only start emailing when >= 10 new leads exist today
     SEND_GAP_SEC  = 600  # 10 minutes between real emails
     today         = datetime.now().strftime("%Y-%m-%d")
 
