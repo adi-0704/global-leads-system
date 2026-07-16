@@ -172,6 +172,7 @@ function renderOverview() {
         
         let statusTagClass = 'tag-no-web';
         if (lead.status === 'Old Website') statusTagClass = 'tag-old-web';
+        if (lead.status === 'No Booking/AI') statusTagClass = 'tag-no-booking';
         if (lead.status === 'Modern Website') statusTagClass = 'tag-modern-web';
         
         item.innerHTML = `
@@ -232,7 +233,7 @@ function renderCampaignTable() {
     
     // Filter
     const filtered = allLeads.filter(lead => {
-        if (lead.status !== 'Old Website') return false;
+        if (lead.status !== 'Old Website' && lead.status !== 'No Booking/AI') return false;
         
         if (emailFilter !== 'ALL') {
             if (lead.email_status !== emailFilter) return false;

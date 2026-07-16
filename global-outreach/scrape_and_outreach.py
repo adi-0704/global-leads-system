@@ -155,6 +155,36 @@ _AI_PATTERNS = [
 ]
 _AI_RE = re.compile('|'.join(_AI_PATTERNS), re.IGNORECASE)
 
+# --- Contact form detection ---
+_CONTACT_FORM_RE = re.compile(
+    r'<form|contact.?form|enquiry.?form|patient.?form|intake.?form'
+    r'|<input[^>]+type=["\'](?:email|tel)["\']'
+    r'|mailto:',
+    re.IGNORECASE
+)
+
+# --- Google Analytics / tracking detection ---
+_ANALYTICS_RE = re.compile(
+    r'google-analytics\.com|googletagmanager\.com|gtag\(|ga\(|fbq\(|_gaq'
+    r'|hotjar|mixpanel|segment\.com|clarity\.ms',
+    re.IGNORECASE
+)
+
+# --- Social media link detection ---
+_SOCIAL_RE = re.compile(
+    r'facebook\.com|instagram\.com|twitter\.com|x\.com|linkedin\.com'
+    r'|youtube\.com|tiktok\.com|threads\.net',
+    re.IGNORECASE
+)
+
+# --- Testimonial / review section detection ---
+_REVIEW_RE = re.compile(
+    r'testimonial|review|patient.said|what.our.patient|star.rating'
+    r'|google.review|trustpilot|doctolib.*review|zocdoc.*review'
+    r'|class=["\'][^"\'>]*(?:review|testimonial|rating)',
+    re.IGNORECASE
+)
+
 _HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -165,19 +195,48 @@ _HEADERS = {
 }
 
 
+def _build_fault_list(result: dict) -> list:
+    """
+    Convert analysis result dict into a list of specific, human-readable
+    fault strings. Used to personalise outreach emails.
+    """
+    faults = []
+    if not result["ssl"]:
+        faults.append("no SSL certificate (website shows as 'Not Secure' in browsers)")
+    if not result["viewport"]:
+        faults.append("not mobile-friendly (broken layout on phones and tablets)")
+    if result["copyright_year"] and result["copyright_year"] <= 2022:
+        faults.append(f"outdated design (copyright shows {result['copyright_year']})")
+    if not result["has_booking"]:
+        faults.append("no online booking (patients cannot schedule appointments from the website)")
+    if not result["has_ai"]:
+        faults.append("no AI assistant or live chat (no way to answer patient questions after hours)")
+    if not result["has_contact_form"]:
+        faults.append("no contact form or online enquiry form")
+    if not result["has_analytics"]:
+        faults.append("no website analytics (no visibility into how many patients visit or where they come from)")
+    if not result["has_social"]:
+        faults.append("no social media links visible on the website")
+    if not result["has_reviews"]:
+        faults.append("no patient testimonials or reviews section")
+    return faults
+
+
 def analyze_website(url: str) -> dict:
     """
-    Fetch *url* and check for modernity signals, booking system, and AI chat.
+    Fetch *url* and perform a comprehensive audit for 10 specific faults.
 
     Status hierarchy:
-      'No Website'    — no URL present
-      'Old Website'   — HTTP-only, no viewport, or copyright <= 2022
-      'No Booking/AI' — modern site but lacks online booking AND AI chatbot
-      'Modern Website'— modern site WITH booking system or AI chat
+      'No Website'    - no URL present
+      'Old Website'   - HTTP-only, no viewport, or copyright <= 2022
+      'No Booking/AI' - modern site but lacks booking AND AI chatbot
+      'Modern Website'- modern site WITH booking system or AI chat
 
     Returns dict with keys:
-        ssl, viewport, copyright_year, has_booking, has_ai,
-        status, notes
+        ssl, viewport, copyright_year,
+        has_booking, has_ai, has_contact_form,
+        has_analytics, has_social, has_reviews,
+        faults (list), status, notes
     """
     result = {
         "ssl": 0,
@@ -185,6 +244,11 @@ def analyze_website(url: str) -> dict:
         "copyright_year": None,
         "has_booking": 0,
         "has_ai": 0,
+        "has_contact_form": 0,
+        "has_analytics": 0,
+        "has_social": 0,
+        "has_reviews": 0,
+        "faults": [],
         "status": "Old Website",
         "notes": "",
     }
@@ -192,6 +256,7 @@ def analyze_website(url: str) -> dict:
     if not url or not url.strip():
         result["status"] = "No Website"
         result["notes"]  = "No website listed."
+        result["faults"] = ["no website at all"]
         return result
 
     fetch_url = url.strip()
@@ -203,41 +268,52 @@ def analyze_website(url: str) -> dict:
             fetch_url, timeout=8, headers=_HEADERS, allow_redirects=True
         )
 
-        # SSL
+        # 1. SSL
         if resp.url.startswith("https://"):
             result["ssl"] = 1
-        elif not url.startswith("https://"):
-            result["notes"] += "HTTP-only (no SSL). "
 
         if not resp.ok:
             result["notes"] += f"Server returned HTTP {resp.status_code}. "
+            result["faults"] = _build_fault_list(result)
             return result
 
         html = resp.text
 
-        # Viewport
+        # 2. Mobile viewport
         if _VIEWPORT_RE.search(html):
             result["viewport"] = 1
-        else:
-            result["notes"] += "Missing mobile viewport meta tag. "
 
-        # Copyright year
+        # 3. Copyright year
         m = _COPYRIGHT_RE.search(html) or _COPYRIGHT_FB.search(html[:100_000])
         if m:
             year = int(m.group(1))
             result["copyright_year"] = year
-            if year <= 2022:
-                result["notes"] += f"Outdated copyright year ({year}). "
 
-        # Booking system detection
+        # 4. Booking system
         if _BOOKING_RE.search(html):
             result["has_booking"] = 1
 
-        # AI / chatbot detection
+        # 5. AI / chatbot
         if _AI_RE.search(html):
             result["has_ai"] = 1
 
-        # ── Status decision ────────────────────────────────────────────────
+        # 6. Contact form
+        if _CONTACT_FORM_RE.search(html):
+            result["has_contact_form"] = 1
+
+        # 7. Analytics / tracking
+        if _ANALYTICS_RE.search(html):
+            result["has_analytics"] = 1
+
+        # 8. Social media links
+        if _SOCIAL_RE.search(html):
+            result["has_social"] = 1
+
+        # 9. Testimonials / reviews
+        if _REVIEW_RE.search(html):
+            result["has_reviews"] = 1
+
+        # -- Status decision --
         is_old = (
             result["ssl"] == 0
             or result["viewport"] == 0
@@ -245,28 +321,32 @@ def analyze_website(url: str) -> dict:
         )
         if is_old:
             result["status"] = "Old Website"
-            if not result["notes"].strip():
-                result["notes"] = "Outdated design indicators found."
         elif not result["has_booking"] and not result["has_ai"]:
-            # Modern site but missing booking system AND AI assistant
             result["status"] = "No Booking/AI"
-            result["notes"]  = "Modern website but no online booking or AI assistant detected."
         else:
             result["status"] = "Modern Website"
-            features = []
-            if result["has_booking"]: features.append("booking system")
-            if result["has_ai"]:      features.append("AI/chat widget")
-            result["notes"] = f"Website is secure and responsive. Has: {', '.join(features)}."
+
+        # Build fault list AFTER all checks are done
+        result["faults"] = _build_fault_list(result)
+
+        # Human-readable notes summary
+        if result["faults"]:
+            result["notes"] = f"Issues found: {'; '.join(result['faults'][:3])}."
+        else:
+            result["notes"] = "Website appears fully optimised."
 
     except requests.exceptions.Timeout:
-        result["notes"]  = "Website request timed out."
+        result["notes"]  = "Website timed out (very slow or unresponsive)."
         result["status"] = "Old Website"
+        result["faults"] = ["website is very slow or unresponsive"] + _build_fault_list(result)
     except requests.exceptions.ConnectionError:
         result["notes"]  = "Could not connect to website."
         result["status"] = "Old Website"
+        result["faults"] = ["website appears to be down or unreachable"] + _build_fault_list(result)
     except Exception as exc:
         result["notes"]  = f"Analysis error: {exc}."
         result["status"] = "Old Website"
+        result["faults"] = _build_fault_list(result)
 
     return result
 
@@ -332,14 +412,14 @@ async def scrape_new_leads(
 
                 # Audit website
                 analysis = analyze_website(website)
-                print(f"      → {analysis['status']}  {analysis['notes'].strip()}")
+                print(f"      -> {analysis['status']}  {analysis['notes'].strip()}")
 
                 # Discover email only for Old Website/No Booking leads
                 email = ""
                 if website and analysis["status"] in ["Old Website", "No Booking/AI"]:
-                    print("      → Searching for contact email…")
+                    print("      -> Searching for contact email...")
                     email = email_finder.find(website)
-                    print(f"      → Email: {email or 'not found'}")
+                    print(f"      -> Email: {email or 'not found'}")
 
                 # Persist
                 try:
@@ -493,7 +573,7 @@ def send_outreach_emails(
 
         # Pull eligible leads: Old Website + No Booking/AI — unsent, have email
         leads_to_email = conn.execute("""
-            SELECT id, name, email, website, query, location, status
+            SELECT id, name, email, website, query, location, status, website_notes
             FROM   leads
             WHERE  status       IN ('Old Website', 'No Booking/AI')
               AND  email_status  = 'Not Sent'
@@ -516,7 +596,7 @@ def send_outreach_emails(
     with sqlite3.connect(db_path) as conn:
         cursor = conn.cursor()
 
-        for lead_id, name, email, website, query_term, location, lead_status in leads_to_email:
+        for lead_id, name, email, website, query_term, location, lead_status, website_notes in leads_to_email:
 
             # Resolve niche from keyword
             niche = "dental"
@@ -525,14 +605,26 @@ def send_outreach_emails(
                     niche = kw["niche"]
                     break
 
+            # Format the specific website issues as a numbered list for the email
+            raw_notes = website_notes or ""
+            if "Issues found:" in raw_notes:
+                # Parse out the fault list from stored notes
+                issues_raw = raw_notes.replace("Issues found:", "").strip().rstrip(".")
+                issue_items = [i.strip() for i in issues_raw.split(";") if i.strip()]
+            else:
+                issue_items = [raw_notes] if raw_notes else ["several areas that could be improved"]
+            # Format as numbered list
+            website_issues = "\n".join(
+                f"  {i+1}. {item.capitalize()}" for i, item in enumerate(issue_items[:5])
+            )
+
             # Choose template based on lead type
             if lead_status == "No Booking/AI":
                 template_key = f"{niche}_no_booking_ai"
-                # Fall back to generic no_booking_ai if niche-specific missing
                 template = (
                     config["email_templates"].get(template_key)
                     or config["email_templates"].get("no_booking_ai")
-                    or config["email_templates"].get(niche)   # ultimate fallback
+                    or config["email_templates"].get(niche)
                 )
             else:
                 template = config["email_templates"].get(niche) or list(config["email_templates"].values())[0]
@@ -543,6 +635,7 @@ def send_outreach_emails(
                 business_name=name,
                 website_url=website or "your website",
                 promo_url=promo_url,
+                website_issues=website_issues,
             )
 
             if is_dry_run:
