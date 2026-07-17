@@ -234,6 +234,7 @@ function renderCampaignTable() {
     // Filter
     const filtered = allLeads.filter(lead => {
         if (lead.status !== 'Old Website' && lead.status !== 'No Booking/AI') return false;
+        if (!lead.email || lead.email.trim() === '') return false;
         
         if (emailFilter !== 'ALL') {
             if (lead.email_status !== emailFilter) return false;
