@@ -1,6 +1,46 @@
 {
   "leads": [
     {
+      "id": 221,
+      "name": "CommUnityCare",
+      "phone": "512) 978-9015",
+      "address": "\ue0c8\n15 Waller St, Austin, TX 78702",
+      "website": "https://communitycaretx.org/",
+      "status": "No Booking/AI",
+      "email": "newsletter@communitycare.org",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:45:57.777312",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Austin",
+      "scraped_at": "2026-07-18T06:45:56.343453",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2024,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
+      "id": 218,
+      "name": "myDental at Tech Ridge",
+      "phone": "512) 815-2524",
+      "address": "\ue0c8\n13000 N Interstate Hwy 35 Ste 206, Austin, TX 78753",
+      "website": "https://www.mydental.com/locations/tech-ridge/?utm_source=google&utm_medium=organic&utm_campaign=gbp",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Austin",
+      "scraped_at": "2026-07-18T06:45:39.311658",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no contact form or online enquiry form; no website analytics (no visibility into how many patients visit or where they come from).",
+      "email_error": null
+    },
+    {
       "id": 216,
       "name": "The Tooth Inc",
       "phone": "512) 593-1874",
@@ -3142,15 +3182,15 @@
     }
   ],
   "stats": {
-    "total": 157,
+    "total": 159,
     "no_website": 2,
-    "old_website": 53,
-    "modern_website": 102,
-    "sent": 53,
+    "old_website": 54,
+    "modern_website": 103,
+    "sent": 54,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:44:18.926603+00:00"
+  "generated_at": "2026-07-18T06:45:57.781398+00:00"
 }
