@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 153,
+      "name": "Clinique Dentaire Port-Royal - Dentiste Montr\u00e9al - Urgences 7 jours",
+      "phone": "+1 438-600-5578",
+      "address": "\ue0c8\n75 Rue de Port-Royal E Ste 120, Montreal, Quebec H3L 3T1, Canada",
+      "website": "https://www.cdportroyal.com/?utm_campaign=gmb",
+      "status": "No Booking/AI",
+      "email": "utilisateur@domaine.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:15:33.179672",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Montreal",
+      "scraped_at": "2026-07-18T06:15:31.676373",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no contact form or online enquiry form.",
+      "email_error": null
+    },
+    {
       "id": 151,
       "name": "Downtown Montreal Dentistry",
       "phone": "+1 514-844-3112",
@@ -2342,15 +2362,15 @@
     }
   ],
   "stats": {
-    "total": 117,
+    "total": 118,
     "no_website": 1,
-    "old_website": 32,
+    "old_website": 33,
     "modern_website": 84,
-    "sent": 32,
+    "sent": 33,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:14:19.683234+00:00"
+  "generated_at": "2026-07-18T06:15:33.182357+00:00"
 }
