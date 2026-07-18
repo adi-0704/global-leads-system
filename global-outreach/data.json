@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 63,
+      "name": "Adel Magid DDS",
+      "phone": "248) 628-9707",
+      "address": "\ue0c8\n201 S Washington St, Oxford, MI 48371",
+      "website": "http://www.oxfordsmiledentistry.com/",
+      "status": "Old Website",
+      "email": "your@email.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T05:42:14.150202",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Oxford",
+      "scraped_at": "2026-07-18T05:42:12.596397",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2019,
+      "website_notes": "Issues found: outdated design (copyright shows 2019); no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
       "id": 60,
       "name": "Oxford Dental Care",
       "phone": "256) 831-3432",
@@ -922,15 +942,15 @@
     }
   ],
   "stats": {
-    "total": 46,
+    "total": 47,
     "no_website": 0,
-    "old_website": 12,
+    "old_website": 13,
     "modern_website": 34,
-    "sent": 12,
+    "sent": 13,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At",
-  "generated_at": "2026-07-18T05:40:51.053849+00:00"
+  "generated_at": "2026-07-18T05:42:14.152151+00:00"
 }
