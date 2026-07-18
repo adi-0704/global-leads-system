@@ -1,6 +1,66 @@
 {
   "leads": [
     {
+      "id": 141,
+      "name": "Dr Kieren Bong Essence Medical",
+      "phone": "+44 141 894 9098",
+      "address": "\ue0c8\nDUNDAS COURT, 38 New City Rd, Glasgow G4 9JT, United Kingdom",
+      "website": "http://www.essencemedical.co.uk/",
+      "status": "No Booking/AI",
+      "email": "lorraine@growthdigitalmarketing.co.uk",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:07:18.907549",
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Glasgow",
+      "scraped_at": "2026-07-18T06:07:17.334587",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
+      "id": 139,
+      "name": "The Mole Clinic Glasgow",
+      "phone": "+44 800 023 4212",
+      "address": "\ue0c8\n132 W Regent St, Glasgow G2 2RQ, United Kingdom",
+      "website": "https://themoleclinic.co.uk/glasgow/?utm_source=google&utm_medium=local&utm_campaign=gmb",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Glasgow",
+      "scraped_at": "2026-07-18T06:07:03.719050",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no contact form or online enquiry form.",
+      "email_error": null
+    },
+    {
+      "id": 138,
+      "name": "Skinstitute Scotland",
+      "phone": "+44 141 427 3454",
+      "address": "\ue0c8\nWatermark Business Park, 325 Govan Rd, Glasgow G51 2SE, United Kingdom",
+      "website": "http://www.skinstitutescotland.co.uk/",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Glasgow",
+      "scraped_at": "2026-07-18T06:07:02.746214",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
       "id": 137,
       "name": "Glasgow Skin Cancer Clinic",
       "phone": "+44 141 328 1225",
@@ -2102,15 +2162,15 @@
     }
   ],
   "stats": {
-    "total": 105,
+    "total": 108,
     "no_website": 1,
-    "old_website": 26,
-    "modern_website": 78,
-    "sent": 26,
+    "old_website": 27,
+    "modern_website": 80,
+    "sent": 27,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:06:00.940728+00:00"
+  "generated_at": "2026-07-18T06:07:18.910030+00:00"
 }
