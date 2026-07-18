@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 164,
+      "name": "Centre Dentaire Cristal",
+      "phone": "+1 514-333-0444",
+      "address": "\ue0c8\n2131 Rue Yvette-Brillon, Montr\u00e9al, QC H4N 0E3, Canada",
+      "website": "http://www.centredentairecristal.com/",
+      "status": "No Booking/AI",
+      "email": "info@centredentairecristal.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:19:57.137203",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Montreal",
+      "scraped_at": "2026-07-18T06:19:55.678161",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2024,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
       "id": 160,
       "name": "La Clinique rue Roy",
       "phone": "+1 514-499-0984",
@@ -2442,15 +2462,15 @@
     }
   ],
   "stats": {
-    "total": 122,
+    "total": 123,
     "no_website": 2,
-    "old_website": 35,
+    "old_website": 36,
     "modern_website": 85,
-    "sent": 35,
+    "sent": 36,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:18:13.618478+00:00"
+  "generated_at": "2026-07-18T06:19:57.139580+00:00"
 }
