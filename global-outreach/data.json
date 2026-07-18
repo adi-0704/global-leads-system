@@ -1,6 +1,46 @@
 {
   "leads": [
     {
+      "id": 59,
+      "name": "Dental Center Of Oxford",
+      "phone": "248) 628-9707",
+      "address": "\ue0c8\n201 S Washington St, Oxford, MI 48371",
+      "website": "http://www.oxfordsmiledentistry.com/",
+      "status": "Old Website",
+      "email": "your@email.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T05:39:47.853552",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Oxford",
+      "scraped_at": "2026-07-18T05:39:46.419055",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2019,
+      "website_notes": "Issues found: outdated design (copyright shows 2019); no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
+      "id": 58,
+      "name": "Oxford Dental",
+      "phone": "262) 270-6933",
+      "address": "\ue0c8\n6035 Durand Ave, Mt Pleasant, WI 53406",
+      "website": "https://www.oxforddentalusa.com/",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Oxford",
+      "scraped_at": "2026-07-18T05:39:43.683437",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours); no social media links visible on the website.",
+      "email_error": null
+    },
+    {
       "id": 56,
       "name": "Cahaba Medical Care - Dental Center (Birmingham)",
       "phone": "205) 545-7696",
@@ -862,15 +902,15 @@
     }
   ],
   "stats": {
-    "total": 43,
+    "total": 45,
     "no_website": 0,
-    "old_website": 10,
-    "modern_website": 33,
-    "sent": 10,
+    "old_website": 11,
+    "modern_website": 34,
+    "sent": 11,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At",
-  "generated_at": "2026-07-18T05:38:45.918172+00:00"
+  "generated_at": "2026-07-18T05:39:47.855790+00:00"
 }
