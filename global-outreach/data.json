@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 120,
+      "name": "The Face Institute",
+      "phone": "+1 825-401-3300",
+      "address": "\ue0c8\n1021 Keswick Dr SW, Edmonton, AB T6W 4T4, Canada",
+      "website": "https://thefaceinstitute.com/",
+      "status": "Old Website",
+      "email": "info@thefaceinstitute.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:00:01.181930",
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Edmonton",
+      "scraped_at": "2026-07-18T05:59:59.746762",
+      "website_viewport": 0,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: not mobile-friendly (broken layout on phones and tablets).",
+      "email_error": null
+    },
+    {
       "id": 118,
       "name": "Etanda Co. Beauty and Wellness",
       "phone": "+1 825-461-6716",
@@ -1802,15 +1822,15 @@
     }
   ],
   "stats": {
-    "total": 90,
+    "total": 91,
     "no_website": 0,
-    "old_website": 22,
+    "old_website": 23,
     "modern_website": 68,
-    "sent": 22,
+    "sent": 23,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At",
-  "generated_at": "2026-07-18T05:58:42.153483+00:00"
+  "generated_at": "2026-07-18T06:00:01.184800+00:00"
 }
