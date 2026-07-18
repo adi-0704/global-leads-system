@@ -1,6 +1,66 @@
 {
   "leads": [
     {
+      "id": 96,
+      "name": "Westend Dental of Lincoln Park Chicago",
+      "phone": "773) 244-9500",
+      "address": "\ue0c8\n1170 W Armitage Ave, Chicago, IL 60614",
+      "website": "https://dentistlincolnparkchicago.com/",
+      "status": "No Booking/AI",
+      "email": "info@westenddental.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T05:50:15.105046",
+      "replied_at": null,
+      "query": "dentist",
+      "location": "Sheffield",
+      "scraped_at": "2026-07-18T05:50:13.673654",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
+      "id": 95,
+      "name": "Dr. Jack D. Manikowski, DDS",
+      "phone": "312) 337-1665",
+      "address": "\ue0c8\n1701 N Sheffield Ave #101, Chicago, IL 60614",
+      "website": "https://www.lpsdental.com/meet-the-doctors/",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dentist",
+      "location": "Sheffield",
+      "scraped_at": "2026-07-18T05:50:13.205094",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
+      "id": 94,
+      "name": "Tooth Fairy World - Lincoln Park",
+      "phone": "773) 327-3331",
+      "address": "\ue0c8\n2069 N Clybourn Ave, Chicago, IL 60614",
+      "website": "https://www.toothfairyworlddentistry.com/",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dentist",
+      "location": "Sheffield",
+      "scraped_at": "2026-07-18T05:50:12.148941",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Website appears fully optimised.",
+      "email_error": null
+    },
+    {
       "id": 93,
       "name": "Pearl Aesthetics & Dentistry",
       "phone": "312) 858-7067",
@@ -1382,15 +1442,15 @@
     }
   ],
   "stats": {
-    "total": 69,
+    "total": 72,
     "no_website": 0,
-    "old_website": 17,
-    "modern_website": 52,
-    "sent": 17,
+    "old_website": 18,
+    "modern_website": 54,
+    "sent": 18,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At",
-  "generated_at": "2026-07-18T05:49:09.434935+00:00"
+  "generated_at": "2026-07-18T05:50:15.107057+00:00"
 }
