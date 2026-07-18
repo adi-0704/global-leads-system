@@ -1,6 +1,46 @@
 {
   "leads": [
     {
+      "id": 175,
+      "name": "Penn Dental Medicine",
+      "phone": "215) 898-8965",
+      "address": "\ue0c8\n240 S 40th St #3, Philadelphia, PA 19104",
+      "website": "http://penndentalmedicine.org/",
+      "status": "No Booking/AI",
+      "email": "pdmapptrequest@dental.upenn.edu",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:25:46.305958",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Philadelphia",
+      "scraped_at": "2026-07-18T06:25:44.806977",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
+      "id": 173,
+      "name": "Center City Emergency Dentist",
+      "phone": "215) 223-5555",
+      "address": "\ue0c8\n1429 Walnut St 6th Floor, Philadelphia, PA 19102",
+      "website": "https://www.centercityemergencydentists.com/?utm_source=google&utm_medium=organic&utm_campaign=1seo_gmb",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Philadelphia",
+      "scraped_at": "2026-07-18T06:25:32.634602",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
       "id": 172,
       "name": "Philadelphia Dental - Broad St",
       "phone": "215) 336-8391",
@@ -2562,15 +2602,15 @@
     }
   ],
   "stats": {
-    "total": 128,
+    "total": 130,
     "no_website": 2,
-    "old_website": 39,
-    "modern_website": 87,
-    "sent": 39,
+    "old_website": 40,
+    "modern_website": 88,
+    "sent": 40,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:24:30.995115+00:00"
+  "generated_at": "2026-07-18T06:25:46.308359+00:00"
 }
