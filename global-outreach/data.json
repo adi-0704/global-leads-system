@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 202,
+      "name": "Austin Emergency Dental",
+      "phone": "737) 747-4646",
+      "address": "\ue0c8\nAustin Emergency Dental, 2500 W William Cannon Dr Ste 103 (Building #1, Austin, TX 78745",
+      "website": "https://emergencydentalaustin.com/",
+      "status": "No Booking/AI",
+      "email": "adminatx@erdentist.io",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:40:09.598156",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Austin",
+      "scraped_at": "2026-07-18T06:40:08.080305",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no social media links visible on the website.",
+      "email_error": null
+    },
+    {
       "id": 199,
       "name": "Emergency Dentist of Austin",
       "phone": "512) 961-6200",
@@ -2902,15 +2922,15 @@
     }
   ],
   "stats": {
-    "total": 145,
+    "total": 146,
     "no_website": 2,
-    "old_website": 49,
+    "old_website": 50,
     "modern_website": 94,
-    "sent": 49,
+    "sent": 50,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:38:45.017249+00:00"
+  "generated_at": "2026-07-18T06:40:09.600993+00:00"
 }
