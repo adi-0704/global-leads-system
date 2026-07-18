@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 198,
+      "name": "Manos De Cristo Dental Center",
+      "phone": "512) 477-2319",
+      "address": "\ue0c8\n4911 Harmon Ave, Austin, TX 78751",
+      "website": "http://www.manosdecristo.org/",
+      "status": "No Booking/AI",
+      "email": "jballesteros@manosdecristo.org",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:37:40.922809",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Austin",
+      "scraped_at": "2026-07-18T06:37:39.369481",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
       "id": 195,
       "name": "Smile Center on Roosevelt Blvd-Best Emergency Dentist Near you-uSmile Philadelphia",
       "phone": "215) 288-6404",
@@ -2862,15 +2882,15 @@
     }
   ],
   "stats": {
-    "total": 143,
+    "total": 144,
     "no_website": 2,
-    "old_website": 47,
+    "old_website": 48,
     "modern_website": 94,
-    "sent": 47,
+    "sent": 48,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:36:28.182421+00:00"
+  "generated_at": "2026-07-18T06:37:40.926161+00:00"
 }
