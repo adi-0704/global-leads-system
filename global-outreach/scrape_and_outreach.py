@@ -572,6 +572,7 @@ async def scrape_until_target(
 
         try:
             await scrape_new_leads(db_path, config, limit=limit)
+            git_sync(db_path)
         except Exception as err:
             print(f"[Target] Search iteration {iteration} failed: {err}")
 
@@ -663,6 +664,7 @@ def send_single_email(
                     (datetime.now().isoformat(), lead_id),
                 )
                 conn.commit()
+            git_sync(db_path)
             return True
         except sqlite3.Error as e:
             print(f"  [Error] DB update failed: {e}")
@@ -689,6 +691,7 @@ def send_single_email(
             )
             conn.commit()
         print(f"  [Sent][{lead_status}] {email}  |  {name}")
+        git_sync(db_path)
         return True
 
     except Exception as mail_err:
@@ -702,6 +705,7 @@ def send_single_email(
                 conn.commit()
         except sqlite3.Error as e:
             print(f"  [Error] DB update failed: {e}")
+        git_sync(db_path)
         return False
 
 
@@ -798,6 +802,60 @@ def send_outreach_emails(
 
     print(f"[Outreach] Finished. {sent_count} emails dispatched today (total today: {sent_count + sent_today}).")
     return sent_count
+
+
+# ---------------------------------------------------------------------------
+# Real-time Git Sync
+# ---------------------------------------------------------------------------
+
+def git_sync(db_path: str):
+    """Export data.json and commit/push changes in real-time during run."""
+    if not os.environ.get("GITHUB_ACTIONS"):
+        return
+
+    # Export data.json first
+    try:
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        if script_dir not in sys.path:
+            sys.path.insert(0, script_dir)
+        import generate_data_json
+        generate_data_json.main()
+    except Exception as export_err:
+        print(f"  [Real-time Sync] Failed to export data.json: {export_err}")
+        return
+
+    # Commit and push
+    try:
+        import subprocess
+        # Configure user if needed
+        subprocess.run(["git", "config", "--global", "user.name", "github-actions[bot]"], check=True, capture_output=True)
+        subprocess.run(["git", "config", "--global", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True, capture_output=True)
+        
+        # Add files (relative paths from repo root)
+        subprocess.run(["git", "add", "global-outreach/leads.db", "global-outreach/data.json"], check=True, capture_output=True)
+        
+        # Check if changes exist
+        diff_res = subprocess.run(["git", "diff", "--staged", "--quiet"])
+        if diff_res.returncode == 0:
+            return # No changes
+            
+        # Commit
+        subprocess.run([
+            "git", "commit", "-m", "chore: real-time dashboard sync [skip ci]"
+        ], check=True, capture_output=True)
+        
+        # Pull with rebase
+        subprocess.run(["git", "pull", "--rebase"], check=True, capture_output=True)
+        
+        # Push
+        subprocess.run(["git", "push"], check=True, capture_output=True)
+        print("  [Real-time Sync] Database & dashboard updated on GitHub Pages.")
+    except subprocess.CalledProcessError as git_err:
+        stderr_msg = git_err.stderr.decode('utf-8', errors='ignore') if git_err.stderr else ''
+        print(f"  [Real-time Sync] Git command failed: {stderr_msg}")
+    except Exception as err:
+        print(f"  [Real-time Sync] Unexpected error: {err}")
+
 
 # ---------------------------------------------------------------------------
 # Inbound Reply Tracking
@@ -978,6 +1036,7 @@ async def run_continuous_outreach_loop(
                 dry_run=dry_run,
             )
             print(f"[Outreach Loop] Iteration complete: added {new_leads} new leads, sent {emails_sent} outreach emails.")
+            git_sync(db_path)
             if cap_reached:
                 print("[Outreach Loop] Daily email cap reached during scraping. Done.")
                 break
