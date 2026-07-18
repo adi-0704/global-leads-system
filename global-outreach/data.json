@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 144,
+      "name": "Dr Lauren Evans Aesthetics",
+      "phone": "+44 141 339 7579",
+      "address": "\ue0c8\n154 Hyndland Rd, Glasgow G12 9HZ, United Kingdom",
+      "website": "http://drlaurenevans.com/",
+      "status": "Old Website",
+      "email": "lauren@drlaurenevans.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:10:33.281811",
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Glasgow",
+      "scraped_at": "2026-07-18T06:10:31.681224",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2020,
+      "website_notes": "Issues found: outdated design (copyright shows 2020); no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
       "id": 143,
       "name": "Esteem Beauty Glasgow",
       "phone": "+44 141 334 3254",
@@ -2202,15 +2222,15 @@
     }
   ],
   "stats": {
-    "total": 110,
+    "total": 111,
     "no_website": 1,
-    "old_website": 29,
+    "old_website": 30,
     "modern_website": 80,
-    "sent": 29,
+    "sent": 30,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:09:28.991382+00:00"
+  "generated_at": "2026-07-18T06:10:33.284659+00:00"
 }
