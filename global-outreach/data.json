@@ -1,6 +1,46 @@
 {
   "leads": [
     {
+      "id": 88,
+      "name": "Lincoln Dental Lounge",
+      "phone": "312) 809-9799",
+      "address": "\ue0c8\n2767 N Lincoln Ave, Chicago, IL 60614",
+      "website": "https://lincolndentallounge.com/",
+      "status": "Old Website",
+      "email": "matt@pixelspread.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T05:48:03.280155",
+      "replied_at": null,
+      "query": "dentist",
+      "location": "Sheffield",
+      "scraped_at": "2026-07-18T05:48:01.762982",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2017,
+      "website_notes": "Issues found: outdated design (copyright shows 2017); no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
+      "id": 87,
+      "name": "Advanced Dental Care",
+      "phone": "773) 871-0336",
+      "address": "\ue0c8\n2457 N Lincoln Ave, Chicago, IL 60614",
+      "website": "https://www.chicagogeneraldentistry.com/",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dentist",
+      "location": "Sheffield",
+      "scraped_at": "2026-07-18T05:48:01.316344",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours); no social media links visible on the website.",
+      "email_error": null
+    },
+    {
       "id": 86,
       "name": "Halsted Street Dental",
       "phone": "773) 935-4444",
@@ -1242,15 +1282,15 @@
     }
   ],
   "stats": {
-    "total": 62,
+    "total": 64,
     "no_website": 0,
-    "old_website": 15,
-    "modern_website": 47,
-    "sent": 15,
+    "old_website": 16,
+    "modern_website": 48,
+    "sent": 16,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At",
-  "generated_at": "2026-07-18T05:46:59.574887+00:00"
+  "generated_at": "2026-07-18T05:48:03.282550+00:00"
 }
