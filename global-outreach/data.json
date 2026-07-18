@@ -1,6 +1,66 @@
 {
   "leads": [
     {
+      "id": 56,
+      "name": "Cahaba Medical Care - Dental Center (Birmingham)",
+      "phone": "205) 545-7696",
+      "address": "\ue0c8\n623 8th Ave W, Birmingham, AL 35204",
+      "website": "https://www.cahabamedicalcare.com/",
+      "status": "No Booking/AI",
+      "email": "contact@cahabamedicalcare.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T05:37:25.669045",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Birmingham",
+      "scraped_at": "2026-07-18T05:37:24.049407",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no website analytics (no visibility into how many patients visit or where they come from).",
+      "email_error": null
+    },
+    {
+      "id": 55,
+      "name": "RiT Dental Care | Dental Clinic in Birmingham | Implants, Orthodontics and Cosmetic Dentistry",
+      "phone": "+44 7428 552661",
+      "address": "\ue0c8\n147 Great Charles Street Queensway, Birmingham B3 3LP, United Kingdom",
+      "website": "https://birmingham.ritdental.co.uk/",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Birmingham",
+      "scraped_at": "2026-07-18T05:37:23.249378",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
+      "id": 54,
+      "name": "Mountain Brook Dental Care",
+      "phone": "205) 871-2302",
+      "address": "\ue0c8\n3928 Montclair Rd Suit 120, Mountain Brook, AL 35213",
+      "website": "https://stonecreekdentalcare.com/locations/mountain-brook/",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Birmingham",
+      "scraped_at": "2026-07-18T05:37:17.983535",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
       "id": 53,
       "name": "Park Dental Surgery",
       "phone": "+44 121 772 1725",
@@ -802,15 +862,15 @@
     }
   ],
   "stats": {
-    "total": 40,
+    "total": 43,
     "no_website": 0,
-    "old_website": 9,
-    "modern_website": 31,
-    "sent": 9,
+    "old_website": 10,
+    "modern_website": 33,
+    "sent": 10,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At",
-  "generated_at": "2026-07-18T05:36:15.428890+00:00"
+  "generated_at": "2026-07-18T05:37:25.671248+00:00"
 }
