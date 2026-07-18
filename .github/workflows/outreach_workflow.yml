@@ -85,10 +85,12 @@ jobs:
           fi
 
       - name: Export data.json for GitHub Pages Dashboard
+        if: always()
         run: |
           python global-outreach/generate_data_json.py
 
       - name: Commit & Push Updated Database + Dashboard Data
+        if: always()
         run: |
           git config --global user.name  "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"

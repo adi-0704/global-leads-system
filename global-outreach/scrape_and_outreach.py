@@ -395,7 +395,7 @@ async def scrape_new_leads(
     cap_reached = False
 
     DAILY_CAP    = config.get("daily_email_limit", 50)
-    SEND_GAP_SEC  = 600  # 10 minutes between real emails
+    SEND_GAP_SEC = config.get("send_gap_seconds", 60)
 
     # Process collected records
     conn = sqlite3.connect(db_path)
@@ -718,7 +718,7 @@ def send_outreach_emails(
 
     DAILY_CAP    = config.get("daily_email_limit", 50)
     MIN_NEW_LEADS = 10   # Only start emailing when >= 10 new leads exist today
-    SEND_GAP_SEC  = 600  # 10 minutes between real emails
+    SEND_GAP_SEC = config.get("send_gap_seconds", 60)
     today         = datetime.now().strftime("%Y-%m-%d")
 
     with sqlite3.connect(db_path) as conn:

@@ -15,6 +15,7 @@
     "Seattle", "Boston", "Denver", "Miami", "San Francisco", "Austin", "Atlanta"
   ],
   "daily_email_limit": 50,
+  "send_gap_seconds": 60,
   "promo_urls": {
     "dental": "https://smile-dental.vercel.app/",
     "derm": "https://derm-site.vercel.app/"
