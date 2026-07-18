@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 169,
+      "name": "NU\u00d2 - Dentist Downtown Montreal",
+      "phone": "+1 514-861-6106",
+      "address": "\ue0c8\n2121 Rue Crescent #300, Montreal, Quebec H3G 2C1, Canada",
+      "website": "https://dentistdowntownmontreal.com/",
+      "status": "No Booking/AI",
+      "email": "contact@nuodental.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:22:15.503196",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Montreal",
+      "scraped_at": "2026-07-18T06:22:14.033064",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
       "id": 168,
       "name": "Centre dentaire Les Cours",
       "phone": "+1 514-903-1103",
@@ -2522,15 +2542,15 @@
     }
   ],
   "stats": {
-    "total": 126,
+    "total": 127,
     "no_website": 2,
-    "old_website": 37,
+    "old_website": 38,
     "modern_website": 87,
-    "sent": 37,
+    "sent": 38,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:21:12.425377+00:00"
+  "generated_at": "2026-07-18T06:22:15.506469+00:00"
 }
