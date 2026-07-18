@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 118,
+      "name": "Etanda Co. Beauty and Wellness",
+      "phone": "+1 825-461-6716",
+      "address": "\ue0c8\n10804 124 St, Edmonton, AB T5M 0E3, Canada",
+      "website": "https://etandaco.com/",
+      "status": "No Booking/AI",
+      "email": "info@etandaskinsolutions.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T05:58:42.151190",
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Edmonton",
+      "scraped_at": "2026-07-18T05:58:40.589925",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
       "id": 117,
       "name": "Symmetry Dermatology, Laser & Esthetics",
       "phone": "+1 780-784-0606",
@@ -1782,15 +1802,15 @@
     }
   ],
   "stats": {
-    "total": 89,
+    "total": 90,
     "no_website": 0,
-    "old_website": 21,
+    "old_website": 22,
     "modern_website": 68,
-    "sent": 21,
+    "sent": 22,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At",
-  "generated_at": "2026-07-18T05:57:37.749426+00:00"
+  "generated_at": "2026-07-18T05:58:42.153483+00:00"
 }
