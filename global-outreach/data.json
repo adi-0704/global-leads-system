@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 185,
+      "name": "Philadelphia Dental - Moyamensing Ave",
+      "phone": "215) 462-4047",
+      "address": "\ue0c8\n1701 E Moyamensing Ave, Philadelphia, PA 19148",
+      "website": "https://www.philadelphiadental.com/locations/moyamensing",
+      "status": "No Booking/AI",
+      "email": "contact@philadental.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:30:49.696782",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Philadelphia",
+      "scraped_at": "2026-07-18T06:30:47.193805",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no contact form or online enquiry form.",
+      "email_error": null
+    },
+    {
       "id": 184,
       "name": "CarePoint Emergency Dental Care Philadelphia",
       "phone": "215) 267-2120",
@@ -2722,15 +2742,15 @@
     }
   ],
   "stats": {
-    "total": 136,
+    "total": 137,
     "no_website": 2,
-    "old_website": 43,
+    "old_website": 44,
     "modern_website": 91,
-    "sent": 43,
+    "sent": 44,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:29:45.677706+00:00"
+  "generated_at": "2026-07-18T06:30:49.699417+00:00"
 }
