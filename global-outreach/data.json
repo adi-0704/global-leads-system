@@ -1,6 +1,46 @@
 {
   "leads": [
     {
+      "id": 190,
+      "name": "Dentistry in Philadelphia",
+      "phone": "215) 735-8844",
+      "address": "\ue0c8\n1628 Spruce St, Philadelphia, PA 19103",
+      "website": "http://www.dentistryinphiladelphia.com/",
+      "status": "No Booking/AI",
+      "email": "dentistryinphiladelphia@gmail.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:34:12.718575",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Philadelphia",
+      "scraped_at": "2026-07-18T06:34:11.128127",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no website analytics (no visibility into how many patients visit or where they come from).",
+      "email_error": null
+    },
+    {
+      "id": 189,
+      "name": "Dr. Thomas E. George, DMD",
+      "phone": "215) 561-3363",
+      "address": "\ue0c8\n2200 Arch St Ste 102, Philadelphia, PA 19103",
+      "website": "https://business.google.com/create?fp=10731316631915607722&hl=en&authuser=0&gmbsrc=us-en-et-ip-z-gmb-s-z-l~mrc%7Cclaimbz%7Cu&ppsrc=GMBMI&utm_campaign=us-en-et-ip-z-gmb-s-z-l~mrc%7Cclaimbz%7Cu&utm_source=gmb_mrc81&utm_medium=et&getstarted&lis=0",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Philadelphia",
+      "scraped_at": "2026-07-18T06:34:10.200924",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2024,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no contact form or online enquiry form; no website analytics (no visibility into how many patients visit or where they come from).",
+      "email_error": null
+    },
+    {
       "id": 188,
       "name": "1800 Emergency Dentist Philadelphia 24 Hour",
       "phone": "267) 552-8714",
@@ -2782,15 +2822,15 @@
     }
   ],
   "stats": {
-    "total": 139,
+    "total": 141,
     "no_website": 2,
-    "old_website": 46,
-    "modern_website": 91,
-    "sent": 46,
+    "old_website": 47,
+    "modern_website": 92,
+    "sent": 47,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:33:07.530027+00:00"
+  "generated_at": "2026-07-18T06:34:12.721217+00:00"
 }
