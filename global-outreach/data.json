@@ -1,6 +1,66 @@
 {
   "leads": [
     {
+      "id": 168,
+      "name": "Centre dentaire Les Cours",
+      "phone": "+1 514-903-1103",
+      "address": "\ue0c8\nRez-de Chauss\u00e9e, 600 Blvd. De Maisonneuve Ouest Ste 106, Montr\u00e9al, QC H3A 2B8, Canada",
+      "website": "http://www.centredentairelescours.com/",
+      "status": "Old Website",
+      "email": "info@centredentairelescours.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:21:12.422342",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Montreal",
+      "scraped_at": "2026-07-18T06:21:10.732172",
+      "website_viewport": 0,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: not mobile-friendly (broken layout on phones and tablets); no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
+      "id": 167,
+      "name": "Centre Dentaire Blanc",
+      "phone": "+1 514-564-4554",
+      "address": "\ue0c8\n5001 Rue Jean-Talon O, Montr\u00e9al, QC H4P 1W7, Canada",
+      "website": "http://www.blancdentaire.ca/",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Montreal",
+      "scraped_at": "2026-07-18T06:21:10.290047",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
+      "id": 165,
+      "name": "Carrefour dentaire de Montr\u00e9al",
+      "phone": "+1 438-814-6648",
+      "address": "\ue0c8\n1101 Rue B\u00e9langer, Montr\u00e9al, QC H2S 1H6, Canada",
+      "website": "https://www.carrefourdentaire.com/site/accueil?utm_source=G&utm_medium=LPM&utm_campaign=DentalCorp",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Montreal",
+      "scraped_at": "2026-07-18T06:20:59.026318",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
       "id": 164,
       "name": "Centre Dentaire Cristal",
       "phone": "+1 514-333-0444",
@@ -2462,15 +2522,15 @@
     }
   ],
   "stats": {
-    "total": 123,
+    "total": 126,
     "no_website": 2,
-    "old_website": 36,
-    "modern_website": 85,
-    "sent": 36,
+    "old_website": 37,
+    "modern_website": 87,
+    "sent": 37,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:19:57.139580+00:00"
+  "generated_at": "2026-07-18T06:21:12.425377+00:00"
 }
