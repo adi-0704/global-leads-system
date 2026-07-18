@@ -1,6 +1,46 @@
 {
   "leads": [
     {
+      "id": 53,
+      "name": "Park Dental Surgery",
+      "phone": "+44 121 772 1725",
+      "address": "\ue0c8\n628 Coventry Rd, Birmingham B10 0UT, United Kingdom",
+      "website": "http://www.myparkdental.co.uk/",
+      "status": "Old Website",
+      "email": "parkdental888@gmail.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T05:36:15.426788",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Birmingham",
+      "scraped_at": "2026-07-18T05:36:12.920779",
+      "website_viewport": 1,
+      "website_ssl": 0,
+      "website_copyright_year": 2023,
+      "website_notes": "Issues found: no SSL certificate (website shows as 'Not Secure' in browsers); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
+      "id": 52,
+      "name": "City Dental Practice",
+      "phone": "+44 121 455 9233",
+      "address": "\ue0c8\n364 Dudley Rd, Birmingham B18 4HJ, United Kingdom",
+      "website": "http://www.citydental364.co.uk/",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Birmingham",
+      "scraped_at": "2026-07-18T05:36:12.017643",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
       "id": 51,
       "name": "Birmingham Dental Hospital",
       "phone": "+44 121 466 5555",
@@ -762,15 +802,15 @@
     }
   ],
   "stats": {
-    "total": 38,
+    "total": 40,
     "no_website": 0,
-    "old_website": 8,
-    "modern_website": 30,
-    "sent": 8,
+    "old_website": 9,
+    "modern_website": 31,
+    "sent": 9,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At",
-  "generated_at": "2026-07-18T05:35:09.051098+00:00"
+  "generated_at": "2026-07-18T05:36:15.428890+00:00"
 }
