@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 172,
+      "name": "Philadelphia Dental - Broad St",
+      "phone": "215) 336-8391",
+      "address": "\ue0c8\n1732 S Broad St, Philadelphia, PA 19145",
+      "website": "https://www.philadelphiadental.com/locations/broad",
+      "status": "No Booking/AI",
+      "email": "contact@philadental.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:24:30.992642",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Philadelphia",
+      "scraped_at": "2026-07-18T06:24:29.522342",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no contact form or online enquiry form.",
+      "email_error": null
+    },
+    {
       "id": 169,
       "name": "NU\u00d2 - Dentist Downtown Montreal",
       "phone": "+1 514-861-6106",
@@ -2542,15 +2562,15 @@
     }
   ],
   "stats": {
-    "total": 127,
+    "total": 128,
     "no_website": 2,
-    "old_website": 38,
+    "old_website": 39,
     "modern_website": 87,
-    "sent": 38,
+    "sent": 39,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:23:32.977056+00:00"
+  "generated_at": "2026-07-18T06:24:30.995115+00:00"
 }
