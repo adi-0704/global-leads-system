@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 199,
+      "name": "Emergency Dentist of Austin",
+      "phone": "512) 961-6200",
+      "address": "\ue0c8\n1030 Norwood Park Blvd #324, Austin, TX 78753",
+      "website": "https://emergencydentistofaustin.com/?utm_source=google&utm_medium=organic&utm_campaign=gbp-listing",
+      "status": "Old Website",
+      "email": "info@emergencydentistofaustin.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:38:45.014572",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Austin",
+      "scraped_at": "2026-07-18T06:38:43.493167",
+      "website_viewport": 0,
+      "website_ssl": 1,
+      "website_copyright_year": 2025,
+      "website_notes": "Issues found: not mobile-friendly (broken layout on phones and tablets); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
       "id": 198,
       "name": "Manos De Cristo Dental Center",
       "phone": "512) 477-2319",
@@ -2882,15 +2902,15 @@
     }
   ],
   "stats": {
-    "total": 144,
+    "total": 145,
     "no_website": 2,
-    "old_website": 48,
+    "old_website": 49,
     "modern_website": 94,
-    "sent": 48,
+    "sent": 49,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:37:40.926161+00:00"
+  "generated_at": "2026-07-18T06:38:45.017249+00:00"
 }
