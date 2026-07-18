@@ -1,6 +1,46 @@
 {
   "leads": [
     {
+      "id": 123,
+      "name": "Este Medical Group- Hair & Skin Clinic Glasgow",
+      "phone": "+44 141 231 1883",
+      "address": "\ue0c8\n1st Floor, 176 Bath St, Glasgow G2 4HG, United Kingdom",
+      "website": "https://www.estemedicalgroup.uk/clinics/glasgow",
+      "status": "No Booking/AI",
+      "email": "info@estemedicalgroup.uk",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:02:22.314042",
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Glasgow",
+      "scraped_at": "2026-07-18T06:02:20.776888",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
+      "id": 122,
+      "name": "sk:n Glasgow",
+      "phone": "+44 333 014 1666",
+      "address": "\ue0c8\n6th Floor, 200 St Vincent St, Glasgow G2 5SG, United Kingdom",
+      "website": "https://www.sknclinics.co.uk/clinics/the-north-and-scotland/glasgow-st-vincent-street",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Glasgow",
+      "scraped_at": "2026-07-18T06:02:07.114287",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Website appears fully optimised.",
+      "email_error": null
+    },
+    {
       "id": 121,
       "name": "Flawless Skin Clinic",
       "phone": "+1 780-220-5673",
@@ -1842,15 +1882,15 @@
     }
   ],
   "stats": {
-    "total": 92,
+    "total": 94,
     "no_website": 0,
-    "old_website": 23,
-    "modern_website": 69,
-    "sent": 23,
+    "old_website": 24,
+    "modern_website": 70,
+    "sent": 24,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At",
-  "generated_at": "2026-07-18T06:01:06.131504+00:00"
+  "generated_at": "2026-07-18T06:02:22.316950+00:00"
 }
