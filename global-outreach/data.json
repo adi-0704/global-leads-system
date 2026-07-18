@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 47,
+      "name": "Birmingham Dental",
+      "phone": "205) 324-1323",
+      "address": "\ue0c8\n1021 19th St S, Birmingham, AL 35205",
+      "website": "https://birminghamdental.com/",
+      "status": "No Booking/AI",
+      "email": "office@birminghamdental.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T05:32:47.880482",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Birmingham",
+      "scraped_at": "2026-07-18T05:32:46.402193",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no website analytics (no visibility into how many patients visit or where they come from).",
+      "email_error": null
+    },
+    {
       "id": 46,
       "name": "Emergency Dentist 24/7 Birmingham",
       "phone": "205) 725-6034",
@@ -682,15 +702,15 @@
     }
   ],
   "stats": {
-    "total": 34,
+    "total": 35,
     "no_website": 0,
-    "old_website": 5,
+    "old_website": 6,
     "modern_website": 29,
-    "sent": 5,
+    "sent": 6,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At",
-  "generated_at": "2026-07-18T05:31:44.685479+00:00"
+  "generated_at": "2026-07-18T05:32:47.882741+00:00"
 }
