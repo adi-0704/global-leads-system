@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 121,
+      "name": "Flawless Skin Clinic",
+      "phone": "+1 780-220-5673",
+      "address": "\ue0c8\n368 Bulyea Rd NW, Edmonton, AB T6R 2B3, Canada",
+      "website": "http://www.flawlessskinclinic.com/",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Edmonton",
+      "scraped_at": "2026-07-18T06:01:06.126803",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
       "id": 120,
       "name": "The Face Institute",
       "phone": "+1 825-401-3300",
@@ -1822,15 +1842,15 @@
     }
   ],
   "stats": {
-    "total": 91,
+    "total": 92,
     "no_website": 0,
     "old_website": 23,
-    "modern_website": 68,
+    "modern_website": 69,
     "sent": 23,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At",
-  "generated_at": "2026-07-18T06:00:01.184800+00:00"
+  "generated_at": "2026-07-18T06:01:06.131504+00:00"
 }
