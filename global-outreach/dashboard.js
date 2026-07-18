@@ -122,23 +122,11 @@ async function fetchData() {
             stats    = await statsRes.json();
         }
 
-        // Update KPI cards
-        document.getElementById('kpi-total').innerText      = stats.total      ?? 0;
-        document.getElementById('kpi-no-website').innerText = stats.no_website ?? 0;
-        document.getElementById('kpi-old-website').innerText = stats.old_website ?? 0;
-        document.getElementById('kpi-sent').innerText       = stats.sent       ?? 0;
-        document.getElementById('kpi-replied').innerText    = stats.replied    ?? 0;
-        document.getElementById('kpi-conversion').innerText = (stats.conversion_rate ?? 0) + '%';
+        // Populate the date filter bar
+        populateDateFilterBar();
 
-        // Update sidebar badges
-        document.getElementById('badge-count-nowebsite').innerText = stats.no_website ?? 0;
-        document.getElementById('badge-count-campaign').innerText  = stats.old_website ?? 0;
-
-        // Render current tab
-        if      (activeTab === 'overview')   renderOverview();
-        else if (activeTab === 'nowebsite')  renderNoWebsiteTable();
-        else if (activeTab === 'campaign')   renderCampaignTable();
-        else if (activeTab === 'modern')     renderModernTable();
+        // Render the filtered view (which computes stats and renders current tab)
+        renderCurrentFilteredView();
 
     } catch (err) {
         console.error('Dashboard data error:', err);
@@ -162,8 +150,14 @@ function renderOverview() {
         return;
     }
     
+    const filteredLeads = getFilteredLeads();
+    if (!filteredLeads || filteredLeads.length === 0) {
+        listContainer.innerHTML = '<p class="placeholder-text">No leads scraped on this date.</p>';
+        return;
+    }
+    
     // Get 5 most recent leads
-    const recentLeads = allLeads.slice(0, 5);
+    const recentLeads = filteredLeads.slice(0, 5);
     listContainer.innerHTML = '';
     
     recentLeads.forEach(lead => {
@@ -190,9 +184,10 @@ function renderOverview() {
 function renderNoWebsiteTable() {
     const searchVal = document.getElementById('search-nowebsite').value.toLowerCase().trim();
     const tbody = document.getElementById('body-nowebsite');
+    const filteredLeads = getFilteredLeads();
     
     // Filter
-    const filtered = allLeads.filter(lead => {
+    const filtered = filteredLeads.filter(lead => {
         if (lead.status !== 'No Website') return false;
         
         if (searchVal) {
@@ -230,9 +225,10 @@ function renderCampaignTable() {
     const searchVal = document.getElementById('search-campaign').value.toLowerCase().trim();
     const emailFilter = document.getElementById('filter-email-status').value;
     const tbody = document.getElementById('body-campaign');
+    const filteredLeads = getFilteredLeads();
     
     // Filter
-    const filtered = allLeads.filter(lead => {
+    const filtered = filteredLeads.filter(lead => {
         if (lead.status !== 'Old Website' && lead.status !== 'No Booking/AI') return false;
         if (!lead.email || lead.email.trim() === '') return false;
         
@@ -281,9 +277,10 @@ function renderCampaignTable() {
 function renderModernTable() {
     const searchVal = document.getElementById('search-modern').value.toLowerCase().trim();
     const tbody = document.getElementById('body-modern');
+    const filteredLeads = getFilteredLeads();
     
     // Filter
-    const filtered = allLeads.filter(lead => {
+    const filtered = filteredLeads.filter(lead => {
         if (lead.status !== 'Modern Website') return false;
         
         if (searchVal) {
@@ -511,4 +508,145 @@ function formatDate(isoStr) {
     } catch (e) {
         return isoStr;
     }
+}
+
+// ─── Real-time Date-wise Filter & Stats ───────────────────────────────────────────
+let selectedDate = 'ALL';
+
+function getFilteredLeads() {
+    if (selectedDate === 'ALL') {
+        return allLeads;
+    }
+    return allLeads.filter(lead => {
+        return lead.scraped_at && lead.scraped_at.startsWith(selectedDate);
+    });
+}
+
+function calculateStats(leadsList) {
+    const stats = {
+        total: 0,
+        no_website: 0,
+        old_website: 0,
+        modern_website: 0,
+        sent: 0,
+        replied: 0,
+        failed: 0,
+        conversion_rate: 0
+    };
+
+    leadsList.forEach(lead => {
+        if (lead.status === 'Filtered (No Email)') return;
+
+        stats.total++;
+        if (lead.status === 'No Website') {
+            stats.no_website++;
+        } else if ((lead.status === 'Old Website' || lead.status === 'No Booking/AI') && lead.email && lead.email.trim() !== '') {
+            stats.old_website++;
+        } else if (lead.status === 'Modern Website') {
+            stats.modern_website++;
+        }
+
+        if (lead.email_status === 'Sent' || lead.email_status === 'Sent (Dry Run)') {
+            stats.sent++;
+        } else if (lead.email_status === 'Replied') {
+            stats.replied++;
+        } else if (lead.email_status === 'Failed') {
+            stats.failed++;
+        }
+    });
+
+    if (stats.sent > 0) {
+        stats.conversion_rate = Math.round((stats.replied / stats.sent) * 100 * 10) / 10;
+        if (stats.conversion_rate > 100) stats.conversion_rate = 100;
+    }
+
+    return stats;
+}
+
+function populateDateFilterBar() {
+    const bar = document.getElementById('date-filter-bar');
+    if (!bar) return;
+
+    // Extract unique dates from scraped_at
+    const dateSet = new Set();
+    allLeads.forEach(lead => {
+        if (lead.scraped_at) {
+            const datePart = lead.scraped_at.split('T')[0]; // "YYYY-MM-DD"
+            if (datePart && datePart.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                dateSet.add(datePart);
+            }
+        }
+    });
+
+    // Convert to sorted array (newest first)
+    const sortedDates = Array.from(dateSet).sort().reverse();
+
+    // Rebuild the HTML
+    let html = `<button class="date-tab ${selectedDate === 'ALL' ? 'active' : ''}" onclick="setDateFilter('ALL')">All Time</button>`;
+    
+    sortedDates.forEach(dateStr => {
+        const dateObj = new Date(dateStr);
+        
+        // Check if dateStr matches today (local date in client timezone)
+        const todayLocal = new Date();
+        const offset = todayLocal.getTimezoneOffset();
+        const localDateStr = new Date(todayLocal.getTime() - (offset*60*1000)).toISOString().split('T')[0];
+        
+        let label = '';
+        const formattedDate = dateObj.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+        
+        if (dateStr === localDateStr) {
+            label = `Today (${dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})`;
+        } else {
+            label = formattedDate;
+        }
+
+        html += `<button class="date-tab ${selectedDate === dateStr ? 'active' : ''}" onclick="setDateFilter('${dateStr}')">${label}</button>`;
+    });
+
+    bar.innerHTML = html;
+}
+
+function setDateFilter(dateStr) {
+    selectedDate = dateStr;
+    
+    const bar = document.getElementById('date-filter-bar');
+    if (bar) {
+        bar.querySelectorAll('.date-tab').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        const targetBtn = Array.from(bar.querySelectorAll('.date-tab')).find(btn => {
+            return btn.getAttribute('onclick').includes(`'${dateStr}'`);
+        });
+        if (targetBtn) targetBtn.classList.add('active');
+    }
+
+    renderCurrentFilteredView();
+}
+
+function renderCurrentFilteredView() {
+    const filteredLeads = getFilteredLeads();
+    const stats = calculateStats(filteredLeads);
+    
+    // Update KPI cards
+    document.getElementById('kpi-total').innerText      = stats.total      ?? 0;
+    document.getElementById('kpi-no-website').innerText = stats.no_website ?? 0;
+    document.getElementById('kpi-old-website').innerText = stats.old_website ?? 0;
+    document.getElementById('kpi-sent').innerText       = stats.sent       ?? 0;
+    document.getElementById('kpi-replied').innerText    = stats.replied    ?? 0;
+    document.getElementById('kpi-conversion').innerText = stats.conversion_rate + '%';
+
+    // Update sidebar badges
+    document.getElementById('badge-count-nowebsite').innerText = stats.no_website ?? 0;
+    document.getElementById('badge-count-campaign').innerText  = stats.old_website ?? 0;
+
+    // Render current tab
+    if      (activeTab === 'overview')   renderOverview();
+    else if (activeTab === 'nowebsite')  renderNoWebsiteTable();
+    else if (activeTab === 'campaign')   renderCampaignTable();
+    else if (activeTab === 'modern')     renderModernTable();
 }

@@ -768,3 +768,43 @@ table a:hover {
 .icon-spin.spinning {
     animation: spin 0.8s linear infinite;
 }
+
+/* Date Filter Tabs */
+.date-filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    padding: 6px;
+    background: rgba(20, 26, 45, 0.3);
+    border-radius: 12px;
+    border: 1px solid var(--border-glass);
+    align-self: flex-start;
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.date-tab {
+    padding: 8px 16px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-family: var(--font-inter);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.date-tab:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.date-tab.active {
+    color: var(--bg-app);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    font-weight: 600;
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+}
