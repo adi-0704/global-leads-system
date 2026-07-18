@@ -1,6 +1,46 @@
 {
   "leads": [
     {
+      "id": 195,
+      "name": "Smile Center on Roosevelt Blvd-Best Emergency Dentist Near you-uSmile Philadelphia",
+      "phone": "215) 288-6404",
+      "address": "\ue0c8\n6404 Roosevelt Blvd Floor 2, Philadelphia, PA 19149",
+      "website": "https://smilecenterspa.com/roosevelt-boulevard-smile-center/",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Philadelphia",
+      "scraped_at": "2026-07-18T06:36:19.735571",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
+      "id": 191,
+      "name": "Dental Solutions Market Street",
+      "phone": "215) 792-2171",
+      "address": "\ue0c8\n722 Market St Fl 1, Philadelphia, PA 19106",
+      "website": "https://dentalsolutionscreatingsmiles.com/dentist-office/philadelphia-pa-19106?utm_source=Google&utm_medium=KnowledgePanel&utm_campaign=Website",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Philadelphia",
+      "scraped_at": "2026-07-18T06:35:14.575959",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours); no website analytics (no visibility into how many patients visit or where they come from).",
+      "email_error": null
+    },
+    {
       "id": 190,
       "name": "Dentistry in Philadelphia",
       "phone": "215) 735-8844",
@@ -2822,15 +2862,15 @@
     }
   ],
   "stats": {
-    "total": 141,
+    "total": 143,
     "no_website": 2,
     "old_website": 47,
-    "modern_website": 92,
+    "modern_website": 94,
     "sent": 47,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:34:12.721217+00:00"
+  "generated_at": "2026-07-18T06:36:28.182421+00:00"
 }
