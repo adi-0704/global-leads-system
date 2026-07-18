@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 137,
+      "name": "Glasgow Skin Cancer Clinic",
+      "phone": "+44 141 328 1225",
+      "address": "\ue0c8\n154 Clyde St, Glasgow G1 4EX, United Kingdom",
+      "website": "https://www.skincancerglasgow.co.uk/",
+      "status": "Old Website",
+      "email": "info@academyofplasticsurgery.co.uk",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:06:00.938429",
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Glasgow",
+      "scraped_at": "2026-07-18T06:05:59.443993",
+      "website_viewport": 0,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: not mobile-friendly (broken layout on phones and tablets); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
       "id": 136,
       "name": "Harley Street Medics",
       "phone": "+44 141 488 8985",
@@ -2082,15 +2102,15 @@
     }
   ],
   "stats": {
-    "total": 104,
+    "total": 105,
     "no_website": 1,
-    "old_website": 25,
+    "old_website": 26,
     "modern_website": 78,
-    "sent": 25,
+    "sent": 26,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:04:57.677835+00:00"
+  "generated_at": "2026-07-18T06:06:00.940728+00:00"
 }
