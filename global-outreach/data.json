@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 188,
+      "name": "1800 Emergency Dentist Philadelphia 24 Hour",
+      "phone": "267) 552-8714",
+      "address": "\ue0c8\n2501 Oakford St #1, Philadelphia, PA 19146",
+      "website": "https://1800dentist.com/dentist-philadelphia-520635/",
+      "status": "No Booking/AI",
+      "email": "feedback@1800dentist.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:33:07.527226",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Philadelphia",
+      "scraped_at": "2026-07-18T06:33:05.912886",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2023,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no contact form or online enquiry form.",
+      "email_error": null
+    },
+    {
       "id": 187,
       "name": "South Philly Dental",
       "phone": "215) 465-6061",
@@ -2762,15 +2782,15 @@
     }
   ],
   "stats": {
-    "total": 138,
+    "total": 139,
     "no_website": 2,
-    "old_website": 45,
+    "old_website": 46,
     "modern_website": 91,
-    "sent": 45,
+    "sent": 46,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:32:02.478514+00:00"
+  "generated_at": "2026-07-18T06:33:07.530027+00:00"
 }
