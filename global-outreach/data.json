@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 184,
+      "name": "CarePoint Emergency Dental Care Philadelphia",
+      "phone": "215) 267-2120",
+      "address": "\ue0c8\n2317 Wallace St #3, Philadelphia, PA 19130",
+      "website": "https://www.emergencydentalservice.com/emergencydentist24-7/philadelphia-pa-19130",
+      "status": "No Booking/AI",
+      "email": "info@emergencydentalservice.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:29:45.675018",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Philadelphia",
+      "scraped_at": "2026-07-18T06:29:43.190867",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no contact form or online enquiry form.",
+      "email_error": null
+    },
+    {
       "id": 183,
       "name": "Dentists On the Square",
       "phone": "267) 554-2012",
@@ -2702,15 +2722,15 @@
     }
   ],
   "stats": {
-    "total": 135,
+    "total": 136,
     "no_website": 2,
-    "old_website": 42,
+    "old_website": 43,
     "modern_website": 91,
-    "sent": 42,
+    "sent": 43,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:28:38.362172+00:00"
+  "generated_at": "2026-07-18T06:29:45.677706+00:00"
 }
