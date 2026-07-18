@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 112,
+      "name": "Leah V Skin Care & Laser Clinic",
+      "phone": "+1 825-526-1434",
+      "address": "\ue0c8\n5144 Gateway Blvd NW, Edmonton, AB T6H 5W5, Canada",
+      "website": "https://leahvskincare.com/",
+      "status": "Old Website",
+      "email": "605a7baede844d278b89dc95ae0a9123@sentry-next.wixpress.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T05:56:22.707461",
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Edmonton",
+      "scraped_at": "2026-07-18T05:56:21.191336",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2019,
+      "website_notes": "Issues found: outdated design (copyright shows 2019); no online booking (patients cannot schedule appointments from the website); no website analytics (no visibility into how many patients visit or where they come from).",
+      "email_error": null
+    },
+    {
       "id": 111,
       "name": "Western Canada Dermatology Institute",
       "phone": "+1 780-424-4440",
@@ -1662,15 +1682,15 @@
     }
   ],
   "stats": {
-    "total": 83,
+    "total": 84,
     "no_website": 0,
-    "old_website": 19,
+    "old_website": 20,
     "modern_website": 64,
-    "sent": 19,
+    "sent": 20,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At",
-  "generated_at": "2026-07-18T05:55:18.472451+00:00"
+  "generated_at": "2026-07-18T05:56:22.709795+00:00"
 }
