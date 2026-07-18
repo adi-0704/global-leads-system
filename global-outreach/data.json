@@ -1,6 +1,46 @@
 {
   "leads": [
     {
+      "id": 204,
+      "name": "Madison Pine Dental Clinic",
+      "phone": "773) 287-2277",
+      "address": "\ue0c8\n5470 W Madison St, Chicago, IL 60644",
+      "website": "http://www.madisonpinedental.com/",
+      "status": "Old Website",
+      "email": "605a7baede844d278b89dc95ae0a9123@sentry-next.wixpress.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:41:15.999307",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Austin",
+      "scraped_at": "2026-07-18T06:41:13.664636",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2019,
+      "website_notes": "Issues found: outdated design (copyright shows 2019); no online booking (patients cannot schedule appointments from the website); no website analytics (no visibility into how many patients visit or where they come from).",
+      "email_error": null
+    },
+    {
+      "id": 203,
+      "name": "Austin Family Dental Center",
+      "phone": "",
+      "address": "\ue0c8\nChicago, IL 60643",
+      "website": "https://business.google.com/create?fp=10486406734435621933&hl=en&authuser=0&gmbsrc=us-en-et-ip-z-gmb-s-z-l~mrc%7Cclaimbz%7Cu&ppsrc=GMBMI&utm_campaign=us-en-et-ip-z-gmb-s-z-l~mrc%7Cclaimbz%7Cu&utm_source=gmb_mrc81&utm_medium=et&getstarted&lis=0",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Austin",
+      "scraped_at": "2026-07-18T06:41:12.202461",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2024,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no contact form or online enquiry form; no website analytics (no visibility into how many patients visit or where they come from).",
+      "email_error": null
+    },
+    {
       "id": 202,
       "name": "Austin Emergency Dental",
       "phone": "737) 747-4646",
@@ -2922,15 +2962,15 @@
     }
   ],
   "stats": {
-    "total": 146,
+    "total": 148,
     "no_website": 2,
-    "old_website": 50,
-    "modern_website": 94,
-    "sent": 50,
+    "old_website": 51,
+    "modern_website": 95,
+    "sent": 51,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:40:09.600993+00:00"
+  "generated_at": "2026-07-18T06:41:16.002898+00:00"
 }
