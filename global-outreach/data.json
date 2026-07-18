@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 151,
+      "name": "Downtown Montreal Dentistry",
+      "phone": "+1 514-844-3112",
+      "address": "\ue0c8\n2045 Rue Stanley Ste 1550, Montreal, Quebec H3A 2V4, Canada",
+      "website": "http://downtownmtldentistry.com/",
+      "status": "No Booking/AI",
+      "email": "info@downtownmtldentistry.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:14:19.680909",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Montreal",
+      "scraped_at": "2026-07-18T06:14:17.394073",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no website analytics (no visibility into how many patients visit or where they come from).",
+      "email_error": null
+    },
+    {
       "id": 150,
       "name": "Fairmount Dental Centre",
       "phone": "+1 514-270-2838",
@@ -2322,15 +2342,15 @@
     }
   ],
   "stats": {
-    "total": 116,
+    "total": 117,
     "no_website": 1,
-    "old_website": 31,
+    "old_website": 32,
     "modern_website": 84,
-    "sent": 31,
+    "sent": 32,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:12:54.126730+00:00"
+  "generated_at": "2026-07-18T06:14:19.683234+00:00"
 }
