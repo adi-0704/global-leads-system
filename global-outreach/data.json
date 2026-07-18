@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 60,
+      "name": "Oxford Dental Care",
+      "phone": "256) 831-3432",
+      "address": "\ue0c8\n420 Snow St, Oxford, AL 36203",
+      "website": "http://www.oxforddentalcare.net/",
+      "status": "No Booking/AI",
+      "email": "drwhitwelch@gmail.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T05:40:51.051930",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Oxford",
+      "scraped_at": "2026-07-18T05:40:49.398980",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no social media links visible on the website.",
+      "email_error": null
+    },
+    {
       "id": 59,
       "name": "Dental Center Of Oxford",
       "phone": "248) 628-9707",
@@ -902,15 +922,15 @@
     }
   ],
   "stats": {
-    "total": 45,
+    "total": 46,
     "no_website": 0,
-    "old_website": 11,
+    "old_website": 12,
     "modern_website": 34,
-    "sent": 11,
+    "sent": 12,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At",
-  "generated_at": "2026-07-18T05:39:47.855790+00:00"
+  "generated_at": "2026-07-18T05:40:51.053849+00:00"
 }
