@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 143,
+      "name": "Esteem Beauty Glasgow",
+      "phone": "+44 141 334 3254",
+      "address": "\ue0c8\n481 Great Western Rd, Glasgow G12 8HL, United Kingdom",
+      "website": "https://www.esteembeauty.co.uk/",
+      "status": "No Booking/AI",
+      "email": "esteembeautyglasgow@gmail.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:09:28.988819",
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Glasgow",
+      "scraped_at": "2026-07-18T06:09:25.538336",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no website analytics (no visibility into how many patients visit or where they come from).",
+      "email_error": null
+    },
+    {
       "id": 142,
       "name": "Glasgow Skin Specialists",
       "phone": "+44 141 611 6996",
@@ -2182,15 +2202,15 @@
     }
   ],
   "stats": {
-    "total": 109,
+    "total": 110,
     "no_website": 1,
-    "old_website": 28,
+    "old_website": 29,
     "modern_website": 80,
-    "sent": 28,
+    "sent": 29,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:08:22.846811+00:00"
+  "generated_at": "2026-07-18T06:09:28.991382+00:00"
 }
