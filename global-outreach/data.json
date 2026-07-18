@@ -1,6 +1,26 @@
 {
   "leads": [
     {
+      "id": 160,
+      "name": "La Clinique rue Roy",
+      "phone": "+1 514-499-0984",
+      "address": "\ue0c8\n281 Rue Roy E, Montr\u00e9al, QC H2W 1M7, Canada",
+      "website": "http://www.cliniqueroy.com/",
+      "status": "Old Website",
+      "email": "info@cliniqueroy.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-18T06:18:13.615647",
+      "replied_at": null,
+      "query": "dental clinic",
+      "location": "Montreal",
+      "scraped_at": "2026-07-18T06:18:11.151898",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2017,
+      "website_notes": "Issues found: outdated design (copyright shows 2017); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
       "id": 159,
       "name": "Comfort Care Dental Clinic",
       "phone": "+1 514-844-8061",
@@ -2422,15 +2442,15 @@
     }
   ],
   "stats": {
-    "total": 121,
+    "total": 122,
     "no_website": 2,
-    "old_website": 34,
+    "old_website": 35,
     "modern_website": 85,
-    "sent": 34,
+    "sent": 35,
     "replied": 0,
     "failed": 0,
     "conversion_rate": 0.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
-  "generated_at": "2026-07-18T06:17:06.946706+00:00"
+  "generated_at": "2026-07-18T06:18:13.618478+00:00"
 }
