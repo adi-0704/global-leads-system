@@ -74,8 +74,8 @@
       "website": "https://www.goochdental.com/",
       "status": "No Booking/AI",
       "email": "info@goochdental.com",
-      "email_status": "Not Sent",
-      "sent_at": null,
+      "email_status": "Sent (Dry Run)",
+      "sent_at": "2026-07-19T05:55:47.552304",
       "replied_at": null,
       "query": "dentist",
       "location": "Birmingham",
@@ -3614,12 +3614,12 @@
     "no_website": 2,
     "old_website": 57,
     "modern_website": 105,
-    "sent": 56,
+    "sent": 57,
     "replied": 1,
     "failed": 0,
     "conversion_rate": 1.8
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-19T05:55:46.211670+00:00"
+  "generated_at": "2026-07-19T05:55:47.555455+00:00"
 }
