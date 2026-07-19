@@ -1,6 +1,28 @@
 {
   "leads": [
     {
+      "id": 230,
+      "name": "Riley Dental Group",
+      "phone": "270) 651-5939",
+      "address": "\ue0c8\n101 State Ave, Glasgow, KY 42141",
+      "website": "https://rileydentalgroupky.com/",
+      "status": "No Booking/AI",
+      "email": "info@pinnaclemgp.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-19T10:29:19.338563",
+      "replied_at": null,
+      "query": "dentist",
+      "location": "Glasgow",
+      "scraped_at": "2026-07-19T10:29:17.526687",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no contact form or online enquiry form.",
+      "email_error": null,
+      "reply_subject": null,
+      "reply_body": null
+    },
+    {
       "id": 228,
       "name": "Farm Street Dental Practice",
       "phone": "+44 121 554 9324",
@@ -3610,16 +3632,16 @@
     }
   ],
   "stats": {
-    "total": 164,
+    "total": 165,
     "no_website": 2,
-    "old_website": 57,
+    "old_website": 58,
     "modern_website": 105,
-    "sent": 57,
+    "sent": 58,
     "replied": 1,
     "failed": 0,
-    "conversion_rate": 1.8
+    "conversion_rate": 1.7
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-19T06:03:04.055737+00:00"
+  "generated_at": "2026-07-19T10:29:19.343276+00:00"
 }
