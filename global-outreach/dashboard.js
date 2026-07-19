@@ -15,6 +15,7 @@ let _noWebsiteCsv = '';
 let allLeads  = [];
 let configData = {};
 let activeTab  = 'overview';
+let senderEmail = '';
 
 // Initialize Dashboard
 document.addEventListener('DOMContentLoaded', () => {
@@ -112,6 +113,7 @@ async function fetchData() {
             allLeads      = data.leads  || [];
             stats         = data.stats  || {};
             _noWebsiteCsv = data.no_website_csv || '';
+            senderEmail   = data.sender_email || '';
 
             // Show last-updated timestamp
             if (data.generated_at) {
@@ -711,7 +713,12 @@ function renderReplies() {
         const queryLower = (lead.query || '').toLowerCase();
         const nicheTag = queryLower.includes('skin') || queryLower.includes('derm') ? 'derm' : 'dental';
 
-        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(lead.email)}&su=${encodeURIComponent('Re: ' + subject)}`;
+        let gmailUrl = '';
+        if (senderEmail && senderEmail.trim()) {
+            gmailUrl = `https://mail.google.com/mail/u/${encodeURIComponent(senderEmail.trim())}/?view=cm&fs=1&to=${encodeURIComponent(lead.email)}&su=${encodeURIComponent('Re: ' + subject)}`;
+        } else {
+            gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(lead.email)}&su=${encodeURIComponent('Re: ' + subject)}`;
+        }
 
         card.innerHTML = `
             <div class="reply-card-header">

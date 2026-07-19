@@ -817,6 +817,17 @@ def git_sync(db_path: str):
     if not os.environ.get("GITHUB_ACTIONS"):
         return
 
+    # Write sender email first
+    try:
+        smtp_from = os.environ.get("SMTP_FROM", os.environ.get("SMTP_USER", "")).strip()
+        if smtp_from:
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            txt_path = os.path.join(script_dir, "sender_email.txt")
+            with open(txt_path, "w", encoding="utf-8") as f:
+                f.write(smtp_from)
+    except Exception as e:
+        print(f"  [Real-time Sync] Failed to write sender_email.txt: {e}")
+
     # Export data.json first
     try:
         script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -836,7 +847,7 @@ def git_sync(db_path: str):
         subprocess.run(["git", "config", "--global", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True, capture_output=True)
         
         # Add files (relative paths from repo root)
-        subprocess.run(["git", "add", "global-outreach/leads.db", "global-outreach/data.json"], check=True, capture_output=True)
+        subprocess.run(["git", "add", "global-outreach/leads.db", "global-outreach/data.json", "global-outreach/sender_email.txt"], check=True, capture_output=True)
         
         # Check if changes exist
         diff_res = subprocess.run(["git", "diff", "--staged", "--quiet"])

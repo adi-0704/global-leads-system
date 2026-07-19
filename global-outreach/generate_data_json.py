@@ -66,10 +66,23 @@ def main():
         ]))
     csv_content = "\n".join(csv_lines)
 
+    sender_email = ""
+    try:
+        txt_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sender_email.txt")
+        if os.path.exists(txt_path):
+            with open(txt_path, "r", encoding="utf-8") as f:
+                sender_email = f.read().strip()
+    except Exception:
+        pass
+        
+    if not sender_email:
+        sender_email = os.environ.get("SMTP_FROM", os.environ.get("SMTP_USER", "")).strip()
+
     payload = {
         "leads":        leads,
         "stats":        stats,
         "no_website_csv": csv_content,
+        "sender_email": sender_email,
         "generated_at": _now(),
     }
     _write(payload)
