@@ -1,6 +1,50 @@
 {
   "leads": [
     {
+      "id": 370,
+      "name": "Skindepth Perth",
+      "phone": "+61 414 756 100",
+      "address": "\ue0c8\n484 Albany Hwy, Victoria Park WA 6100, Australia",
+      "website": "http://www.skindepthperth.com.au/",
+      "status": "No Booking/AI",
+      "email": "user@domain.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-19T11:21:13.202789",
+      "replied_at": null,
+      "query": "dermatologist",
+      "location": "Perth",
+      "scraped_at": "2026-07-19T11:21:11.393707",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no contact form or online enquiry form.",
+      "email_error": null,
+      "reply_subject": null,
+      "reply_body": null
+    },
+    {
+      "id": 369,
+      "name": "Mi Skn Clinic: Experts In Skin Health",
+      "phone": "+61 8 9328 3350",
+      "address": "\ue0c8\n144 Summers St, Perth WA 6000, Australia",
+      "website": "https://www.miskn.com/",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dermatologist",
+      "location": "Perth",
+      "scraped_at": "2026-07-19T11:21:10.102054",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null,
+      "reply_subject": null,
+      "reply_body": null
+    },
+    {
       "id": 368,
       "name": "Loftus Street Dermatology",
       "phone": "+61 8 9228 0795",
@@ -5722,16 +5766,16 @@
     }
   ],
   "stats": {
-    "total": 260,
+    "total": 262,
     "no_website": 5,
-    "old_website": 91,
-    "modern_website": 164,
-    "sent": 91,
+    "old_website": 92,
+    "modern_website": 165,
+    "sent": 92,
     "replied": 1,
     "failed": 0,
     "conversion_rate": 1.1
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Port Richmond Dental Center\",\"215) 739-8008\",\"\ue0c8\n3162 Richmond St, Philadelphia, PA 19134\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:49:00.748194\"\n\"Priority Emergency Dental Care\",\"844) 490-5591\",\"\ue0c8\n2333 Tasker St, Philadelphia, PA 19145\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:47:54.390866\"\n\"Whiteside Dental\",\"270) 651-6471\",\"\ue0c8\n400 E Main St, Glasgow, KY 42141\",\"dentist\",\"Glasgow\",\"2026-07-19T10:34:06.670234\"\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-19T11:20:07.651906+00:00"
+  "generated_at": "2026-07-19T11:21:13.206665+00:00"
 }
