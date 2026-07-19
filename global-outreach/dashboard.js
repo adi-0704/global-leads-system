@@ -710,8 +710,8 @@ function renderReplies() {
             card.classList.toggle('expanded');
         };
 
-        const subject = lead.reply_subject || 'Re: Website Redesign / Audit';
-        const bodyText = lead.reply_body || 'Hi, yes, we are interested. Can you send more information or schedule a call?';
+        const subject = lead.reply_subject || '(Subject not captured)';
+        const bodyText = lead.reply_body || '(Body content not captured)';
         const queryLower = (lead.query || '').toLowerCase();
         const nicheTag = queryLower.includes('skin') || queryLower.includes('derm') ? 'derm' : 'dental';
 
