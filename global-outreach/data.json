@@ -1,6 +1,28 @@
 {
   "leads": [
     {
+      "id": 312,
+      "name": "Vista Clinic - Skin and Aesthetics in Dublin",
+      "phone": "+353 85 220 6221",
+      "address": "\ue0c8\n18 Priory Office Park, Stillorgan, Dublin, A94 R5P6, Ireland",
+      "website": "https://www.vistaclinic.ie/",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Dublin",
+      "scraped_at": "2026-07-19T10:57:46.089036",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2025,
+      "website_notes": "Website appears fully optimised.",
+      "email_error": null,
+      "reply_subject": null,
+      "reply_body": null
+    },
+    {
       "id": 311,
       "name": "Derma Clinic Monkstown",
       "phone": "+353 1 230 3404",
@@ -4820,10 +4842,10 @@
     }
   ],
   "stats": {
-    "total": 219,
+    "total": 220,
     "no_website": 5,
     "old_website": 75,
-    "modern_website": 139,
+    "modern_website": 140,
     "sent": 75,
     "replied": 1,
     "failed": 0,
@@ -4831,5 +4853,5 @@
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Port Richmond Dental Center\",\"215) 739-8008\",\"\ue0c8\n3162 Richmond St, Philadelphia, PA 19134\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:49:00.748194\"\n\"Priority Emergency Dental Care\",\"844) 490-5591\",\"\ue0c8\n2333 Tasker St, Philadelphia, PA 19145\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:47:54.390866\"\n\"Whiteside Dental\",\"270) 651-6471\",\"\ue0c8\n400 E Main St, Glasgow, KY 42141\",\"dentist\",\"Glasgow\",\"2026-07-19T10:34:06.670234\"\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-19T10:56:43.459794+00:00"
+  "generated_at": "2026-07-19T10:57:57.640514+00:00"
 }
