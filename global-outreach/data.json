@@ -1,6 +1,28 @@
 {
   "leads": [
     {
+      "id": 346,
+      "name": "Calgary Skin Cancer Centre",
+      "phone": "+1 403-700-0110",
+      "address": "\ue0c8\n3320 17 Ave SW Ste 316, Calgary, AB T3E 0B4, Canada",
+      "website": "http://www.calgaryskincancer.com/",
+      "status": "Old Website",
+      "email": "info@calgaryskincancer.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-19T11:13:18.069039",
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Calgary",
+      "scraped_at": "2026-07-19T11:13:16.053552",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2012,
+      "website_notes": "Issues found: outdated design (copyright shows 2012); no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null,
+      "reply_subject": null,
+      "reply_body": null
+    },
+    {
       "id": 345,
       "name": "The Aesthetic Clinic (TAC) Calgary",
       "phone": "+1 368-399-5944",
@@ -5348,16 +5370,16 @@
     }
   ],
   "stats": {
-    "total": 243,
+    "total": 244,
     "no_website": 5,
-    "old_website": 85,
+    "old_website": 86,
     "modern_website": 153,
-    "sent": 85,
+    "sent": 86,
     "replied": 1,
     "failed": 0,
     "conversion_rate": 1.2
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Port Richmond Dental Center\",\"215) 739-8008\",\"\ue0c8\n3162 Richmond St, Philadelphia, PA 19134\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:49:00.748194\"\n\"Priority Emergency Dental Care\",\"844) 490-5591\",\"\ue0c8\n2333 Tasker St, Philadelphia, PA 19145\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:47:54.390866\"\n\"Whiteside Dental\",\"270) 651-6471\",\"\ue0c8\n400 E Main St, Glasgow, KY 42141\",\"dentist\",\"Glasgow\",\"2026-07-19T10:34:06.670234\"\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-19T11:12:13.848490+00:00"
+  "generated_at": "2026-07-19T11:13:18.073256+00:00"
 }
