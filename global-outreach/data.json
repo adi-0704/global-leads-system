@@ -1,6 +1,28 @@
 {
   "leads": [
     {
+      "id": 302,
+      "name": "Dr Lisa Fay Rooms",
+      "phone": "+353 1 685 3100",
+      "address": "\ue0c8\n6 merrion Court, Ailesbury Rd, Dublin 4, D04 DD58, Ireland",
+      "website": "http://www.cosmeticdoctor.ie/",
+      "status": "No Booking/AI",
+      "email": "info@cosmeticdoctor.ie",
+      "email_status": "Sent",
+      "sent_at": "2026-07-19T10:55:13.406886",
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Dublin",
+      "scraped_at": "2026-07-19T10:55:11.507238",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no contact form or online enquiry form.",
+      "email_error": null,
+      "reply_subject": null,
+      "reply_body": null
+    },
+    {
       "id": 301,
       "name": "The Adare Clinic",
       "phone": "+353 1 676 9810",
@@ -4622,16 +4644,16 @@
     }
   ],
   "stats": {
-    "total": 210,
+    "total": 211,
     "no_website": 5,
-    "old_website": 73,
+    "old_website": 74,
     "modern_website": 132,
-    "sent": 73,
+    "sent": 74,
     "replied": 1,
     "failed": 0,
     "conversion_rate": 1.4
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Port Richmond Dental Center\",\"215) 739-8008\",\"\ue0c8\n3162 Richmond St, Philadelphia, PA 19134\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:49:00.748194\"\n\"Priority Emergency Dental Care\",\"844) 490-5591\",\"\ue0c8\n2333 Tasker St, Philadelphia, PA 19145\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:47:54.390866\"\n\"Whiteside Dental\",\"270) 651-6471\",\"\ue0c8\n400 E Main St, Glasgow, KY 42141\",\"dentist\",\"Glasgow\",\"2026-07-19T10:34:06.670234\"\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-19T10:53:46.665545+00:00"
+  "generated_at": "2026-07-19T10:55:13.410391+00:00"
 }
