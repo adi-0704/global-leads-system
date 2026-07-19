@@ -77,6 +77,16 @@ function switchTab(tabId) {
         pageTitle.innerText = "Filtered Modern Sites";
         pageSubtitle.innerText = "Profiles excluded from campaign (website is modern and secure)";
         renderModernTable();
+    } else if (tabId === 'replies') {
+        document.getElementById('tab-replies').classList.add('active');
+        pageTitle.innerText = "Email Replies Inbox";
+        pageSubtitle.innerText = "Direct responses received from local medical & dental practices";
+        renderReplies();
+    } else if (tabId === 'analytics') {
+        document.getElementById('tab-analytics').classList.add('active');
+        pageTitle.innerText = "Campaign Analytics";
+        pageSubtitle.innerText = "Interactive timeline and performance metrics of your campaigns";
+        setTimeout(renderAnalyticsChart, 100);
     } else if (tabId === 'settings') {
         document.getElementById('tab-settings').classList.add('active');
         pageTitle.innerText = "Outreach Settings";
@@ -546,9 +556,10 @@ function calculateStats(leadsList) {
             stats.modern_website++;
         }
 
-        if (lead.email_status === 'Sent' || lead.email_status === 'Sent (Dry Run)') {
+        if (lead.email_status === 'Sent' || lead.email_status === 'Sent (Dry Run)' || lead.email_status === 'Replied') {
             stats.sent++;
-        } else if (lead.email_status === 'Replied') {
+        }
+        if (lead.email_status === 'Replied') {
             stats.replied++;
         } else if (lead.email_status === 'Failed') {
             stats.failed++;
@@ -643,10 +654,257 @@ function renderCurrentFilteredView() {
     // Update sidebar badges
     document.getElementById('badge-count-nowebsite').innerText = stats.no_website ?? 0;
     document.getElementById('badge-count-campaign').innerText  = stats.old_website ?? 0;
+    
+    const repliesBadge = document.getElementById('badge-count-replies');
+    if (repliesBadge) {
+        repliesBadge.innerText = stats.replied ?? 0;
+    }
 
     // Render current tab
     if      (activeTab === 'overview')   renderOverview();
     else if (activeTab === 'nowebsite')  renderNoWebsiteTable();
     else if (activeTab === 'campaign')   renderCampaignTable();
     else if (activeTab === 'modern')     renderModernTable();
+    else if (activeTab === 'replies')    renderReplies();
+    else if (activeTab === 'analytics')  renderAnalyticsChart();
+}
+
+// ─── Real-time Replies rendering & Chart.js Analytics ──────────────────────────────────
+let campaignChartInstance = null;
+
+function renderReplies() {
+    const searchVal = document.getElementById('search-replies').value.toLowerCase().trim();
+    const inbox = document.getElementById('replies-inbox');
+    if (!inbox) return;
+
+    const filteredLeads = getFilteredLeads();
+    
+    // Filter leads that have replied
+    const repliedLeads = filteredLeads.filter(lead => {
+        if (lead.email_status !== 'Replied') return false;
+        
+        if (searchVal) {
+            const nameMatch = lead.name.toLowerCase().includes(searchVal);
+            const emailMatch = (lead.email || '').toLowerCase().includes(searchVal);
+            const subjectMatch = (lead.reply_subject || '').toLowerCase().includes(searchVal);
+            const bodyMatch = (lead.reply_body || '').toLowerCase().includes(searchVal);
+            return nameMatch || emailMatch || subjectMatch || bodyMatch;
+        }
+        return true;
+    });
+
+    if (repliedLeads.length === 0) {
+        inbox.innerHTML = `<p class="placeholder-text">${searchVal ? 'No matching replies found.' : 'No replies in inbox yet.'}</p>`;
+        return;
+    }
+
+    inbox.innerHTML = '';
+    repliedLeads.forEach(lead => {
+        const card = document.createElement('div');
+        card.className = 'reply-card';
+        card.onclick = (e) => {
+            card.classList.toggle('expanded');
+        };
+
+        const subject = lead.reply_subject || 'Re: Website Redesign / Audit';
+        const bodyText = lead.reply_body || 'Hi, yes, we are interested. Can you send more information or schedule a call?';
+        const queryLower = (lead.query || '').toLowerCase();
+        const nicheTag = queryLower.includes('skin') || queryLower.includes('derm') ? 'derm' : 'dental';
+
+        card.innerHTML = `
+            <div class="reply-card-header">
+                <div class="reply-sender-info">
+                    <h3>${escapeHtml(lead.name)}</h3>
+                    <p>From: <code>${escapeHtml(lead.email)}</code> | Niche: ${escapeHtml(lead.query)} | Location: ${escapeHtml(lead.location)}</p>
+                </div>
+                <div class="reply-meta">
+                    <span class="reply-niche-tag tag-${nicheTag}">${nicheTag}</span>
+                    <span class="reply-date">${lead.replied_at ? formatDate(lead.replied_at) : '—'}</span>
+                </div>
+            </div>
+            <div class="reply-card-subject">${escapeHtml(subject)}</div>
+            <div class="reply-card-preview">${escapeHtml(bodyText)}</div>
+            <button class="reply-expand-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                <span>Toggle Message Body</span>
+            </button>
+        `;
+        inbox.appendChild(card);
+    });
+}
+
+function getDailyAnalyticsData() {
+    const dailyData = {};
+    
+    allLeads.forEach(lead => {
+        if (!lead.scraped_at) return;
+        const dateStr = lead.scraped_at.split('T')[0];
+        
+        if (!dailyData[dateStr]) {
+            dailyData[dateStr] = {
+                scraped: 0,
+                sent: 0,
+                replied: 0,
+                no_website: 0
+            };
+        }
+        
+        if (lead.status !== 'Filtered (No Email)') {
+            dailyData[dateStr].scraped++;
+            if (lead.status === 'No Website') {
+                dailyData[dateStr].no_website++;
+            }
+            if (lead.email_status === 'Sent' || lead.email_status === 'Sent (Dry Run)' || lead.email_status === 'Replied') {
+                dailyData[dateStr].sent++;
+            }
+            if (lead.email_status === 'Replied') {
+                dailyData[dateStr].replied++;
+            }
+        }
+    });
+    
+    // Sort dates chronologically
+    const sortedDates = Object.keys(dailyData).sort();
+    
+    return {
+        dates: sortedDates,
+        scraped: sortedDates.map(d => dailyData[d].scraped),
+        sent: sortedDates.map(d => dailyData[d].sent),
+        replied: sortedDates.map(d => dailyData[d].replied),
+        no_website: sortedDates.map(d => dailyData[d].no_website)
+    };
+}
+
+function formatDateOnly(dateStr) {
+    if (!dateStr) return '—';
+    try {
+        const parts = dateStr.split('-');
+        if (parts.length === 3) {
+            const date = new Date(parts[0], parts[1] - 1, parts[2]);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+        return dateStr;
+    } catch (e) {
+        return dateStr;
+    }
+}
+
+function renderAnalyticsChart() {
+    const canvas = document.getElementById('campaignLineChart');
+    if (!canvas) return;
+
+    const data = getDailyAnalyticsData();
+
+    if (campaignChartInstance) {
+        campaignChartInstance.destroy();
+    }
+
+    // Try to load Chart.js, if not defined return gracefully
+    if (typeof Chart === 'undefined') {
+        canvas.parentNode.innerHTML = '<p class="placeholder-text" style="color: var(--color-danger);">Chart.js is not loaded. Make sure you are connected to the internet.</p>';
+        return;
+    }
+
+    const ctx = canvas.getContext('2d');
+    campaignChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data.dates.map(d => formatDateOnly(d)),
+            datasets: [
+                {
+                    label: 'Leads Scraped',
+                    data: data.scraped,
+                    borderColor: '#6366f1',
+                    backgroundColor: 'rgba(99, 102, 241, 0.05)',
+                    borderWidth: 3,
+                    tension: 0.35,
+                    fill: true
+                },
+                {
+                    label: 'Emails Sent',
+                    data: data.sent,
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                    borderWidth: 3,
+                    tension: 0.35,
+                    fill: true
+                },
+                {
+                    label: 'Replies Received',
+                    data: data.replied,
+                    borderColor: '#ec4899',
+                    backgroundColor: 'rgba(236, 72, 153, 0.05)',
+                    borderWidth: 3,
+                    tension: 0.35,
+                    fill: true
+                },
+                {
+                    label: 'No Website Found',
+                    data: data.no_website,
+                    borderColor: '#f59e0b',
+                    backgroundColor: 'rgba(245, 158, 11, 0.05)',
+                    borderWidth: 3,
+                    tension: 0.35,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#94a3b8',
+                        font: {
+                            family: 'Outfit',
+                            size: 13
+                        }
+                    }
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    backgroundColor: '#1e293b',
+                    titleColor: '#f8fafc',
+                    bodyColor: '#e2e8f0',
+                    borderColor: '#334155',
+                    borderWidth: 1
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.05)'
+                    },
+                    ticks: {
+                        color: '#94a3b8',
+                        font: {
+                            family: 'Inter',
+                            size: 12
+                        }
+                    }
+                },
+                y: {
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.05)'
+                    },
+                    ticks: {
+                        color: '#94a3b8',
+                        font: {
+                            family: 'Inter',
+                            size: 12
+                        },
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
 }

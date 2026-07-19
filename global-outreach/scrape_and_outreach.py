@@ -79,12 +79,16 @@ def init_db(db_path: str) -> None:
         conn.execute(
             "CREATE INDEX IF NOT EXISTS idx_leads_name ON leads (name)"
         )
-        # Migration: add email_error column to pre-existing databases that lack it
+        # Migration: add columns to pre-existing databases that lack them
         existing_cols = {
             row[1] for row in conn.execute("PRAGMA table_info(leads)").fetchall()
         }
         if "email_error" not in existing_cols:
             conn.execute("ALTER TABLE leads ADD COLUMN email_error TEXT")
+        if "reply_subject" not in existing_cols:
+            conn.execute("ALTER TABLE leads ADD COLUMN reply_subject TEXT")
+        if "reply_body" not in existing_cols:
+            conn.execute("ALTER TABLE leads ADD COLUMN reply_body TEXT")
         conn.commit()
 
 # ---------------------------------------------------------------------------
@@ -861,6 +865,55 @@ def git_sync(db_path: str):
 # Inbound Reply Tracking
 # ---------------------------------------------------------------------------
 
+def decode_mime_header(header_val: str) -> str:
+    if not header_val:
+        return ""
+    try:
+        from email.header import decode_header
+        decoded = decode_header(header_val)
+        parts = []
+        for text, encoding in decoded:
+            if isinstance(text, bytes):
+                parts.append(text.decode(encoding or "utf-8", errors="ignore"))
+            else:
+                parts.append(str(text))
+        return "".join(parts)
+    except Exception:
+        return header_val
+
+
+def get_email_body_text(msg) -> str:
+    body = ""
+    try:
+        if msg.is_multipart():
+            for part in msg.walk():
+                content_type = part.get_content_type()
+                content_disposition = str(part.get("Content-Disposition"))
+                if content_type == "text/plain" and "attachment" not in content_disposition:
+                    payload = part.get_payload(decode=True)
+                    if payload:
+                        body = payload.decode('utf-8', errors='ignore')
+                        break
+                elif content_type == "text/html" and "attachment" not in content_disposition:
+                    payload = part.get_payload(decode=True)
+                    if payload:
+                        body = payload.decode('utf-8', errors='ignore')
+        else:
+            payload = msg.get_payload(decode=True)
+            if payload:
+                body = payload.decode('utf-8', errors='ignore')
+    except Exception:
+        pass
+    
+    # Strip HTML tags if any HTML tags are present
+    if body and ("<html" in body.lower() or "<div" in body.lower() or "<p" in body.lower()):
+        body = re.sub(r'<[^>]+>', '', body)
+    
+    if body:
+        body = re.sub(r'\s+', ' ', body).strip()
+    return body or ""
+
+
 def check_for_replies(db_path: str) -> None:
     """Check IMAP inbox for replies from leads we pitched."""
 
@@ -930,16 +983,20 @@ def check_for_replies(db_path: str) -> None:
 
                     if sender in active_leads:
                         lead_id = active_leads[sender]
-                        updated_ids.append((lead_id, sender))
+                        subject_hdr = decode_mime_header(msg.get("Subject") or "")
+                        body_text = get_email_body_text(msg)
+                        body_text = body_text[:1000] # limit to 1000 chars
+                        
+                        updated_ids.append((lead_id, sender, subject_hdr, body_text))
                         replies_found += 1
 
             # Batch-update database
             if updated_ids:
                 with sqlite3.connect(db_path) as conn:
-                    for lead_id, sender in updated_ids:
+                    for lead_id, sender, subject_hdr, body_text in updated_ids:
                         conn.execute(
-                            "UPDATE leads SET email_status='Replied', replied_at=? WHERE id=?",
-                            (datetime.now().isoformat(), lead_id),
+                            "UPDATE leads SET email_status='Replied', replied_at=?, reply_subject=?, reply_body=? WHERE id=?",
+                            (datetime.now().isoformat(), subject_hdr, body_text, lead_id),
                         )
                         print(f"  [Reply] '{sender}' replied!")
                     conn.commit()

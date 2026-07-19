@@ -39,7 +39,7 @@ def main():
                 SUM(status = 'No Website')                           AS no_website,
                 SUM(status IN ('Old Website', 'No Booking/AI') AND email IS NOT NULL AND email != '') AS old_website,
                 SUM(status = 'Modern Website')                       AS modern_website,
-                SUM(email_status IN ('Sent','Sent (Dry Run)'))       AS sent,
+                SUM(email_status IN ('Sent','Sent (Dry Run)', 'Replied')) AS sent,
                 SUM(email_status = 'Replied')                        AS replied,
                 SUM(email_status = 'Failed')                         AS failed
             FROM leads
