@@ -113,7 +113,9 @@ async function fetchData() {
             allLeads      = data.leads  || [];
             stats         = data.stats  || {};
             _noWebsiteCsv = data.no_website_csv || '';
-            senderEmail   = data.sender_email || '';
+            const rawSender = data.sender_email || '';
+            const match = rawSender.match(/<([^>]+)>/);
+            senderEmail   = match ? match[1].trim() : rawSender.trim();
 
             // Show last-updated timestamp
             if (data.generated_at) {
