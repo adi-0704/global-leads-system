@@ -1,6 +1,28 @@
 {
   "leads": [
     {
+      "id": 338,
+      "name": "De Necker Dentistry Cape Town",
+      "phone": "+27 21 801 2891",
+      "address": "\ue0c8\nTeneo House, Building 3 Ground Floor, Central Park on Esplanade, Century City, Cape Town, 7446, South Africa",
+      "website": "http://www.deneckerdentistry.com/",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dentist",
+      "location": "Cape Town",
+      "scraped_at": "2026-07-19T11:09:52.452762",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null,
+      "reply_subject": null,
+      "reply_body": null
+    },
+    {
       "id": 335,
       "name": "Ratan & Co. | Dentistry Cape Town",
       "phone": "+27 63 464 3741",
@@ -5194,10 +5216,10 @@
     }
   ],
   "stats": {
-    "total": 236,
+    "total": 237,
     "no_website": 5,
     "old_website": 83,
-    "modern_website": 148,
+    "modern_website": 149,
     "sent": 83,
     "replied": 1,
     "failed": 0,
@@ -5205,5 +5227,5 @@
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Port Richmond Dental Center\",\"215) 739-8008\",\"\ue0c8\n3162 Richmond St, Philadelphia, PA 19134\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:49:00.748194\"\n\"Priority Emergency Dental Care\",\"844) 490-5591\",\"\ue0c8\n2333 Tasker St, Philadelphia, PA 19145\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:47:54.390866\"\n\"Whiteside Dental\",\"270) 651-6471\",\"\ue0c8\n400 E Main St, Glasgow, KY 42141\",\"dentist\",\"Glasgow\",\"2026-07-19T10:34:06.670234\"\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-19T11:08:27.796036+00:00"
+  "generated_at": "2026-07-19T11:09:52.456555+00:00"
 }
