@@ -1,6 +1,28 @@
 {
   "leads": [
     {
+      "id": 388,
+      "name": "Dr Graham Thom",
+      "phone": "+61 8 9367 6777",
+      "address": "\ue0c8\n14/38 Meadowvale Ave, South Perth WA 6151, Australia",
+      "website": "http://www.perthskincancer.com.au/",
+      "status": "No Booking/AI",
+      "email": "info@perthskincancer.com.au",
+      "email_status": "Sent",
+      "sent_at": "2026-07-19T11:29:39.197597",
+      "replied_at": null,
+      "query": "dermatologist",
+      "location": "Perth",
+      "scraped_at": "2026-07-19T11:29:37.313187",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no website analytics (no visibility into how many patients visit or where they come from).",
+      "email_error": null,
+      "reply_subject": null,
+      "reply_body": null
+    },
+    {
       "id": 386,
       "name": "Dr Rochelle Gild",
       "phone": "+61 8 6169 0631",
@@ -6074,16 +6096,16 @@
     }
   ],
   "stats": {
-    "total": 276,
+    "total": 277,
     "no_website": 6,
-    "old_website": 98,
+    "old_website": 99,
     "modern_website": 172,
-    "sent": 98,
+    "sent": 99,
     "replied": 1,
     "failed": 0,
     "conversion_rate": 1.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Dr N Georgy\",\"+61 8 9448 1244\",\"\ue0c8\nUnit 2/54 Arnisdale Rd, Duncraig WA 6023, Australia\",\"dermatologist\",\"Perth\",\"2026-07-19T11:23:39.012068\"\n\"Port Richmond Dental Center\",\"215) 739-8008\",\"\ue0c8\n3162 Richmond St, Philadelphia, PA 19134\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:49:00.748194\"\n\"Priority Emergency Dental Care\",\"844) 490-5591\",\"\ue0c8\n2333 Tasker St, Philadelphia, PA 19145\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:47:54.390866\"\n\"Whiteside Dental\",\"270) 651-6471\",\"\ue0c8\n400 E Main St, Glasgow, KY 42141\",\"dentist\",\"Glasgow\",\"2026-07-19T10:34:06.670234\"\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-19T11:28:15.619345+00:00"
+  "generated_at": "2026-07-19T11:29:39.202189+00:00"
 }
