@@ -930,6 +930,15 @@ table a:hover {
     border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
+.reply-card-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    padding-top: 12px;
+}
+
 .reply-expand-btn {
     display: flex;
     align-items: center;
@@ -940,7 +949,6 @@ table a:hover {
     background: transparent;
     border: none;
     cursor: pointer;
-    margin-top: 10px;
     padding: 0;
 }
 
@@ -952,6 +960,35 @@ table a:hover {
 
 .reply-card.expanded .reply-expand-btn svg {
     transform: rotate(180deg);
+}
+
+.reply-gmail-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 8px;
+    color: #fca5a5;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.reply-gmail-btn svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+}
+
+.reply-gmail-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #fecaca;
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.25);
+    transform: translateY(-1px);
 }
 
 /* Charts and Analytics Layout */

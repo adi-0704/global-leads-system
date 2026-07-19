@@ -711,6 +711,8 @@ function renderReplies() {
         const queryLower = (lead.query || '').toLowerCase();
         const nicheTag = queryLower.includes('skin') || queryLower.includes('derm') ? 'derm' : 'dental';
 
+        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(lead.email)}&su=${encodeURIComponent('Re: ' + subject)}`;
+
         card.innerHTML = `
             <div class="reply-card-header">
                 <div class="reply-sender-info">
@@ -724,12 +726,18 @@ function renderReplies() {
             </div>
             <div class="reply-card-subject">${escapeHtml(subject)}</div>
             <div class="reply-card-preview">${escapeHtml(bodyText)}</div>
-            <button class="reply-expand-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-                <span>Toggle Message Body</span>
-            </button>
+            <div class="reply-card-actions">
+                <button class="reply-expand-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                    <span>Toggle Message Body</span>
+                </button>
+                <a href="${gmailUrl}" target="_blank" class="reply-gmail-btn" onclick="event.stopPropagation();">
+                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    <span>Reply in Gmail</span>
+                </a>
+            </div>
         `;
         inbox.appendChild(card);
     });
