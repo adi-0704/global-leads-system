@@ -1,6 +1,28 @@
 {
   "leads": [
     {
+      "id": 232,
+      "name": "Amy Norris Cassady, DMD",
+      "phone": "270) 651-5939",
+      "address": "\ue0c8\n101 State Ave, Glasgow, KY 42141",
+      "website": "https://rileydentalgroupky.com/amy-norris-cassady-dmd/",
+      "status": "No Booking/AI",
+      "email": "info@pinnaclemgp.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-19T10:30:40.393216",
+      "replied_at": null,
+      "query": "dentist",
+      "location": "Glasgow",
+      "scraped_at": "2026-07-19T10:30:38.589239",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no contact form or online enquiry form.",
+      "email_error": null,
+      "reply_subject": null,
+      "reply_body": null
+    },
+    {
       "id": 230,
       "name": "Riley Dental Group",
       "phone": "270) 651-5939",
@@ -3632,16 +3654,16 @@
     }
   ],
   "stats": {
-    "total": 165,
+    "total": 166,
     "no_website": 2,
-    "old_website": 58,
+    "old_website": 59,
     "modern_website": 105,
-    "sent": 58,
+    "sent": 59,
     "replied": 1,
     "failed": 0,
     "conversion_rate": 1.7
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-19T10:29:19.343276+00:00"
+  "generated_at": "2026-07-19T10:30:40.397213+00:00"
 }
