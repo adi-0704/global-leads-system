@@ -1,6 +1,28 @@
 {
   "leads": [
     {
+      "id": 323,
+      "name": "The Smile Bar - Teeth Whitening & Cosmetic Dentistry - Cape Town (Camps Bay)",
+      "phone": "+27 71 642 4041",
+      "address": "\ue0c8\nShop 5B, First Floor, Promenade Mall, 87 Victoria Rd, Camps Bay, Cape Town, 8005, South Africa",
+      "website": "https://www.the-smile-bar.co.za/",
+      "status": "Old Website",
+      "email": "booking@the-smile-bar.co.za",
+      "email_status": "Sent",
+      "sent_at": "2026-07-19T11:02:45.567834",
+      "replied_at": null,
+      "query": "dentist",
+      "location": "Cape Town",
+      "scraped_at": "2026-07-19T11:02:43.583829",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2000,
+      "website_notes": "Issues found: outdated design (copyright shows 2000); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null,
+      "reply_subject": null,
+      "reply_body": null
+    },
+    {
       "id": 321,
       "name": "Dental Studio - Dr Beilinsohn",
       "phone": "+27 21 434 3663",
@@ -5018,16 +5040,16 @@
     }
   ],
   "stats": {
-    "total": 228,
+    "total": 229,
     "no_website": 5,
-    "old_website": 78,
+    "old_website": 79,
     "modern_website": 145,
-    "sent": 78,
+    "sent": 79,
     "replied": 1,
     "failed": 0,
     "conversion_rate": 1.3
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Port Richmond Dental Center\",\"215) 739-8008\",\"\ue0c8\n3162 Richmond St, Philadelphia, PA 19134\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:49:00.748194\"\n\"Priority Emergency Dental Care\",\"844) 490-5591\",\"\ue0c8\n2333 Tasker St, Philadelphia, PA 19145\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:47:54.390866\"\n\"Whiteside Dental\",\"270) 651-6471\",\"\ue0c8\n400 E Main St, Glasgow, KY 42141\",\"dentist\",\"Glasgow\",\"2026-07-19T10:34:06.670234\"\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-19T11:01:32.521331+00:00"
+  "generated_at": "2026-07-19T11:02:45.571877+00:00"
 }
