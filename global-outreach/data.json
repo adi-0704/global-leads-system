@@ -1,6 +1,50 @@
 {
   "leads": [
     {
+      "id": 438,
+      "name": "Dermapure Vancouver Davie (Formerly Dermal Laser Centres)",
+      "phone": "+1 778-720-5585",
+      "address": "\ue0c8\n803 Davie St, Vancouver, BC V6Z 1B7, Canada",
+      "website": "https://www.dermapure.com/clinics/vancouver/davie?utm_source=google&utm_medium=organic",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Vancouver",
+      "scraped_at": "2026-07-19T11:38:51.521729",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours); no website analytics (no visibility into how many patients visit or where they come from); no patient testimonials or reviews section.",
+      "email_error": null,
+      "reply_subject": null,
+      "reply_body": null
+    },
+    {
+      "id": 437,
+      "name": "Paad Wellness + DermEsthetics",
+      "phone": "+1 604-558-4838",
+      "address": "\ue0c8\nSecond Floor, 2223 W Broadway Unit #205, Vancouver, BC V6K 2E4, Canada",
+      "website": "https://paadwellness.com/",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Vancouver",
+      "scraped_at": "2026-07-19T11:38:51.129817",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null,
+      "reply_subject": null,
+      "reply_body": null
+    },
+    {
       "id": 435,
       "name": "8 West Clinic",
       "phone": "+1 604-733-1669",
@@ -6866,10 +6910,10 @@
     }
   ],
   "stats": {
-    "total": 312,
+    "total": 314,
     "no_website": 6,
     "old_website": 103,
-    "modern_website": 203,
+    "modern_website": 205,
     "sent": 103,
     "replied": 1,
     "failed": 0,
@@ -6877,5 +6921,5 @@
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Dr N Georgy\",\"+61 8 9448 1244\",\"\ue0c8\nUnit 2/54 Arnisdale Rd, Duncraig WA 6023, Australia\",\"dermatologist\",\"Perth\",\"2026-07-19T11:23:39.012068\"\n\"Port Richmond Dental Center\",\"215) 739-8008\",\"\ue0c8\n3162 Richmond St, Philadelphia, PA 19134\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:49:00.748194\"\n\"Priority Emergency Dental Care\",\"844) 490-5591\",\"\ue0c8\n2333 Tasker St, Philadelphia, PA 19145\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:47:54.390866\"\n\"Whiteside Dental\",\"270) 651-6471\",\"\ue0c8\n400 E Main St, Glasgow, KY 42141\",\"dentist\",\"Glasgow\",\"2026-07-19T10:34:06.670234\"\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-19T11:37:30.183174+00:00"
+  "generated_at": "2026-07-19T11:38:51.526310+00:00"
 }
