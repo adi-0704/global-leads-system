@@ -1,6 +1,28 @@
 {
   "leads": [
     {
+      "id": 425,
+      "name": "SkinPro Vancouver",
+      "phone": "+1 236-833-9353",
+      "address": "\ue0c8\n736 Granville St Unit 124, Vancouver, BC V6Z 1E4, Canada",
+      "website": "http://www.skinprovancouver.com/",
+      "status": "Old Website",
+      "email": "vancouverskinpro@gmail.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-19T11:36:06.059032",
+      "replied_at": null,
+      "query": "skin clinic",
+      "location": "Vancouver",
+      "scraped_at": "2026-07-19T11:36:03.637796",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2021,
+      "website_notes": "Issues found: outdated design (copyright shows 2021).",
+      "email_error": null,
+      "reply_subject": null,
+      "reply_body": null
+    },
+    {
       "id": 424,
       "name": "Renew Skin Clinic",
       "phone": "+1 604-561-8682",
@@ -6668,16 +6690,16 @@
     }
   ],
   "stats": {
-    "total": 303,
+    "total": 304,
     "no_website": 6,
-    "old_website": 101,
+    "old_website": 102,
     "modern_website": 196,
-    "sent": 101,
+    "sent": 102,
     "replied": 1,
     "failed": 0,
     "conversion_rate": 1.0
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Dr N Georgy\",\"+61 8 9448 1244\",\"\ue0c8\nUnit 2/54 Arnisdale Rd, Duncraig WA 6023, Australia\",\"dermatologist\",\"Perth\",\"2026-07-19T11:23:39.012068\"\n\"Port Richmond Dental Center\",\"215) 739-8008\",\"\ue0c8\n3162 Richmond St, Philadelphia, PA 19134\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:49:00.748194\"\n\"Priority Emergency Dental Care\",\"844) 490-5591\",\"\ue0c8\n2333 Tasker St, Philadelphia, PA 19145\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:47:54.390866\"\n\"Whiteside Dental\",\"270) 651-6471\",\"\ue0c8\n400 E Main St, Glasgow, KY 42141\",\"dentist\",\"Glasgow\",\"2026-07-19T10:34:06.670234\"\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-19T11:35:01.547335+00:00"
+  "generated_at": "2026-07-19T11:36:06.063891+00:00"
 }
