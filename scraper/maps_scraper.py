@@ -222,11 +222,14 @@ class GoogleMapsScraper:
                     if count >= max_results:
                         break
 
+                    href = (await link.get_attribute("href") or "").strip()
+                    place_id = href.split("/place/")[1].split("/")[0] if "/place/" in href else href
                     aria = (await link.get_attribute("aria-label") or "").strip()
-                    if not aria or aria in seen_names:
+                    key = place_id if place_id else aria
+                    if not key or key in seen_names:
                         continue
 
-                    seen_names.add(aria)
+                    seen_names.add(key)
                     any_new = True
                     stall_count = 0  # reset stall counter on new result
 
@@ -258,7 +261,7 @@ class GoogleMapsScraper:
                 if not scrolled:
                     break
 
-                await page.wait_for_timeout(1200)
+                await page.wait_for_timeout(1500)
 
         finally:
             await page.close()
@@ -347,8 +350,8 @@ class GoogleMapsScraper:
 
     async def _scroll_panel(self, page: Page) -> bool:
         """
-        Scroll the Maps results sidebar panel down by ~800px.
-        Returns False if no scrollable panel is found (signals end of results).
+        Scroll the Maps results sidebar panel to the bottom to trigger lazy loading.
+        Returns False if no scrollable panel is found.
         """
         panel_selectors = [
             '[role="feed"]',
@@ -359,7 +362,8 @@ class GoogleMapsScraper:
             try:
                 panel = await page.query_selector(sel)
                 if panel:
-                    await panel.evaluate("el => el.scrollBy(0, 900)")
+                    # Scroll to absolute bottom of the scroll container to load next results
+                    await panel.evaluate("el => el.scrollTo(0, el.scrollHeight)")
                     return True
             except Exception:
                 continue

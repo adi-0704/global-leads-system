@@ -533,9 +533,9 @@ async def scrape_new_leads(
 async def scrape_until_target(
     db_path:     str,
     config:      dict,
-    target:      int  = 60,
-    limit:       int  = 25,
-    max_iters:   int  = 20,
+    target:      int  = 400,
+    limit:       int  = 150,
+    max_iters:   int  = 100,
 ) -> None:
     """
     Repeatedly call scrape_new_leads with random city + keyword combinations
@@ -656,16 +656,37 @@ def send_followup_emails_global(
             items = [raw] if raw else ["several areas that could be improved"]
         issues = "\n".join(f"  {i+1}. {item.capitalize()}" for i, item in enumerate(items[:5]))
 
-        subject = f"Re: Quick website audit for {name}"
-        body    = (
-            f"Hi there,\n\n"
-            f"I reached out a few days ago about {name}'s website ({website or 'your website'}) — "
-            f"just following up in case my email got buried.\n\n"
-            f"The main issues I flagged were:\n\n{issues}\n\n"
-            f"Clinics that fix these typically see more online enquiries within the first month. "
-            f"Happy to show you a quick 2-minute demo with no commitment.\n\n"
-            f"Best regards,\nAditya Tyagi\nAI & Automation Engineer"
-        )
+        # Load followup template from config if available, fallback to hardcoded
+        templates = config.get("email_templates", {})
+        template = templates.get("followup")
+
+        niche = "general"
+        for kw in config.get("keywords", []):
+            if kw["term"].lower() in (query_term or "").lower():
+                niche = kw["niche"]
+                break
+        promo_url = config.get("promo_urls", {}).get(niche, config.get("promo_urls", {}).get("general", ""))
+
+        if template:
+            subject = template["subject"].format(business_name=name, city=city or "your city")
+            body = template["body"].format(
+                business_name=name,
+                website_url=website or "your website",
+                promo_url=promo_url,
+                website_issues=issues,
+                city=city or "your city",
+            )
+        else:
+            subject = f"Re: Quick website audit for {name}"
+            body    = (
+                f"Hi there,\n\n"
+                f"I reached out a few days ago about {name}'s website ({website or 'your website'}) — "
+                f"just following up in case my email got buried.\n\n"
+                f"The main issues I flagged were:\n\n{issues}\n\n"
+                f"Clinics that fix these typically see more online enquiries within the first month. "
+                f"Happy to show you a quick 2-minute demo with no commitment.\n\n"
+                f"Best regards,\nAditya Tyagi\nAI & Automation Engineer"
+            )
 
         if dry_run:
             print(f"  [FOLLOW-UP DRY-RUN] -> {email}  |  {name}")
@@ -768,6 +789,18 @@ def send_single_email(
             niche = kw["niche"]
             break
 
+    # Fetch city/location from database for this lead
+    city = ""
+    try:
+        with sqlite3.connect(db_path) as conn:
+            row = conn.execute("SELECT location FROM leads WHERE id = ?", (lead_id,)).fetchone()
+            if row and row[0]:
+                city = row[0].strip()
+    except Exception:
+        pass
+    if not city:
+        city = "your city"
+
     # Format the specific website issues as a numbered list for the email
     raw_notes = website_notes or ""
     if "Issues found:" in raw_notes:
@@ -791,12 +824,13 @@ def send_single_email(
         template = config["email_templates"].get(niche) or list(config["email_templates"].values())[0]
 
     promo_url = config["promo_urls"].get(niche, config["promo_urls"].get("dental", ""))
-    subject   = template["subject"].format(business_name=name)
+    subject   = template["subject"].format(business_name=name, city=city)
     body      = template["body"].format(
         business_name=name,
         website_url=website or "your website",
         promo_url=promo_url,
         website_issues=website_issues,
+        city=city,
     )
 
     if is_dry_run:
@@ -1276,12 +1310,12 @@ if __name__ == "__main__":
     )
     parser.add_argument("--dry-run",      action="store_true",
                         help="Log emails to console instead of sending")
-    parser.add_argument("--limit",        type=int, default=25,
-                        help="Max Google Maps results per single search (default: 25)")
-    parser.add_argument("--target",       type=int, default=0,
-                        help="Keep scraping until this many outreach emails are sent today (0 = use daily_email_limit)")
-    parser.add_argument("--max-iterations", type=int, default=20,
-                        help="Safety cap: max search loops to hit target (default: 20)")
+    parser.add_argument("--limit",        type=int, default=150,
+                        help="Max Google Maps results per single search (default: 150)")
+    parser.add_argument("--target",       type=int, default=400,
+                        help="Keep scraping until this many qualified leads are saved today (default: 400)")
+    parser.add_argument("--max-iterations", type=int, default=100,
+                        help="Safety cap: max search loops to hit target (default: 100)")
     parser.add_argument("--keyword",      type=str, default=None,
                         help="Override keyword (e.g. 'dentist')")
     parser.add_argument("--city",         type=str, default=None,

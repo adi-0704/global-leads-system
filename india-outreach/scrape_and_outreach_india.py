@@ -711,6 +711,65 @@ async def scrape_new_leads(
     return new_count, emails_sent, cap_reached
 
 # ---------------------------------------------------------------------------
+# Target-Based Scraping Loop
+# ---------------------------------------------------------------------------
+
+async def scrape_until_target_india(
+    db_path: str,
+    config: dict,
+    target: int = 400,
+    limit: int = 150,
+    max_iters: int = 100,
+    keyword_override: str | None = None,
+    city_override: str | None = None,
+    dry_run: bool = False,
+) -> None:
+    """
+    Repeatedly call scrape_new_leads with random city + keyword combinations
+    until `target` Old Website/No Booking leads (with email) have been collected today,
+    or until max_iters search loops are exhausted.
+    """
+    from datetime import date
+    today = date.today().isoformat()
+
+    def _count_today() -> int:
+        with sqlite3.connect(db_path) as conn:
+            return conn.execute("""
+                SELECT COUNT(*) FROM leads
+                WHERE status IN ('Old Website', 'No Booking/AI')
+                  AND email IS NOT NULL AND email != ''
+                  AND scraped_at LIKE ?
+            """, (f"{today}%",)).fetchone()[0]
+
+    for iteration in range(1, max_iters + 1):
+        current = _count_today()
+        print(f"\n{'='*60}")
+        print(f"[Target India] Iteration {iteration}/{max_iters}  |  Qualified leads scraped today: {current}/{target}")
+        print(f"{'='*60}")
+
+        if current >= target:
+            print(f"[Target India] Daily target reached! {current} qualified leads collected today.")
+            break
+
+        try:
+            # We don't want immediate email sending during pure scraping runs
+            await scrape_new_leads(
+                db_path=db_path,
+                config=config,
+                keyword_override=keyword_override,
+                city_override=city_override,
+                limit=limit,
+                immediate_outreach=False,
+                dry_run=dry_run,
+            )
+            git_sync(db_path)
+        except Exception as err:
+            print(f"[Target India] Search iteration {iteration} failed: {err}")
+
+    final = _count_today()
+    print(f"\n[Target India] Complete. Total qualified leads today: {final}")
+
+# ---------------------------------------------------------------------------
 # Continuous Outreach Loop
 # ---------------------------------------------------------------------------
 
@@ -746,7 +805,17 @@ async def run_continuous_outreach_loop(
     print(f"\n[India Outreach] Campaign starting. Emails sent today so far: {total_sent_today}/{DAILY_CAP}")
 
     if total_sent_today >= DAILY_CAP:
-        print("[India Outreach] Daily cap already reached. Nothing to do.")
+        print("[India Outreach] Daily email cap already reached. Continuing to scrape to build leads queue...")
+        await scrape_until_target_india(
+            db_path=db_path,
+            config=config,
+            target=target_override if target_override > 0 else 400,
+            limit=limit,
+            max_iters=max_iters,
+            keyword_override=keyword_override,
+            city_override=city_override,
+            dry_run=dry_run,
+        )
         return
 
     # ── Step 1: Follow-ups (max 20, respects remaining budget) ──────────────
@@ -758,7 +827,17 @@ async def run_continuous_outreach_loop(
     git_sync(db_path)
 
     if total_sent_today >= DAILY_CAP:
-        print("[India Outreach] Daily cap reached after follow-ups.")
+        print("[India Outreach] Daily email cap reached after follow-ups. Continuing to scrape to build leads queue...")
+        await scrape_until_target_india(
+            db_path=db_path,
+            config=config,
+            target=target_override if target_override > 0 else 400,
+            limit=limit,
+            max_iters=max_iters,
+            keyword_override=keyword_override,
+            city_override=city_override,
+            dry_run=dry_run,
+        )
         return
 
     # ── Step 2: Email existing unsent leads from queue ──────────────────────
@@ -769,14 +848,34 @@ async def run_continuous_outreach_loop(
     git_sync(db_path)
 
     if total_sent_today >= DAILY_CAP:
-        print(f"[India Outreach] Daily cap reached via queue. Total: {total_sent_today}/{DAILY_CAP}")
+        print(f"[India Outreach] Daily email cap reached via queue. Total: {total_sent_today}/{DAILY_CAP}. Continuing to scrape to build leads queue...")
+        await scrape_until_target_india(
+            db_path=db_path,
+            config=config,
+            target=target_override if target_override > 0 else 400,
+            limit=limit,
+            max_iters=max_iters,
+            keyword_override=keyword_override,
+            city_override=city_override,
+            dry_run=dry_run,
+        )
         return
 
     # ── Step 3: Scrape new leads + email immediately ─────────────────────────
     for iteration in range(1, max_iters + 1):
         total_sent_today = _count_sent_today()
         if total_sent_today >= DAILY_CAP:
-            print(f"[India Outreach] Goal reached! {total_sent_today}/{DAILY_CAP} emails sent today.")
+            print(f"[India Outreach] Goal reached! {total_sent_today}/{DAILY_CAP} emails sent today. Continuing to scrape to build leads queue...")
+            await scrape_until_target_india(
+                db_path=db_path,
+                config=config,
+                target=target_override if target_override > 0 else 400,
+                limit=limit,
+                max_iters=max_iters - iteration + 1,
+                keyword_override=keyword_override,
+                city_override=city_override,
+                dry_run=dry_run,
+            )
             break
 
         remaining = DAILY_CAP - total_sent_today
@@ -984,9 +1083,9 @@ def git_sync(db_path: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="India Doctor Outreach — Scraper + Email Engine")
     parser.add_argument("--dry-run",        action="store_true", help="Log emails, do not send")
-    parser.add_argument("--limit",          type=int, default=25, help="Max Google Maps results per search")
-    parser.add_argument("--target",         type=int, default=0,  help="Target emails to send today (0 = use config)")
-    parser.add_argument("--max-iterations", type=int, default=25, help="Safety cap on scraping loops")
+    parser.add_argument("--limit",          type=int, default=150, help="Max Google Maps results per search (default: 150)")
+    parser.add_argument("--target",         type=int, default=400, help="Target qualified leads to save today (default: 400)")
+    parser.add_argument("--max-iterations", type=int, default=100, help="Safety cap on scraping loops (default: 100)")
     parser.add_argument("--keyword",        type=str, default=None)
     parser.add_argument("--city",           type=str, default=None)
     parser.add_argument("--no-scrape",      action="store_true")
@@ -1011,12 +1110,15 @@ if __name__ == "__main__":
             send_outreach_emails(DB_PATH, config, dry_run=args.dry_run)
     elif args.no_email:
         asyncio.run(
-            scrape_new_leads(DB_PATH, config,
-                             keyword_override=args.keyword,
-                             city_override=args.city,
-                             limit=args.limit,
-                             immediate_outreach=False,
-                             dry_run=args.dry_run)
+            scrape_until_target_india(
+                DB_PATH, config,
+                target=args.target,
+                limit=args.limit,
+                max_iters=args.max_iterations,
+                keyword_override=args.keyword,
+                city_override=args.city,
+                dry_run=args.dry_run
+            )
         )
     else:
         asyncio.run(

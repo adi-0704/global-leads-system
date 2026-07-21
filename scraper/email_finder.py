@@ -31,6 +31,12 @@ _EMAIL_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+# Regex pattern for obfuscated emails, e.g. "info [at] domain.com", "info (at) domain.com", "info at domain dot com"
+_OBFUSCATED_PATTERN = re.compile(
+    r"[a-zA-Z0-9._%+\-]+(?:\s*\[at\]\s*|\s*\(\s*at\s*\)\s*|\s+at\s+)[a-zA-Z0-9.\-]+(?:\s*\[dot\]\s*|\s*\(\s*dot\s*\)\s*|\s+dot\s+)[a-zA-Z]{2,}",
+    re.IGNORECASE,
+)
+
 # Sub-pages most likely to contain contact info
 _CONTACT_PATHS = [
     "/contact", "/contact-us", "/about", "/about-us", "/reach-us",
@@ -59,7 +65,11 @@ _HEADERS = {
         "AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/124.0.0.0 Safari/537.36"
     ),
-    "Accept-Language": "en-US,en;q=0.9",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.5",
+    "Connection": "keep-alive",
+    "Upgrade-Insecure-Requests": "1",
+    "Cache-Control": "max-age=0",
 }
 
 
@@ -118,17 +128,44 @@ class EmailFinder:
 
         # ── Step 1: Scan homepage ─────────────────────────────────────────
         html = self._fetch(website_url)
+        dynamic_urls = []
         if html:
             email = self._extract_email(html, website_url)
             if email:
                 return email
 
+            # Dynamic link harvesting: extract contact/about links from homepage
+            try:
+                hrefs = re.findall(r'href=["\']([^"\']+)["\']', html)
+                base_dom = self._base_domain(website_url).lower()
+                for href in hrefs:
+                    href = href.strip()
+                    if not href or href.startswith(("#", "javascript:", "tel:", "mailto:")):
+                        continue
+                    resolved_url = urljoin(website_url, href)
+                    if self._base_domain(resolved_url).lower() == base_dom:
+                        url_lower = resolved_url.lower()
+                        # check if URL looks like a contact or info page
+                        if any(k in url_lower for k in ["contact", "about", "reach", "touch", "info", "team", "doctor", "staff", "clinic", "detail"]):
+                            if resolved_url not in dynamic_urls:
+                                dynamic_urls.append(resolved_url)
+            except Exception:
+                pass
+
         # ── Step 2: Check contact / about sub-pages ───────────────────────
         if self.check_contact_pages:
             base = self._base_url(website_url)
+            
+            # Combine dynamic URLs with hardcoded fallback paths
+            urls_to_check = list(dynamic_urls)
             for path in _CONTACT_PATHS:
-                time.sleep(self.delay)
                 sub_url = urljoin(base, path)
+                if sub_url not in urls_to_check:
+                    urls_to_check.append(sub_url)
+
+            # Limit checking to first 12 pages to avoid excessive request delays
+            for sub_url in urls_to_check[:12]:
+                time.sleep(self.delay)
                 html = self._fetch(sub_url)
                 if html:
                     email = self._extract_email(html, website_url)
@@ -163,11 +200,21 @@ class EmailFinder:
         """
         Perform a GET request and return the response text, or None on error.
         Silently swallows all network / HTTP errors.
+        Retries without SSL verification if SSLError is encountered.
         """
         try:
             resp = self._session.get(url, timeout=_TIMEOUT, allow_redirects=True)
             if resp.ok:
                 return resp.text
+        except requests.exceptions.SSLError:
+            try:
+                import urllib3
+                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+                resp = self._session.get(url, timeout=_TIMEOUT, allow_redirects=True, verify=False)
+                if resp.ok:
+                    return resp.text
+            except Exception:
+                pass
         except Exception:
             pass
         return None
@@ -179,6 +226,7 @@ class EmailFinder:
         Priority:
           1. mailto: href values (most reliable)
           2. Regex matches anywhere in the page source
+          3. Obfuscated email pattern matches (e.g. [at], (at), [dot], etc.)
 
         Parameters
         ----------
@@ -204,6 +252,14 @@ class EmailFinder:
             email = urllib.parse.unquote(match.group(0)).strip().lower()
             if self._is_valid(email):
                 return email
+
+        # ── Priority 3: Obfuscated regex scan ─────────────────────────────
+        for match in _OBFUSCATED_PATTERN.finditer(html):
+            raw_match = urllib.parse.unquote(match.group(0)).strip().lower()
+            decoded = re.sub(r"\s*(?:\[at\]|\(\s*at\s*\)|at)\s*", "@", raw_match, flags=re.IGNORECASE)
+            decoded = re.sub(r"\s*(?:\[dot\]|\(\s*dot\s*\)|dot)\s*", ".", decoded, flags=re.IGNORECASE)
+            if self._is_valid(decoded):
+                return decoded
 
         return ""
 
