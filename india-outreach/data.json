@@ -9,12 +9,12 @@
     "followup_sent": 0,
     "replied": 0,
     "failed": 0,
-    "conversion_rate": 0.0,
+    "conversion_rate": 0,
     "followups_due": 0
   },
   "niche_breakdown": [],
   "city_breakdown": [],
   "no_website_csv": "Name,Phone,Address,Niche,Search Keyword,City,Scraped At",
-  "sender_email": "",
-  "generated_at": "2026-07-21T00:00:00+00:00"
+  "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
+  "generated_at": "2026-07-21T06:14:56.942503+00:00"
 }
