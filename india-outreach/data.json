@@ -1,6 +1,54 @@
 {
   "leads": [
     {
+      "id": 107,
+      "name": "Dr P. K. Ashokan",
+      "phone": "+91 474 279 5996",
+      "address": "\ue0c8\n34, Salem - Kochi Hwy, Olayil, Thevally, Kollam, Kerala 691009, India",
+      "website": "",
+      "status": "No Website",
+      "email": null,
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "followup_sent_at": null,
+      "replied_at": null,
+      "reply_subject": null,
+      "reply_body": null,
+      "query": "bone and joint specialist",
+      "niche": "orthopedic",
+      "location": "Kollam",
+      "scraped_at": "2026-07-21T06:52:00.114421",
+      "website_viewport": 0,
+      "website_ssl": 0,
+      "website_copyright_year": null,
+      "website_notes": "No website listed.",
+      "email_error": null
+    },
+    {
+      "id": 106,
+      "name": "Dr Shyam Roy",
+      "phone": "+91 94479 35266",
+      "address": "\ue0c8\nBavana Nagar, Kollam, Kerala 691008, India",
+      "website": "",
+      "status": "No Website",
+      "email": null,
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "followup_sent_at": null,
+      "replied_at": null,
+      "reply_subject": null,
+      "reply_body": null,
+      "query": "bone and joint specialist",
+      "niche": "orthopedic",
+      "location": "Kollam",
+      "scraped_at": "2026-07-21T06:52:00.112919",
+      "website_viewport": 0,
+      "website_ssl": 0,
+      "website_copyright_year": null,
+      "website_notes": "No website listed.",
+      "email_error": null
+    },
+    {
       "id": 105,
       "name": "Dr Shankar Sanu Orthopaedic Clinic",
       "phone": "+91 90374 63273",
@@ -1826,8 +1874,8 @@
     }
   ],
   "stats": {
-    "total": 76,
-    "no_website": 24,
+    "total": 78,
+    "no_website": 26,
     "old_website": 14,
     "modern_website": 38,
     "sent": 14,
@@ -1856,7 +1904,7 @@
     },
     {
       "niche": "orthopedic",
-      "count": 6
+      "count": 8
     }
   ],
   "city_breakdown": [
@@ -1878,10 +1926,10 @@
     },
     {
       "city": "Kollam",
-      "count": 6
+      "count": 8
     }
   ],
-  "no_website_csv": "Name,Phone,Address,Niche,Search Keyword,City,Scraped At\n\"Quilon ortho care\",\"+91 474 272 5002\",\"\ue0c8\nVJGC+FPH, Pallimukku, Kollam, Kerala 691010, India\",\"orthopedic\",\"bone and joint specialist\",\"Kollam\",\"2026-07-21T06:50:56.667205\"\n\"Dr. Midhun Krishnan\",\"\",\"\ue0c8\nDr. Nair's Hospital, Asramam, Kollam, Kerala 691002, India\",\"orthopedic\",\"bone and joint specialist\",\"Kollam\",\"2026-07-21T06:50:56.666301\"\n\"Ortho Joint and Sports Clinic\",\"+91 98472 04060\",\"\ue0c8\nShalom Clinical Lab, Chinnakada road, Pullikada, Kadapakkada, Kollam, Kerala 691010, India\",\"orthopedic\",\"bone and joint specialist\",\"Kollam\",\"2026-07-21T06:50:56.665391\"\n\"Dr.C.ANIL KUMAR. Consultant orthopaedic\",\"+91 97450 94444\",\"\ue0c8\nnear nellimukku, KV Nagar, Nellimuku, Kureepuzha South, Kollam, Kerala 691012, India\",\"orthopedic\",\"bone and joint specialist\",\"Kollam\",\"2026-07-21T06:50:55.066899\"\n\"Dr. Sarfaraz Baig\",\"+91 98300 06067\",\"\ue0c8\n7B, St Francis Xavier Sarani, behind Bhagirathi Neotia Women & Child Care Centre, Mullick Bazar, Park Street area, Kolkata, West Bengal 700017, India\",\"weightloss\",\"bariatric surgery clinic\",\"Kolkata\",\"2026-07-21T06:34:51.092463\"\n\"Machhan Clinic and Diabetic centre Rohru\",\"\",\"\ue0c8\nMacchan Clinic and Diabetic centre, Rohru, Himachal Pradesh 171207, India\",\"diabetes\",\"diabetes clinic\",\"Shimla\",\"2026-07-21T06:31:49.862114\"\n\"SURYODAY MEDICOS\",\"+91 177 267 0385\",\"\ue0c8\nB.C.S, Shimla Bypass, New Shimla, Shimla, Himachal Pradesh 171009, India\",\"diabetes\",\"diabetes clinic\",\"Shimla\",\"2026-07-21T06:31:31.732301\"\n\"Tirupati Medicine Center\",\"+91 94189 84068\",\"\ue0c8\nBCS, New Shimla, Shimla, Himachal Pradesh 171009, India\",\"diabetes\",\"diabetes clinic\",\"Shimla\",\"2026-07-21T06:31:23.117344\"\n\"Ayurvedic Hospital\",\"\",\"\ue0c8\n4646+X22 NH 22, Dhalli, Shimla, Himachal Pradesh 171012, India\",\"diabetes\",\"diabetes clinic\",\"Shimla\",\"2026-07-21T06:31:23.116400\"\n\"V CARE MEDICAL STORE\",\"+91 98058 76828\",\"\ue0c8\nRoyal Bhawan, Shimla Bypass, Panthaghati, Shimla, Himachal Pradesh 171009, India\",\"diabetes\",\"diabetes clinic\",\"Shimla\",\"2026-07-21T06:31:16.278953\"\n\"Arora\u2019s Nutrtion Centre\",\"+91 94186 45070\",\"\ue0c8\nTop Floor, Hotel Avon Villa, below CPRI Road, Kanlog, Shimla, Himachal Pradesh 171001, India\",\"diabetes\",\"diabetes clinic\",\"Shimla\",\"2026-07-21T06:31:16.277975\"\n\"Sumeha Clinic & Laboratory\",\"+91 177 265 2907\",\"\ue0c8\nChaura Maidan, Shimla, Himachal Pradesh 171004, India\",\"diabetes\",\"diabetes clinic\",\"Shimla\",\"2026-07-21T06:30:16.819320\"\n\"Dr. Mangesh Patil\",\"+91 99233 31771\",\"\ue0c8\nAmerican Oncology Institute C1/1, Opp MIA Centre for sports and recreation, Wadi, Bypass Road, Midc, Hingna, Nagpur, Maharashtra 440016, India\",\"oncology\",\"oncologist\",\"Nagpur\",\"2026-07-21T06:29:00.380162\"\n\"Central India Institute of Haematology & Oncology\",\"\",\"\ue0c8\n14/2 Park Corner, Balraj Marg, near Lokmat square, Dhantoli, Nagpur, Maharashtra 440012, India\",\"oncology\",\"oncologist\",\"Nagpur\",\"2026-07-21T06:29:00.379192\"\n\"Dr.Murtaza Bohra(Best Oncologist in Nagpur)\",\"\",\"\ue0c8\n24/A, Ground floor, Shiv Ganga Hospital & Critical Care Centre, behind Mount Carmel School, near Lokmat Square, Lokmat Square, Dhantoli, Nagpur, Maharashtra 440012, India\",\"oncology\",\"oncologist\",\"Nagpur\",\"2026-07-21T06:28:56.171442\"\n\"Pathak (Dr) Anand B\",\"+91 98230 38498\",\"\ue0c8\n6th Floor, Cancer Care Clinic, Vasant Shila Tower, Lokmat Square, Dhantoli, Nagpur, Maharashtra 440012, India\",\"oncology\",\"oncologist\",\"Nagpur\",\"2026-07-21T06:28:46.494883\"\n\"Dr Baraskar Jaiprakash\",\"+91 712 245 2105\",\"\ue0c8\nCrystal Plaza, Baraskar Hospital, 276, Central Bazar Road, Ramdaspeth, Nagpur, Maharashtra 440010, India\",\"oncology\",\"oncologist\",\"Nagpur\",\"2026-07-21T06:28:45.868587\"\n\"Dr Madhavi Indani Mohata | Medical Oncologist\",\"+91 93595 07291\",\"\ue0c8\nKims Kingsway hospital, near parwana bhawan, Mohan Nagar, Nagpur, Maharashtra 440001, India\",\"oncology\",\"oncologist\",\"Nagpur\",\"2026-07-21T06:24:42.365702\"\n\"Dr Prashant Dhoke\",\"\",\"\ue0c8\nRashtrasant Tukdoji Maharaj Regional Cancer Hospital, Tukdoji Putla Square, Nagpur, Maharashtra 440027, India\",\"oncology\",\"oncologist\",\"Nagpur\",\"2026-07-21T06:23:10.351810\"\n\"Dr. Rajveer Singh Gurjar\",\"+91 92511 30204\",\"\ue0c8\nSawai Mansingh, 0-5, Hospital Rd, above Kamal Diagnostics, opposite Gate No. 3, C-Scheme, Ashok Nagar, Jaipur, Rajasthan 302001, India\",\"general\",\"family doctor\",\"Jaipur\",\"2026-07-21T06:21:35.915164\"\n\"Welfare Clinic\",\"+91 98298 72221\",\"\ue0c8\n15-16, Ajmer Rd, Devi Niketan Compound, J.D.A. Market, Hathroi, Jaipur, Rajasthan 302001, India\",\"general\",\"family doctor\",\"Jaipur\",\"2026-07-21T06:21:35.914261\"\n\"Mathur Satish Chandra\",\"\",\"\ue0c8\n267-a, Tonk Rd, Murti Kala Colony, Vasundhara Colony, Gopal Pura Mode, Jaipur, Rajasthan 302018, India\",\"general\",\"family doctor\",\"Jaipur\",\"2026-07-21T06:20:11.578708\"\n\"Dr. R.Dhan\",\"+91 96029 31113\",\"\ue0c8\nPink Vinayak Hospital, 46, dhuleshwar garden, Sardar Patel Marg, C Scheme, Jaipur, Rajasthan 302001, India\",\"general\",\"family doctor\",\"Jaipur\",\"2026-07-21T06:20:11.575449\"\n\"Dr Sanjeev Garg's Clinic\",\"\",\"\ue0c8\nB-104, Jan Path, Kishan Nagar, Shyam Nagar, Jaipur, Rajasthan 302019, India\",\"general\",\"family doctor\",\"Jaipur\",\"2026-07-21T06:20:10.059396\"",
+  "no_website_csv": "Name,Phone,Address,Niche,Search Keyword,City,Scraped At\n\"Dr P. K. Ashokan\",\"+91 474 279 5996\",\"\ue0c8\n34, Salem - Kochi Hwy, Olayil, Thevally, Kollam, Kerala 691009, India\",\"orthopedic\",\"bone and joint specialist\",\"Kollam\",\"2026-07-21T06:52:00.114421\"\n\"Dr Shyam Roy\",\"+91 94479 35266\",\"\ue0c8\nBavana Nagar, Kollam, Kerala 691008, India\",\"orthopedic\",\"bone and joint specialist\",\"Kollam\",\"2026-07-21T06:52:00.112919\"\n\"Quilon ortho care\",\"+91 474 272 5002\",\"\ue0c8\nVJGC+FPH, Pallimukku, Kollam, Kerala 691010, India\",\"orthopedic\",\"bone and joint specialist\",\"Kollam\",\"2026-07-21T06:50:56.667205\"\n\"Dr. Midhun Krishnan\",\"\",\"\ue0c8\nDr. Nair's Hospital, Asramam, Kollam, Kerala 691002, India\",\"orthopedic\",\"bone and joint specialist\",\"Kollam\",\"2026-07-21T06:50:56.666301\"\n\"Ortho Joint and Sports Clinic\",\"+91 98472 04060\",\"\ue0c8\nShalom Clinical Lab, Chinnakada road, Pullikada, Kadapakkada, Kollam, Kerala 691010, India\",\"orthopedic\",\"bone and joint specialist\",\"Kollam\",\"2026-07-21T06:50:56.665391\"\n\"Dr.C.ANIL KUMAR. Consultant orthopaedic\",\"+91 97450 94444\",\"\ue0c8\nnear nellimukku, KV Nagar, Nellimuku, Kureepuzha South, Kollam, Kerala 691012, India\",\"orthopedic\",\"bone and joint specialist\",\"Kollam\",\"2026-07-21T06:50:55.066899\"\n\"Dr. Sarfaraz Baig\",\"+91 98300 06067\",\"\ue0c8\n7B, St Francis Xavier Sarani, behind Bhagirathi Neotia Women & Child Care Centre, Mullick Bazar, Park Street area, Kolkata, West Bengal 700017, India\",\"weightloss\",\"bariatric surgery clinic\",\"Kolkata\",\"2026-07-21T06:34:51.092463\"\n\"Machhan Clinic and Diabetic centre Rohru\",\"\",\"\ue0c8\nMacchan Clinic and Diabetic centre, Rohru, Himachal Pradesh 171207, India\",\"diabetes\",\"diabetes clinic\",\"Shimla\",\"2026-07-21T06:31:49.862114\"\n\"SURYODAY MEDICOS\",\"+91 177 267 0385\",\"\ue0c8\nB.C.S, Shimla Bypass, New Shimla, Shimla, Himachal Pradesh 171009, India\",\"diabetes\",\"diabetes clinic\",\"Shimla\",\"2026-07-21T06:31:31.732301\"\n\"Tirupati Medicine Center\",\"+91 94189 84068\",\"\ue0c8\nBCS, New Shimla, Shimla, Himachal Pradesh 171009, India\",\"diabetes\",\"diabetes clinic\",\"Shimla\",\"2026-07-21T06:31:23.117344\"\n\"Ayurvedic Hospital\",\"\",\"\ue0c8\n4646+X22 NH 22, Dhalli, Shimla, Himachal Pradesh 171012, India\",\"diabetes\",\"diabetes clinic\",\"Shimla\",\"2026-07-21T06:31:23.116400\"\n\"V CARE MEDICAL STORE\",\"+91 98058 76828\",\"\ue0c8\nRoyal Bhawan, Shimla Bypass, Panthaghati, Shimla, Himachal Pradesh 171009, India\",\"diabetes\",\"diabetes clinic\",\"Shimla\",\"2026-07-21T06:31:16.278953\"\n\"Arora\u2019s Nutrtion Centre\",\"+91 94186 45070\",\"\ue0c8\nTop Floor, Hotel Avon Villa, below CPRI Road, Kanlog, Shimla, Himachal Pradesh 171001, India\",\"diabetes\",\"diabetes clinic\",\"Shimla\",\"2026-07-21T06:31:16.277975\"\n\"Sumeha Clinic & Laboratory\",\"+91 177 265 2907\",\"\ue0c8\nChaura Maidan, Shimla, Himachal Pradesh 171004, India\",\"diabetes\",\"diabetes clinic\",\"Shimla\",\"2026-07-21T06:30:16.819320\"\n\"Dr. Mangesh Patil\",\"+91 99233 31771\",\"\ue0c8\nAmerican Oncology Institute C1/1, Opp MIA Centre for sports and recreation, Wadi, Bypass Road, Midc, Hingna, Nagpur, Maharashtra 440016, India\",\"oncology\",\"oncologist\",\"Nagpur\",\"2026-07-21T06:29:00.380162\"\n\"Central India Institute of Haematology & Oncology\",\"\",\"\ue0c8\n14/2 Park Corner, Balraj Marg, near Lokmat square, Dhantoli, Nagpur, Maharashtra 440012, India\",\"oncology\",\"oncologist\",\"Nagpur\",\"2026-07-21T06:29:00.379192\"\n\"Dr.Murtaza Bohra(Best Oncologist in Nagpur)\",\"\",\"\ue0c8\n24/A, Ground floor, Shiv Ganga Hospital & Critical Care Centre, behind Mount Carmel School, near Lokmat Square, Lokmat Square, Dhantoli, Nagpur, Maharashtra 440012, India\",\"oncology\",\"oncologist\",\"Nagpur\",\"2026-07-21T06:28:56.171442\"\n\"Pathak (Dr) Anand B\",\"+91 98230 38498\",\"\ue0c8\n6th Floor, Cancer Care Clinic, Vasant Shila Tower, Lokmat Square, Dhantoli, Nagpur, Maharashtra 440012, India\",\"oncology\",\"oncologist\",\"Nagpur\",\"2026-07-21T06:28:46.494883\"\n\"Dr Baraskar Jaiprakash\",\"+91 712 245 2105\",\"\ue0c8\nCrystal Plaza, Baraskar Hospital, 276, Central Bazar Road, Ramdaspeth, Nagpur, Maharashtra 440010, India\",\"oncology\",\"oncologist\",\"Nagpur\",\"2026-07-21T06:28:45.868587\"\n\"Dr Madhavi Indani Mohata | Medical Oncologist\",\"+91 93595 07291\",\"\ue0c8\nKims Kingsway hospital, near parwana bhawan, Mohan Nagar, Nagpur, Maharashtra 440001, India\",\"oncology\",\"oncologist\",\"Nagpur\",\"2026-07-21T06:24:42.365702\"\n\"Dr Prashant Dhoke\",\"\",\"\ue0c8\nRashtrasant Tukdoji Maharaj Regional Cancer Hospital, Tukdoji Putla Square, Nagpur, Maharashtra 440027, India\",\"oncology\",\"oncologist\",\"Nagpur\",\"2026-07-21T06:23:10.351810\"\n\"Dr. Rajveer Singh Gurjar\",\"+91 92511 30204\",\"\ue0c8\nSawai Mansingh, 0-5, Hospital Rd, above Kamal Diagnostics, opposite Gate No. 3, C-Scheme, Ashok Nagar, Jaipur, Rajasthan 302001, India\",\"general\",\"family doctor\",\"Jaipur\",\"2026-07-21T06:21:35.915164\"\n\"Welfare Clinic\",\"+91 98298 72221\",\"\ue0c8\n15-16, Ajmer Rd, Devi Niketan Compound, J.D.A. Market, Hathroi, Jaipur, Rajasthan 302001, India\",\"general\",\"family doctor\",\"Jaipur\",\"2026-07-21T06:21:35.914261\"\n\"Mathur Satish Chandra\",\"\",\"\ue0c8\n267-a, Tonk Rd, Murti Kala Colony, Vasundhara Colony, Gopal Pura Mode, Jaipur, Rajasthan 302018, India\",\"general\",\"family doctor\",\"Jaipur\",\"2026-07-21T06:20:11.578708\"\n\"Dr. R.Dhan\",\"+91 96029 31113\",\"\ue0c8\nPink Vinayak Hospital, 46, dhuleshwar garden, Sardar Patel Marg, C Scheme, Jaipur, Rajasthan 302001, India\",\"general\",\"family doctor\",\"Jaipur\",\"2026-07-21T06:20:11.575449\"\n\"Dr Sanjeev Garg's Clinic\",\"\",\"\ue0c8\nB-104, Jan Path, Kishan Nagar, Shyam Nagar, Jaipur, Rajasthan 302019, India\",\"general\",\"family doctor\",\"Jaipur\",\"2026-07-21T06:20:10.059396\"",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-21T06:50:58.870530+00:00"
+  "generated_at": "2026-07-21T06:52:00.116945+00:00"
 }
