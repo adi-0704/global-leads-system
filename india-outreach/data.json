@@ -1,6 +1,30 @@
 {
   "leads": [
     {
+      "id": 3,
+      "name": "Dr. Vikas Mittal",
+      "phone": "+91 97859 06095",
+      "address": "\ue0c8\n92, New Sanganer Rd, near Vivek Vihar Metro Station, opposite Metro Pillar No, Shiva Colony, Sodala, Jaipur, Rajasthan 302019, India",
+      "website": "http://www.unikarehospital.com/",
+      "status": "Old Website",
+      "email": "vikasmittal2006@yahoo.co.in",
+      "email_status": "Sent",
+      "sent_at": "2026-07-21T06:17:12.159317",
+      "followup_sent_at": null,
+      "replied_at": null,
+      "reply_subject": null,
+      "reply_body": null,
+      "query": "family doctor",
+      "niche": "general",
+      "location": "Jaipur",
+      "scraped_at": "2026-07-21T06:17:10.761813",
+      "website_viewport": 1,
+      "website_ssl": 0,
+      "website_copyright_year": 2021,
+      "website_notes": "Issues found: no SSL certificate (website shows 'Not Secure' in browsers); outdated design (copyright shows 2021); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
       "id": 2,
       "name": "Dr Abha Sharma",
       "phone": "+91 87698 90028",
@@ -26,11 +50,11 @@
     }
   ],
   "stats": {
-    "total": 1,
+    "total": 2,
     "no_website": 0,
-    "old_website": 1,
+    "old_website": 2,
     "modern_website": 0,
-    "sent": 1,
+    "sent": 2,
     "followup_sent": 0,
     "replied": 0,
     "failed": 0,
@@ -40,16 +64,16 @@
   "niche_breakdown": [
     {
       "niche": "general",
-      "count": 1
+      "count": 2
     }
   ],
   "city_breakdown": [
     {
       "city": "Jaipur",
-      "count": 1
+      "count": 2
     }
   ],
   "no_website_csv": "Name,Phone,Address,Niche,Search Keyword,City,Scraped At",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-21T06:16:08.788316+00:00"
+  "generated_at": "2026-07-21T06:17:12.161204+00:00"
 }
