@@ -1,6 +1,52 @@
 {
   "leads": [
     {
+      "id": 779,
+      "name": "Cardiff Cosmetic Clinic",
+      "phone": "+44 800 689 1111",
+      "address": "\ue0c8\n187 City Rd, Cardiff CF24 3WD, United Kingdom",
+      "website": "https://cardiffcosmeticclinic.com/",
+      "status": "No Booking/AI",
+      "email": "enquiries@cardiffcosmeticclinic.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-21T11:52:40.393613",
+      "replied_at": null,
+      "query": "dermatologist",
+      "location": "Cardiff",
+      "scraped_at": "2026-07-21T11:52:38.647136",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2023,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no contact form or online enquiry form.",
+      "email_error": null,
+      "reply_subject": null,
+      "reply_body": null,
+      "followup_sent_at": null
+    },
+    {
+      "id": 778,
+      "name": "Dr Nancy Clinic & Academy - Cardiff",
+      "phone": "+44 7769 087955",
+      "address": "\ue0c8\n5 Heol-Y-Deri, Cardiff CF14 6HA, United Kingdom",
+      "website": "https://drnancy.co.uk/",
+      "status": "Modern Website",
+      "email": "",
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "replied_at": null,
+      "query": "dermatologist",
+      "location": "Cardiff",
+      "scraped_at": "2026-07-21T11:52:36.244097",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": null,
+      "website_notes": "Website appears fully optimised.",
+      "email_error": null,
+      "reply_subject": null,
+      "reply_body": null,
+      "followup_sent_at": null
+    },
+    {
       "id": 777,
       "name": "Dermaskin Clinic",
       "phone": "+44 29 2009 0809",
@@ -13503,11 +13549,11 @@
     }
   ],
   "stats": {
-    "total": 587,
+    "total": 589,
     "no_website": 13,
-    "old_website": 187,
-    "modern_website": 387,
-    "sent": 187,
+    "old_website": 188,
+    "modern_website": 388,
+    "sent": 188,
     "followup_sent": 0,
     "replied": 4,
     "failed": 0,
@@ -13516,5 +13562,5 @@
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Ottawa Dental Clinic\",\"+1 613-580-9633\",\"\ue0c8\n40 Cobourg St, Ottawa, ON K1N 5N8, Canada\",\"dental clinic\",\"Ottawa\",\"2026-07-21T11:28:25.480845\"\n\"S8 Skin Clinic\",\"+44 7720 754935\",\"\ue0c8\n1C Greenfield Rd, Meadowhead, Sheffield S8 7RQ, United Kingdom\",\"dermatologist\",\"Sheffield\",\"2026-07-20T11:36:18.285539\"\n\"Dr Wong Aesthetics\",\"\",\"\ue0c8\nWest One Space, Unit 6, The Plaza, 8 Fitzwilliam St, Broomhall, Sheffield S1 4JB, United Kingdom\",\"dermatologist\",\"Sheffield\",\"2026-07-20T11:36:18.284647\"\n\"Derma Clinic\",\"+44 7983 919113\",\"\ue0c8\n17 Wicker, Sheffield S3 8HS, United Kingdom\",\"dermatologist\",\"Sheffield\",\"2026-07-20T11:34:50.555652\"\n\"Waterfront Skin & Laser\",\"+1 604-281-4211\",\"\ue0c8\n750 W Broadway #1212, Vancouver, BC V5Z 1J5, Canada\",\"dermatologist\",\"Vancouver\",\"2026-07-20T10:21:26.276730\"\n\"Clinic 138 - Dr. Angela Law Inc.\",\"+1 604-688-6531\",\"\ue0c8\n138 Davie St, Vancouver, BC V6Z 2V4, Canada\",\"dermatologist\",\"Vancouver\",\"2026-07-20T10:20:20.987598\"\n\"False Creek Dermatology - Dr. Christina Han MD FRCPC\",\"+1 604-283-8892\",\"\ue0c8\n1285 W Broadway #280, Vancouver, BC V6H 3X8, Canada\",\"dermatologist\",\"Vancouver\",\"2026-07-20T10:19:17.192431\"\n\"Dr N Georgy\",\"+61 8 9448 1244\",\"\ue0c8\nUnit 2/54 Arnisdale Rd, Duncraig WA 6023, Australia\",\"dermatologist\",\"Perth\",\"2026-07-19T11:23:39.012068\"\n\"Port Richmond Dental Center\",\"215) 739-8008\",\"\ue0c8\n3162 Richmond St, Philadelphia, PA 19134\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:49:00.748194\"\n\"Priority Emergency Dental Care\",\"844) 490-5591\",\"\ue0c8\n2333 Tasker St, Philadelphia, PA 19145\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:47:54.390866\"\n\"Whiteside Dental\",\"270) 651-6471\",\"\ue0c8\n400 E Main St, Glasgow, KY 42141\",\"dentist\",\"Glasgow\",\"2026-07-19T10:34:06.670234\"\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-21T11:51:31.841021+00:00"
+  "generated_at": "2026-07-21T11:52:40.400692+00:00"
 }
