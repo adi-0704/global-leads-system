@@ -1,0 +1,99 @@
+name: India Lead Outreach Campaign
+
+on:
+  schedule:
+    # Runs daily at 04:30 UTC = 10:00 AM IST
+    - cron: '30 4 * * *'
+
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry-run only? (true = log, false = send real emails)'
+        required: false
+        default: 'true'
+        type: choice
+        options: ['true', 'false']
+      limit:
+        description: 'Max Google Maps results per search'
+        required: false
+        default: '25'
+      target:
+        description: 'Target emails today (0 = use config default of 50)'
+        required: false
+        default: '50'
+
+permissions:
+  contents: write
+
+jobs:
+  india-outreach:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: 'global-outreach/requirements.txt'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r global-outreach/requirements.txt
+
+      - name: Install Playwright Chromium
+        run: python -m playwright install --with-deps chromium
+
+      - name: Run India Scraper & Outreach
+        env:
+          SMTP_HOST:     ${{ secrets.SMTP_HOST }}
+          SMTP_PORT:     ${{ secrets.SMTP_PORT }}
+          SMTP_USER:     ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          SMTP_FROM:     ${{ secrets.SMTP_FROM }}
+          IMAP_HOST:     ${{ secrets.IMAP_HOST }}
+          IMAP_USER:     ${{ secrets.IMAP_USER }}
+          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
+        run: |
+          echo "======================================"
+          echo "  INDIA OUTREACH — 10:00 AM IST"
+          echo "  35+ niches | 80+ cities"
+          echo "  Target: 50 emails/day"
+          echo "  Follow-ups: max 20 | New: min 30"
+          echo "======================================"
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            python india-outreach/scrape_and_outreach_india.py --target 50 --limit 25 --max-iterations 25
+          else
+            ARGS="--limit ${{ github.event.inputs.limit || '25' }}"
+            [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
+            TARGET="${{ github.event.inputs.target || '50' }}"
+            [ "$TARGET" != "0" ] && ARGS="$ARGS --target $TARGET"
+            echo "Args: $ARGS"
+            eval python india-outreach/scrape_and_outreach_india.py $ARGS
+          fi
+
+      - name: Export India data.json
+        if: always()
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_FROM: ${{ secrets.SMTP_FROM }}
+        run: python india-outreach/generate_data_json_india.py
+
+      - name: Commit Results
+        if: always()
+        run: |
+          git config --global user.name  "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main || true
+          git add india-outreach/leads.db india-outreach/data.json india-outreach/sender_email.txt || true
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: india outreach sync [skip ci]"
+            git push
+          fi
