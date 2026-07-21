@@ -892,6 +892,7 @@ def send_single_email(
 def send_outreach_emails(
     db_path: str,
     config:  dict,
+    budget_used: int = 0,
     dry_run: bool = False,
 ) -> int:
     """
@@ -906,19 +907,13 @@ def send_outreach_emails(
     today         = datetime.now().strftime("%Y-%m-%d")
 
     with sqlite3.connect(db_path) as conn:
-        # How many emails already sent today?
-        sent_today = conn.execute(
-            "SELECT COUNT(*) FROM leads WHERE sent_at LIKE ?",
-            (f"{today}%",)
-        ).fetchone()[0]
-
         # How many new leads scraped today? (freshness gate)
         new_today = conn.execute(
             "SELECT COUNT(*) FROM leads WHERE scraped_at LIKE ?",
             (f"{today}%",)
         ).fetchone()[0]
 
-        print(f"\n[Outreach] Leads scraped today: {new_today}  |  Emails sent today: {sent_today}/{DAILY_CAP}")
+        print(f"\n[Outreach] Leads scraped today: {new_today}  |  Total campaign budget used: {budget_used}/{DAILY_CAP}")
 
         # Check if freshness gate is bypassed (e.g. by setting MIN_NEW_LEADS to 0 in memory)
         bypass_freshness = (globals().get("MIN_NEW_LEADS", 10) == 0)
@@ -927,11 +922,11 @@ def send_outreach_emails(
                   f"(need {MIN_NEW_LEADS}). Skipping email stage.")
             return 0
 
-        if sent_today >= DAILY_CAP:
+        if budget_used >= DAILY_CAP:
             print(f"[Outreach] Daily cap of {DAILY_CAP} emails already reached. Done.")
             return 0
 
-        remaining_slots = DAILY_CAP - sent_today
+        remaining_slots = DAILY_CAP - budget_used
 
         # Pull eligible leads: Old Website + No Booking/AI — unsent, have email
         leads_to_email = conn.execute("""
@@ -1246,7 +1241,7 @@ async def run_continuous_outreach_loop(
     old_min = globals().get("MIN_NEW_LEADS", 10)
     globals()["MIN_NEW_LEADS"] = 0
     try:
-        send_outreach_emails(db_path, config, dry_run=dry_run)
+        send_outreach_emails(db_path, config, budget_used=sent_today, dry_run=dry_run)
     finally:
         globals()["MIN_NEW_LEADS"] = old_min
 
@@ -1344,7 +1339,8 @@ if __name__ == "__main__":
     if args.no_scrape:
         # Email only mode
         if not args.no_email:
-            send_outreach_emails(DB_PATH, config, dry_run=args.dry_run)
+            followups = send_followup_emails_global(DB_PATH, config, dry_run=args.dry_run)
+            send_outreach_emails(DB_PATH, config, budget_used=followups, dry_run=args.dry_run)
     elif args.no_email:
         # Scrape only mode
         try:
