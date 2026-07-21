@@ -1,6 +1,54 @@
 {
   "leads": [
     {
+      "id": 8,
+      "name": "Dr. Anchin Kalia - Physician, Diabetes, Thyroid Specialist",
+      "phone": "+91 63780 81809",
+      "address": "\ue0c8\n219-220, Welton Hospital, Mandir Marg, Mahaveer Nagar-1, Durgapura, Jaipur, Rajasthan 302018, India",
+      "website": "https://dranchinkalia.com/",
+      "status": "Old Website",
+      "email": "anchin.kalia@gmail.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-21T06:18:52.779580",
+      "followup_sent_at": null,
+      "replied_at": null,
+      "reply_subject": null,
+      "reply_body": null,
+      "query": "family doctor",
+      "niche": "general",
+      "location": "Jaipur",
+      "scraped_at": "2026-07-21T06:18:51.323433",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2022,
+      "website_notes": "Issues found: outdated design (copyright shows 2022); no AI assistant or live chat (no way to answer patient questions after hours).",
+      "email_error": null
+    },
+    {
+      "id": 4,
+      "name": "URJA FAMILY CLINIC & DIAGNOSTICS Pratapnagar Jagatpura",
+      "phone": "+91 80076 09524",
+      "address": "\ue0c8\nPannadhyay Circle, Haldighati Marg, Sanganer, Pratap Nagar, Jaipur, Rajasthan 302033, India",
+      "website": "https://urjafamilyclinic.com/",
+      "status": "Modern Website",
+      "email": null,
+      "email_status": "Not Sent",
+      "sent_at": null,
+      "followup_sent_at": null,
+      "replied_at": null,
+      "reply_subject": null,
+      "reply_body": null,
+      "query": "family doctor",
+      "niche": "general",
+      "location": "Jaipur",
+      "scraped_at": "2026-07-21T06:18:14.271540",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2023,
+      "website_notes": "Issues found: no AI assistant or live chat (no way to answer patient questions after hours); no website analytics (no visibility into how many patients visit or where they come from).",
+      "email_error": null
+    },
+    {
       "id": 3,
       "name": "Dr. Vikas Mittal",
       "phone": "+91 97859 06095",
@@ -50,11 +98,11 @@
     }
   ],
   "stats": {
-    "total": 2,
+    "total": 4,
     "no_website": 0,
-    "old_website": 2,
-    "modern_website": 0,
-    "sent": 2,
+    "old_website": 3,
+    "modern_website": 1,
+    "sent": 3,
     "followup_sent": 0,
     "replied": 0,
     "failed": 0,
@@ -64,16 +112,16 @@
   "niche_breakdown": [
     {
       "niche": "general",
-      "count": 2
+      "count": 4
     }
   ],
   "city_breakdown": [
     {
       "city": "Jaipur",
-      "count": 2
+      "count": 4
     }
   ],
   "no_website_csv": "Name,Phone,Address,Niche,Search Keyword,City,Scraped At",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-21T06:17:12.161204+00:00"
+  "generated_at": "2026-07-21T06:18:52.781555+00:00"
 }
