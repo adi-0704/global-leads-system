@@ -1,0 +1,141 @@
+# -*- coding: utf-8 -*-
+"""
+generate_data_json_india.py
+===========================
+Reads india-outreach/leads.db and exports all leads + stats to data.json
+so the India dashboard can be served as a static GitHub Pages site.
+"""
+import json
+import os
+import sqlite3
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH    = os.path.join(SCRIPT_DIR, "leads.db")
+OUT_PATH   = os.path.join(SCRIPT_DIR, "data.json")
+
+
+def main():
+    if not os.path.exists(DB_PATH):
+        print("[India data-export] leads.db not found — writing empty data.json")
+        payload = {"leads": [], "stats": _empty_stats(), "generated_at": _now()}
+        _write(payload)
+        return
+
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+
+        leads = [
+            dict(r)
+            for r in conn.execute(
+                "SELECT * FROM leads WHERE status != 'Filtered (No Email)' ORDER BY scraped_at DESC"
+            ).fetchall()
+        ]
+
+        row = conn.execute("""
+            SELECT
+                COUNT(*)                                                                              AS total,
+                SUM(status = 'No Website')                                                            AS no_website,
+                SUM(status IN ('Old Website', 'No Booking/AI') AND email IS NOT NULL AND email != '') AS old_website,
+                SUM(status = 'Modern Website')                                                        AS modern_website,
+                SUM(email_status IN ('Sent','Sent (Dry Run)', 'Follow-Up Sent', 'Replied'))           AS sent,
+                SUM(email_status = 'Follow-Up Sent')                                                  AS followup_sent,
+                SUM(email_status = 'Replied')                                                         AS replied,
+                SUM(email_status = 'Failed')                                                          AS failed
+            FROM leads
+            WHERE status != 'Filtered (No Email)'
+        """).fetchone()
+
+        # Niche breakdown
+        niche_rows = conn.execute("""
+            SELECT niche, COUNT(*) as count
+            FROM leads
+            WHERE niche IS NOT NULL AND status != 'Filtered (No Email)'
+            GROUP BY niche
+            ORDER BY count DESC
+            LIMIT 20
+        """).fetchall()
+
+        # City breakdown (top 15)
+        city_rows = conn.execute("""
+            SELECT location, COUNT(*) as count
+            FROM leads
+            WHERE location IS NOT NULL AND status != 'Filtered (No Email)'
+            GROUP BY location
+            ORDER BY count DESC
+            LIMIT 15
+        """).fetchall()
+
+        # Follow-ups due (sent ≥5 days ago, no followup yet, no reply)
+        followups_due = conn.execute("""
+            SELECT COUNT(*) FROM leads
+            WHERE email_status = 'Sent'
+              AND followup_sent_at IS NULL
+              AND sent_at < datetime('now', '-5 days')
+        """).fetchone()[0]
+
+    stats = {k: (row[k] or 0) for k in row.keys()}
+    sent    = stats["sent"]
+    replied = stats["replied"]
+    stats["conversion_rate"] = round(
+        min(replied / sent * 100, 100) if sent > 0 else 0, 1
+    )
+    stats["followups_due"] = followups_due or 0
+
+    # No-website CSV export
+    no_website_leads = [l for l in leads if l.get("status") == "No Website"]
+    csv_lines = ["Name,Phone,Address,Niche,Search Keyword,City,Scraped At"]
+    for l in no_website_leads:
+        def esc(v):
+            v = str(v or "").replace('"', '""')
+            return f'"{v}"'
+        csv_lines.append(",".join([
+            esc(l.get("name")), esc(l.get("phone")), esc(l.get("address")),
+            esc(l.get("niche")), esc(l.get("query")), esc(l.get("location")),
+            esc(l.get("scraped_at"))
+        ]))
+    csv_content = "\n".join(csv_lines)
+
+    sender_email = ""
+    try:
+        txt_path = os.path.join(SCRIPT_DIR, "sender_email.txt")
+        if os.path.exists(txt_path):
+            with open(txt_path, "r", encoding="utf-8") as f:
+                sender_email = f.read().strip()
+    except Exception:
+        pass
+    if not sender_email:
+        sender_email = os.environ.get("SMTP_FROM", os.environ.get("SMTP_USER", "")).strip()
+
+    payload = {
+        "leads":            leads,
+        "stats":            stats,
+        "niche_breakdown":  [{"niche": r["niche"], "count": r["count"]} for r in niche_rows],
+        "city_breakdown":   [{"city": r["location"], "count": r["count"]} for r in city_rows],
+        "no_website_csv":   csv_content,
+        "sender_email":     sender_email,
+        "generated_at":     _now(),
+    }
+    _write(payload)
+    print(f"[India data-export] Exported {len(leads)} leads -> data.json  |  Stats: {stats}")
+
+
+def _empty_stats():
+    return {
+        "total": 0, "no_website": 0, "old_website": 0, "modern_website": 0,
+        "sent": 0, "followup_sent": 0, "replied": 0, "failed": 0,
+        "conversion_rate": 0.0, "followups_due": 0,
+    }
+
+
+def _now():
+    from datetime import datetime, timezone
+    return datetime.now(timezone.utc).isoformat()
+
+
+def _write(payload):
+    with open(OUT_PATH, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2, default=str)
+
+
+if __name__ == "__main__":
+    main()

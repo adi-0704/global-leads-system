@@ -1,0 +1,20 @@
+{
+  "leads": [],
+  "stats": {
+    "total": 0,
+    "no_website": 0,
+    "old_website": 0,
+    "modern_website": 0,
+    "sent": 0,
+    "followup_sent": 0,
+    "replied": 0,
+    "failed": 0,
+    "conversion_rate": 0.0,
+    "followups_due": 0
+  },
+  "niche_breakdown": [],
+  "city_breakdown": [],
+  "no_website_csv": "Name,Phone,Address,Niche,Search Keyword,City,Scraped At",
+  "sender_email": "",
+  "generated_at": "2026-07-21T00:00:00+00:00"
+}

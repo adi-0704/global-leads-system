@@ -61,7 +61,6 @@ function switchTab(tabId) {
         document.getElementById('tab-overview').classList.add('active');
         pageTitle.innerText    = "Outreach Overview";
         pageSubtitle.innerText = "Metrics and campaign status across dermatologists and dentists";
-        // FIX #10: actually render overview on tab switch
         renderOverview();
     } else if (tabId === 'nowebsite') {
         document.getElementById('tab-nowebsite').classList.add('active');
@@ -73,6 +72,11 @@ function switchTab(tabId) {
         pageTitle.innerText = "Outreach Queue";
         pageSubtitle.innerText = "Campaign tracker for leads with old/unresponsive websites";
         renderCampaignTable();
+    } else if (tabId === 'followup') {
+        document.getElementById('tab-followup').classList.add('active');
+        pageTitle.innerText = "Follow-Up System";
+        pageSubtitle.innerText = "5-day follow-ups · max 20/day · min 30 new outreach always guaranteed";
+        renderFollowUpTab();
     } else if (tabId === 'modern') {
         document.getElementById('tab-modern').classList.add('active');
         pageTitle.innerText = "Filtered Modern Sites";
@@ -95,6 +99,50 @@ function switchTab(tabId) {
         fetchConfig();
     }
 }
+
+// ── Follow-Up Tab (Global) ──────────────────────────────────────────────────
+function renderFollowUpTab() {
+    const now      = Date.now();
+    const FIVE_DAY = 5 * 24 * 60 * 60 * 1000;
+
+    const dueLds     = allLeads.filter(l => l.email_status === 'Sent' && !l.followup_sent_at && l.sent_at && (now - new Date(l.sent_at)) >= FIVE_DAY);
+    const sentFU     = allLeads.filter(l => l.email_status === 'Follow-Up Sent');
+    const pendingLds = allLeads.filter(l => l.email_status === 'Sent' && !l.followup_sent_at && l.sent_at && (now - new Date(l.sent_at)) < FIVE_DAY);
+
+    const setEl = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    setEl('kpi-followup-sent',    sentFU.length);
+    setEl('kpi-followup-due',     dueLds.length);
+    setEl('kpi-followup-pending', pendingLds.length);
+    const badge = document.getElementById('badge-count-followup');
+    if (badge) badge.textContent = sentFU.length;
+
+    const combined = [...dueLds, ...sentFU, ...pendingLds];
+    const tbody = document.getElementById('body-followup');
+    if (!tbody) return;
+    if (!combined.length) {
+        tbody.innerHTML = `<tr><td colspan="7" class="placeholder-text">No follow-up data yet. Follow-ups appear after 5 days.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = combined.map(l => {
+        const daysSince = l.sent_at ? Math.floor((now - new Date(l.sent_at)) / 86400000) : '—';
+        const isDue     = l.email_status === 'Sent' && !l.followup_sent_at && daysSince >= 5;
+        const statusHtml = isDue
+            ? `<span style="background:rgba(246,173,85,0.15);color:#f6ad55;padding:3px 9px;border-radius:20px;font-size:0.72rem;font-weight:600;">⚡ Due</span>`
+            : l.email_status === 'Follow-Up Sent'
+            ? `<span style="background:rgba(66,153,225,0.15);color:#4299e1;padding:3px 9px;border-radius:20px;font-size:0.72rem;font-weight:600;">✓ Sent</span>`
+            : `<span style="color:#718096;font-size:0.78rem;">⏳ Pending</span>`;
+        return `<tr>
+            <td>${escHtml(l.name || '—')}</td>
+            <td style="font-size:0.75rem;color:#718096">${escHtml(l.email || '—')}</td>
+            <td style="color:#718096">${escHtml(l.location || '—')}</td>
+            <td style="color:#718096">${l.sent_at ? formatDate(l.sent_at) : '—'}</td>
+            <td style="color:#718096">${l.followup_sent_at ? formatDate(l.followup_sent_at) : '—'}</td>
+            <td style="font-weight:600;color:${daysSince >= 5 ? '#f6ad55' : '#718096'}">${daysSince}d</td>
+            <td>${statusHtml}</td>
+        </tr>`;
+    }).join('');
+}
+
 
 // Fetch Leads & Stats — auto-detects GitHub Pages vs local Flask
 async function fetchData() {

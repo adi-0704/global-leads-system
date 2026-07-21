@@ -64,6 +64,7 @@ def init_db(db_path: str) -> None:
                 email                 TEXT,
                 email_status          TEXT DEFAULT 'Not Sent',
                 sent_at               TEXT,
+                followup_sent_at      TEXT,
                 replied_at            TEXT,
                 query                 TEXT,
                 location              TEXT,
@@ -75,7 +76,6 @@ def init_db(db_path: str) -> None:
                 email_error           TEXT
             )
         """)
-        # FIX O2: Index on name for fast duplicate lookups on large databases
         conn.execute(
             "CREATE INDEX IF NOT EXISTS idx_leads_name ON leads (name)"
         )
@@ -83,13 +83,11 @@ def init_db(db_path: str) -> None:
         existing_cols = {
             row[1] for row in conn.execute("PRAGMA table_info(leads)").fetchall()
         }
-        if "email_error" not in existing_cols:
-            conn.execute("ALTER TABLE leads ADD COLUMN email_error TEXT")
-        if "reply_subject" not in existing_cols:
-            conn.execute("ALTER TABLE leads ADD COLUMN reply_subject TEXT")
-        if "reply_body" not in existing_cols:
-            conn.execute("ALTER TABLE leads ADD COLUMN reply_body TEXT")
+        for col in ["email_error", "reply_subject", "reply_body", "followup_sent_at"]:
+            if col not in existing_cols:
+                conn.execute(f"ALTER TABLE leads ADD COLUMN {col} TEXT")
         conn.commit()
+
 
 # ---------------------------------------------------------------------------
 # Website Modernity Analysis
@@ -588,6 +586,150 @@ async def scrape_until_target(
     print(f"\n[Target] Session complete. Total Old Website leads today: {final}")
 
 # ---------------------------------------------------------------------------
+# Follow-Up Engine (Global)
+# ---------------------------------------------------------------------------
+
+def send_followup_emails_global(
+    db_path: str,
+    config:  dict,
+    budget_used: int = 0,
+    dry_run: bool = False,
+) -> int:
+    """
+    Send follow-up emails (global system) to leads that:
+      - email_status = 'Sent'
+      - sent_at >= follow_up_days (5) days ago
+      - followup_sent_at IS NULL
+
+    Capped at followup_max_per_day (20). Returns number sent.
+    Excess follow-ups carry over to the next day — never dropped.
+    """
+    DAILY_CAP      = config.get("daily_email_limit", 50)
+    FOLLOWUP_MAX   = config.get("followup_max_per_day", 20)
+    FOLLOW_UP_DAYS = config.get("follow_up_days", 5)
+    SEND_GAP_SEC   = config.get("send_gap_seconds", 60)
+
+    remaining_budget = DAILY_CAP - budget_used
+    followup_cap     = min(FOLLOWUP_MAX, remaining_budget)
+
+    if followup_cap <= 0:
+        print("[Follow-Up Global] No budget remaining for follow-ups today.")
+        return 0
+
+    from datetime import timedelta
+    cutoff = (datetime.now() - timedelta(days=FOLLOW_UP_DAYS)).strftime("%Y-%m-%d")
+
+    with sqlite3.connect(db_path) as conn:
+        due_leads = conn.execute("""
+            SELECT id, name, email, website, query, location, status, website_notes
+            FROM   leads
+            WHERE  email_status    = 'Sent'
+              AND  sent_at         < ?
+              AND  followup_sent_at IS NULL
+              AND  email           IS NOT NULL
+              AND  email           != ''
+            ORDER BY sent_at ASC
+            LIMIT ?
+        """, (cutoff + "T00:00:00", followup_cap)).fetchall()
+
+    if not due_leads:
+        print("[Follow-Up Global] No follow-ups due today.")
+        return 0
+
+    print(f"\n[Follow-Up Global] {len(due_leads)} follow-up(s) due (cap: {followup_cap}). Sending...")
+
+    smtp_host     = os.environ.get("SMTP_HOST",     "smtp.gmail.com").strip()
+    smtp_port     = int(os.environ.get("SMTP_PORT",  "587"))
+    smtp_user     = os.environ.get("SMTP_USER",     "").strip()
+    smtp_password = os.environ.get("SMTP_PASSWORD", "").strip()
+    smtp_from     = os.environ.get("SMTP_FROM",     smtp_user).strip()
+
+    sent_count = 0
+    for lead in due_leads:
+        lead_id, name, email, website, query_term, city, lead_status, website_notes = lead
+
+        # Build follow-up body
+        raw = website_notes or ""
+        if "Issues found:" in raw:
+            items = [i.strip() for i in raw.replace("Issues found:","").strip().rstrip(".").split(";") if i.strip()]
+        else:
+            items = [raw] if raw else ["several areas that could be improved"]
+        issues = "\n".join(f"  {i+1}. {item.capitalize()}" for i, item in enumerate(items[:5]))
+
+        subject = f"Re: Quick website audit for {name}"
+        body    = (
+            f"Hi there,\n\n"
+            f"I reached out a few days ago about {name}'s website ({website or 'your website'}) — "
+            f"just following up in case my email got buried.\n\n"
+            f"The main issues I flagged were:\n\n{issues}\n\n"
+            f"Clinics that fix these typically see more online enquiries within the first month. "
+            f"Happy to show you a quick 2-minute demo with no commitment.\n\n"
+            f"Best regards,\nAditya Tyagi\nAI & Automation Engineer"
+        )
+
+        if dry_run:
+            print(f"  [FOLLOW-UP DRY-RUN] -> {email}  |  {name}")
+            print(f"  Subject: {subject}")
+            try:
+                with sqlite3.connect(db_path) as conn:
+                    conn.execute(
+                        "UPDATE leads SET email_status='Follow-Up Sent', followup_sent_at=? WHERE id=?",
+                        (datetime.now().isoformat(), lead_id),
+                    )
+                    conn.commit()
+            except sqlite3.Error:
+                pass
+            sent_count += 1
+            continue
+
+        if not (smtp_user and smtp_password):
+            print(f"  [Follow-Up Global] SMTP credentials missing — skipping {email}.")
+            continue
+
+        try:
+            msg = MIMEMultipart()
+            msg["From"]    = smtp_from
+            msg["To"]      = email
+            msg["Subject"] = subject
+            msg.attach(MIMEText(body, "plain", "utf-8"))
+
+            with smtplib.SMTP(smtp_host, smtp_port) as server:
+                server.ehlo()
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.sendmail(smtp_from, [email], msg.as_string())
+
+            with sqlite3.connect(db_path) as conn:
+                conn.execute(
+                    "UPDATE leads SET email_status='Follow-Up Sent', followup_sent_at=? WHERE id=?",
+                    (datetime.now().isoformat(), lead_id),
+                )
+                conn.commit()
+
+            print(f"  [Follow-Up Global][Sent] {email}  |  {name}")
+            sent_count += 1
+            git_sync(db_path)
+
+            if sent_count < len(due_leads) and not dry_run:
+                time.sleep(SEND_GAP_SEC)
+
+        except Exception as err:
+            print(f"  [Follow-Up Global][Error] {email}: {err}")
+            try:
+                with sqlite3.connect(db_path) as conn:
+                    conn.execute(
+                        "UPDATE leads SET email_error=? WHERE id=?",
+                        (str(err), lead_id),
+                    )
+                    conn.commit()
+            except sqlite3.Error:
+                pass
+
+    print(f"[Follow-Up Global] Done. {sent_count} follow-up(s) sent.")
+    return sent_count
+
+
+# ---------------------------------------------------------------------------
 # Outbound Email Campaigns
 # ---------------------------------------------------------------------------
 
@@ -1040,41 +1182,45 @@ async def run_continuous_outreach_loop(
     DAILY_CAP = target_override if target_override > 0 else config.get("daily_email_limit", 50)
     today = datetime.now().strftime("%Y-%m-%d")
 
-    # Step 1: Check how many emails have already been sent today
-    with sqlite3.connect(db_path) as conn:
-        sent_today = conn.execute(
-            "SELECT COUNT(*) FROM leads WHERE sent_at LIKE ?",
-            (f"{today}%",)
-        ).fetchone()[0]
+    def _count_sent_today() -> int:
+        with sqlite3.connect(db_path) as c:
+            return c.execute(
+                "SELECT COUNT(*) FROM leads WHERE sent_at LIKE ? OR followup_sent_at LIKE ?",
+                (f"{today}%", f"{today}%")
+            ).fetchone()[0]
 
-    print(f"\n[Outreach Loop] Campaign starting. Emails sent today so far: {sent_today}/{DAILY_CAP}")
+    sent_today = _count_sent_today()
+    print(f"\n[Global Outreach] Campaign starting. Emails sent today: {sent_today}/{DAILY_CAP}")
 
     if sent_today >= DAILY_CAP:
-        print(f"[Outreach Loop] Daily limit of {DAILY_CAP} already reached. Nothing to do.")
+        print(f"[Global Outreach] Daily cap already reached. Nothing to do.")
         return
 
-    # Step 2: Email existing unsent leads from the database queue first
-    print("\n[Outreach Loop] Processing existing unsent leads in queue...")
-    # Temporarily set MIN_NEW_LEADS to 0 in globals so send_outreach_emails doesn't gate us
-    global MIN_NEW_LEADS
-    old_min_new_leads = globals().get("MIN_NEW_LEADS", 10)
-    globals()["MIN_NEW_LEADS"] = 0
-    try:
-        sent_from_queue = send_outreach_emails(db_path, config, dry_run=dry_run)
-    finally:
-        globals()["MIN_NEW_LEADS"] = old_min_new_leads
-
-    # Recalculate sent count
-    with sqlite3.connect(db_path) as conn:
-        sent_today = conn.execute(
-            "SELECT COUNT(*) FROM leads WHERE sent_at LIKE ?",
-            (f"{today}%",)
-        ).fetchone()[0]
-
-    print(f"[Outreach Loop] After queue processing, emails sent today: {sent_today}/{DAILY_CAP}")
+    # ── Step 1: Follow-ups (max 20, fired FIRST) ──────────────────────
+    print("\n[Global Outreach] Step 1 — Sending follow-up emails...")
+    followups_sent = send_followup_emails_global(db_path, config, budget_used=sent_today, dry_run=dry_run)
+    sent_today = _count_sent_today()
+    git_sync(db_path)
 
     if sent_today >= DAILY_CAP:
-        print("[Outreach Loop] Daily cap reached via queue leads. Done.")
+        print("[Global Outreach] Daily cap reached after follow-ups.")
+        return
+
+    # ── Step 2: Email existing unsent leads from queue ─────────────────
+    print("\n[Global Outreach] Step 2 — Emailing unsent leads from queue...")
+    global MIN_NEW_LEADS
+    old_min = globals().get("MIN_NEW_LEADS", 10)
+    globals()["MIN_NEW_LEADS"] = 0
+    try:
+        send_outreach_emails(db_path, config, dry_run=dry_run)
+    finally:
+        globals()["MIN_NEW_LEADS"] = old_min
+
+    sent_today = _count_sent_today()
+    print(f"[Global Outreach] After queue, emails sent today: {sent_today}/{DAILY_CAP}")
+
+    if sent_today >= DAILY_CAP:
+        print("[Global Outreach] Daily cap reached via queue leads. Done.")
         return
 
     # Step 3: Loop scraping & immediate emailing until cap is met

@@ -1,4 +1,4 @@
-name: Global Lead Outreach Campaign
+name: Global + India Lead Outreach Campaign
 
 on:
   schedule:
@@ -17,18 +17,26 @@ on:
         description: 'Max Google Maps results per single search'
         required: false
         default: '25'
-      target:
-        description: 'Target Old Website leads to collect today (0 = single run, 60 = keep looping)'
+      target_global:
+        description: 'Global: target emails today (0 = use config default of 50)'
         required: false
-        default: '60'
-      city:
-        description: 'City to scrape (blank = random from config)'
+        default: '50'
+      target_india:
+        description: 'India: target emails today (0 = use config default of 50)'
         required: false
-        default: ''
-      keyword:
-        description: 'Keyword override (blank = random from config)'
+        default: '50'
+      run_global:
+        description: 'Run Global outreach?'
         required: false
-        default: ''
+        default: 'true'
+        type: choice
+        options: ['true', 'false']
+      run_india:
+        description: 'Run India outreach?'
+        required: false
+        default: 'true'
+        type: choice
+        options: ['true', 'false']
 
 permissions:
   contents: write
@@ -36,7 +44,7 @@ permissions:
 jobs:
   run-outreach:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 170
 
     steps:
       - name: Checkout Repository
@@ -57,7 +65,9 @@ jobs:
       - name: Install Playwright Chromium
         run: python -m playwright install --with-deps chromium
 
-      - name: Run Scraper & Outreach Campaign
+      # ── STEP 1: GLOBAL OUTREACH (cap = 50) ─────────────────────────────
+      - name: Run Global Scraper & Outreach (50 emails/day)
+        if: ${{ github.event_name == 'schedule' || github.event.inputs.run_global == 'true' }}
         env:
           SMTP_HOST:     ${{ secrets.SMTP_HOST }}
           SMTP_PORT:     ${{ secrets.SMTP_PORT }}
@@ -68,39 +78,84 @@ jobs:
           IMAP_USER:     ${{ secrets.IMAP_USER }}
           IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
         run: |
-          # Scheduled runs: target mode — keep scraping until 60 Old Website leads collected
-          # Manual runs: use whatever inputs were selected in the UI
+          echo "=============================================="
+          echo "  GLOBAL OUTREACH — Target: 50 emails/day"
+          echo "  Follow-ups: max 20 | New outreach: min 30"
+          echo "=============================================="
           if [ "${{ github.event_name }}" = "schedule" ]; then
-            echo "Running in SCHEDULED TARGET mode (target: 60 Old Website leads)"
-            python global-outreach/scrape_and_outreach.py --target 60 --limit 25 --max-iterations 20
+            python global-outreach/scrape_and_outreach.py --target 50 --limit 25 --max-iterations 20
           else
-            # Manual workflow_dispatch run
             ARGS="--limit ${{ github.event.inputs.limit || '25' }}"
-            [ "${{ github.event.inputs.dry_run }}"  = "true"  ] && ARGS="$ARGS --dry-run"
-            [ -n "${{ github.event.inputs.city }}"             ] && ARGS="$ARGS --city '${{ github.event.inputs.city }}'"
-            [ -n "${{ github.event.inputs.keyword }}"          ] && ARGS="$ARGS --keyword '${{ github.event.inputs.keyword }}'"
-            [ "${{ github.event.inputs.target || '0' }}" != "0" ] && ARGS="$ARGS --target ${{ github.event.inputs.target || '0' }}"
-            echo "Running manual run with args: $ARGS"
+            [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
+            [ "${{ github.event.inputs.target_global || '50' }}" != "0" ] && ARGS="$ARGS --target ${{ github.event.inputs.target_global || '50' }}"
+            echo "Running global with args: $ARGS"
             eval python global-outreach/scrape_and_outreach.py $ARGS
           fi
 
-      - name: Export data.json for GitHub Pages Dashboard
+      - name: Export Global data.json
         if: always()
         env:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_FROM: ${{ secrets.SMTP_FROM }}
-        run: |
-          python global-outreach/generate_data_json.py
+        run: python global-outreach/generate_data_json.py
 
-      - name: Commit & Push Updated Database + Dashboard Data
+      - name: Commit Global Results
         if: always()
         run: |
           git config --global user.name  "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add global-outreach/leads.db global-outreach/data.json global-outreach/sender_email.txt
+          git add global-outreach/leads.db global-outreach/data.json global-outreach/sender_email.txt || true
           if git diff --staged --quiet; then
-            echo "No changes to commit."
+            echo "No global changes to commit."
           else
-            git commit -m "chore: auto-sync leads + dashboard data [skip ci]"
+            git commit -m "chore: global outreach sync [skip ci]"
+            git push
+          fi
+
+      # ── STEP 2: INDIA OUTREACH (cap = 50) — runs AFTER global ──────────
+      - name: Run India Scraper & Outreach (50 emails/day)
+        if: ${{ github.event_name == 'schedule' || github.event.inputs.run_india == 'true' }}
+        env:
+          SMTP_HOST:     ${{ secrets.SMTP_HOST }}
+          SMTP_PORT:     ${{ secrets.SMTP_PORT }}
+          SMTP_USER:     ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          SMTP_FROM:     ${{ secrets.SMTP_FROM }}
+          IMAP_HOST:     ${{ secrets.IMAP_HOST }}
+          IMAP_USER:     ${{ secrets.IMAP_USER }}
+          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
+        run: |
+          echo "=============================================="
+          echo "  INDIA OUTREACH — Target: 50 emails/day"
+          echo "  35+ niches | 80+ cities"
+          echo "  Follow-ups: max 20 | New outreach: min 30"
+          echo "=============================================="
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            python india-outreach/scrape_and_outreach_india.py --target 50 --limit 25 --max-iterations 25
+          else
+            ARGS="--limit ${{ github.event.inputs.limit || '25' }}"
+            [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
+            [ "${{ github.event.inputs.target_india || '50' }}" != "0" ] && ARGS="$ARGS --target ${{ github.event.inputs.target_india || '50' }}"
+            echo "Running india with args: $ARGS"
+            eval python india-outreach/scrape_and_outreach_india.py $ARGS
+          fi
+
+      - name: Export India data.json
+        if: always()
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_FROM: ${{ secrets.SMTP_FROM }}
+        run: python india-outreach/generate_data_json_india.py
+
+      - name: Commit India Results
+        if: always()
+        run: |
+          git config --global user.name  "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add india-outreach/leads.db india-outreach/data.json india-outreach/sender_email.txt || true
+          if git diff --staged --quiet; then
+            echo "No India changes to commit."
+          else
+            git commit -m "chore: india outreach sync [skip ci]"
             git push
           fi

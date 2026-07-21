@@ -1,16 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=global-outreach/dashboard.html">
-    <title>Global Lead Outreach Dashboard</title>
-    <style>
-        body { background: #0b0f1a; color: #a0aec0; font-family: sans-serif;
-               display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        a { color: #7c6af7; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outreach HQ — Global & India Dashboards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #06091a;
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .logo { font-size: 2.8rem; margin-bottom: 8px; }
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #7c6af7, #FF8C00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    .subtitle { color: #718096; font-size: 0.95rem; margin-bottom: 48px; text-align: center; }
+
+    .cards {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 700px;
+    }
+    .card {
+      background: #0d1340;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 32px 36px;
+      text-align: center;
+      text-decoration: none;
+      color: inherit;
+      width: 280px;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+    }
+    .card.global { border-color: rgba(124,106,247,0.3); }
+    .card.global:hover { border-color: #7c6af7; box-shadow: 0 16px 40px rgba(124,106,247,0.2); }
+    .card.india  { border-color: rgba(255,140,0,0.3); }
+    .card.india:hover  { border-color: #FF8C00; box-shadow: 0 16px 40px rgba(255,140,0,0.2); }
+
+    .card-icon { font-size: 3rem; margin-bottom: 16px; }
+    .card h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .card.global h2 { color: #a78bfa; }
+    .card.india  h2 { color: #FF8C00; }
+    .card p { font-size: 0.82rem; color: #718096; line-height: 1.6; }
+    .card .pill {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .card.global .pill { background: rgba(124,106,247,0.15); color: #a78bfa; }
+    .card.india  .pill { background: rgba(255,140,0,0.12); color: #FF8C00; }
+
+    .footer { margin-top: 48px; font-size: 0.75rem; color: #4a5568; text-align: center; }
+    .footer a { color: #718096; }
+  </style>
 </head>
 <body>
-    <p>Loading dashboard… <a href="global-outreach/dashboard.html">click here if not redirected</a></p>
+  <div class="logo">⚡</div>
+  <h1>Outreach HQ</h1>
+  <p class="subtitle">Automated doctor outreach · Scrape → Audit → Email → Follow-Up · 100 emails/day</p>
+
+  <div class="cards">
+    <a href="global-outreach/dashboard.html" class="card global">
+      <div class="card-icon">🌍</div>
+      <h2>Global Dashboard</h2>
+      <p>Dentists & dermatologists across UK, USA, Canada, Australia and more. 50 emails/day.</p>
+      <span class="pill">50 emails / day</span>
+    </a>
+
+    <a href="india-outreach/dashboard.html" class="card india">
+      <div class="card-icon">🇮🇳</div>
+      <h2>India Dashboard</h2>
+      <p>35+ medical specialties across 80+ Indian cities. Practo, JustDial, WhatsApp context.</p>
+      <span class="pill">50 emails / day</span>
+    </a>
+  </div>
+
+  <div class="footer">
+    <p>Powered by GitHub Actions · Runs daily at 2:30 PM IST · Follow-ups sent after 5 days</p>
+    <p style="margin-top:6px">Built by Aditya Tyagi — AI & Automation Engineer</p>
+  </div>
 </body>
 </html>

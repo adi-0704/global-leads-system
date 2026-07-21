@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>India Doctor Outreach Dashboard</title>
+  <meta name="description" content="Live dashboard for India medical clinic outreach — all specialties, all cities, follow-up tracking.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="app-container">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="logo-area">
+      <div class="logo-icon"></div>
+      <h2>India<span>Outreach</span></h2>
+    </div>
+    <nav class="nav-menu">
+      <button class="nav-item active" id="btn-tab-overview" onclick="switchTab('overview')">
+        <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+        <span>Overview</span>
+      </button>
+      <button class="nav-item" id="btn-tab-nowebsite" onclick="switchTab('nowebsite')">
+        <svg viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+        <span class="badge-container">No Website <span class="badge" id="badge-nowebsite">0</span></span>
+      </button>
+      <button class="nav-item" id="btn-tab-campaign" onclick="switchTab('campaign')">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        <span class="badge-container">Campaign Queue <span class="badge badge-blue" id="badge-campaign">0</span></span>
+      </button>
+      <button class="nav-item" id="btn-tab-followup" onclick="switchTab('followup')">
+        <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+        <span class="badge-container">Follow-Ups <span class="badge badge-amber" id="badge-followup">0</span></span>
+      </button>
+      <button class="nav-item" id="btn-tab-replies" onclick="switchTab('replies')">
+        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+        <span class="badge-container">Replies <span class="badge badge-success" id="badge-replies">0</span></span>
+      </button>
+      <button class="nav-item" id="btn-tab-analytics" onclick="switchTab('analytics')">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+        <span>Analytics</span>
+      </button>
+      <button class="nav-item" id="btn-tab-settings" onclick="switchTab('settings')">
+        <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="status-indicator">
+        <span class="status-dot"></span>
+        <span>System Active</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ──────────────────────────────────────────────────── -->
+  <main class="main-content">
+    <header class="header">
+      <div class="header-title">
+        <h1 id="page-title">India Outreach — Overview</h1>
+        <p id="page-subtitle">All medical specialties · 80+ cities · Live tracking</p>
+      </div>
+      <div class="header-actions">
+        <span class="last-updated" id="last-updated">Loading…</span>
+        <a href="../global-outreach/dashboard.html" class="btn btn-secondary">🌍 Global</a>
+        <button class="btn btn-secondary" onclick="fetchData()">↻ Refresh</button>
+        <button class="btn btn-primary" id="btn-export-csv" onclick="exportCSV()">⬇ Export CSV</button>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      <!-- ══ OVERVIEW TAB ═══════════════════════════════════════════════ -->
+      <div class="tab-panel active" id="tab-overview">
+        <div class="stats-grid">
+          <div class="stat-card saffron">
+            <div class="stat-label">Total Leads</div>
+            <div class="stat-value" id="stat-total">—</div>
+            <div class="stat-sub">Scraped from Google Maps</div>
+          </div>
+          <div class="stat-card blue">
+            <div class="stat-label">Emails Sent</div>
+            <div class="stat-value" id="stat-sent">—</div>
+            <div class="stat-sub">Initial outreach sent</div>
+          </div>
+          <div class="stat-card amber">
+            <div class="stat-label">Follow-Ups Sent</div>
+            <div class="stat-value" id="stat-followup">—</div>
+            <div class="stat-sub">5-day follow-up emails</div>
+          </div>
+          <div class="stat-card replied">
+            <div class="stat-label">Replies</div>
+            <div class="stat-value" id="stat-replied">—</div>
+            <div class="stat-sub">Positive responses</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-label">Conversion %</div>
+            <div class="stat-value" id="stat-conv">—</div>
+            <div class="stat-sub">Reply / Sent ratio</div>
+          </div>
+          <div class="stat-card saffron">
+            <div class="stat-label">Old Websites</div>
+            <div class="stat-value" id="stat-old">—</div>
+            <div class="stat-sub">In outreach queue</div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-label">No Website</div>
+            <div class="stat-value" id="stat-nowebsite">—</div>
+            <div class="stat-sub">Zero online presence</div>
+          </div>
+          <div class="stat-card amber">
+            <div class="stat-label">Follow-Ups Due</div>
+            <div class="stat-value" id="stat-due">—</div>
+            <div class="stat-sub">Ready to send today</div>
+          </div>
+        </div>
+
+        <div class="charts-row">
+          <div class="chart-card">
+            <h3>📊 Email Status Breakdown</h3>
+            <div class="chart-wrap"><canvas id="chart-status"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3>🏙️ Top Cities by Leads</h3>
+            <div class="chart-wrap"><canvas id="chart-cities"></canvas></div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-header">
+            <h3>Recent Leads</h3>
+            <div class="table-controls">
+              <input class="search-input" id="search-overview" placeholder="Search name or city…" oninput="renderOverviewTable()">
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table id="table-overview">
+              <thead>
+                <tr>
+                  <th>Name</th><th>City</th><th>Niche</th><th>Website Status</th>
+                  <th>Email Status</th><th>Scraped</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-overview"></tbody>
+            </table>
+          </div>
+          <div class="pagination" id="pagination-overview"></div>
+        </div>
+      </div>
+
+      <!-- ══ NO WEBSITE TAB ═════════════════════════════════════════════ -->
+      <div class="tab-panel" id="tab-nowebsite">
+        <div class="table-card">
+          <div class="table-header">
+            <h3>🚫 Clinics with No Website</h3>
+            <div class="table-controls">
+              <input class="search-input" id="search-nowebsite" placeholder="Search…" oninput="renderNoWebsiteTable()">
+              <button class="btn btn-green" onclick="downloadNoWebsiteCSV()">⬇ Download CSV</button>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr><th>Name</th><th>Phone</th><th>City</th><th>Niche</th><th>Address</th><th>Scraped</th></tr>
+              </thead>
+              <tbody id="tbody-nowebsite"></tbody>
+            </table>
+          </div>
+          <div class="pagination" id="pagination-nowebsite"></div>
+        </div>
+      </div>
+
+      <!-- ══ CAMPAIGN QUEUE TAB ════════════════════════════════════════ -->
+      <div class="tab-panel" id="tab-campaign">
+        <div class="table-card">
+          <div class="table-header">
+            <h3>📧 Campaign Queue — Old / No Booking Websites</h3>
+            <div class="table-controls">
+              <input class="search-input" id="search-campaign" placeholder="Search…" oninput="renderCampaignTable()">
+              <select class="filter-select" id="filter-niche" onchange="renderCampaignTable()">
+                <option value="">All Niches</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr><th>Name</th><th>Email</th><th>City</th><th>Niche</th><th>Website</th><th>Issues</th><th>Email Status</th><th>Sent At</th></tr>
+              </thead>
+              <tbody id="tbody-campaign"></tbody>
+            </table>
+          </div>
+          <div class="pagination" id="pagination-campaign"></div>
+        </div>
+      </div>
+
+      <!-- ══ FOLLOW-UPS TAB ════════════════════════════════════════════ -->
+      <div class="tab-panel" id="tab-followup">
+        <div id="followup-alert-banner"></div>
+
+        <div class="stats-grid" style="grid-template-columns: repeat(4,1fr); margin-bottom:20px;">
+          <div class="stat-card amber">
+            <div class="stat-label">Follow-Ups Sent</div>
+            <div class="stat-value" id="fu-stat-sent">—</div>
+            <div class="stat-sub">Total follow-up emails</div>
+          </div>
+          <div class="stat-card saffron">
+            <div class="stat-label">Due Today</div>
+            <div class="stat-value" id="fu-stat-due">—</div>
+            <div class="stat-sub">≥5 days, no reply yet</div>
+          </div>
+          <div class="stat-card replied">
+            <div class="stat-label">Replied After FU</div>
+            <div class="stat-value" id="fu-stat-replied">—</div>
+            <div class="stat-sub">Responded to follow-up</div>
+          </div>
+          <div class="stat-card blue">
+            <div class="stat-label">Pending (Waiting)</div>
+            <div class="stat-value" id="fu-stat-pending">—</div>
+            <div class="stat-sub">Sent, &lt;5 days</div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-header">
+            <h3>⏰ Follow-Up Queue &amp; History</h3>
+            <div class="table-controls">
+              <select class="filter-select" id="filter-fu-status" onchange="renderFollowUpTable()">
+                <option value="all">All</option>
+                <option value="due">Due Now</option>
+                <option value="sent">Follow-Up Sent</option>
+                <option value="pending">Pending</option>
+              </select>
+              <input class="search-input" id="search-followup" placeholder="Search…" oninput="renderFollowUpTable()">
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr><th>Name</th><th>Email</th><th>City</th><th>Niche</th><th>Initial Sent</th><th>Follow-Up Sent</th><th>Days Since Initial</th><th>Status</th></tr>
+              </thead>
+              <tbody id="tbody-followup"></tbody>
+            </table>
+          </div>
+          <div class="pagination" id="pagination-followup"></div>
+        </div>
+      </div>
+
+      <!-- ══ REPLIES TAB ═══════════════════════════════════════════════ -->
+      <div class="tab-panel" id="tab-replies">
+        <div class="table-card">
+          <div class="table-header">
+            <h3>💬 Email Replies</h3>
+            <input class="search-input" id="search-replies" placeholder="Search…" oninput="renderRepliesTable()">
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr><th>Name</th><th>Email</th><th>City</th><th>Niche</th><th>Reply Subject</th><th>Replied At</th></tr>
+              </thead>
+              <tbody id="tbody-replies"></tbody>
+            </table>
+          </div>
+          <div class="pagination" id="pagination-replies"></div>
+        </div>
+      </div>
+
+      <!-- ══ ANALYTICS TAB ═════════════════════════════════════════════ -->
+      <div class="tab-panel" id="tab-analytics">
+        <div class="charts-row" style="margin-bottom:20px;">
+          <div class="chart-card">
+            <h3>🏥 Leads by Medical Niche</h3>
+            <div id="niche-bars" class="niche-bars" style="max-height:320px;overflow-y:auto;"></div>
+          </div>
+          <div class="chart-card">
+            <h3>🗺️ Top Indian Cities</h3>
+            <div id="city-grid" class="city-grid"></div>
+          </div>
+        </div>
+        <div class="charts-row">
+          <div class="chart-card">
+            <h3>📈 Website Health Breakdown</h3>
+            <div class="chart-wrap"><canvas id="chart-health"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h3>📊 Follow-Up Pipeline</h3>
+            <div class="chart-wrap"><canvas id="chart-pipeline"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SETTINGS TAB ══════════════════════════════════════════════ -->
+      <div class="tab-panel" id="tab-settings">
+        <div class="chart-card" style="max-width:600px;">
+          <h3>⚙️ Campaign Configuration</h3>
+          <br>
+          <p style="color:var(--grey-text);font-size:0.85rem;line-height:1.7;">
+            These settings are managed in <code style="color:var(--saffron)">india-outreach/config.json</code> and applied on each GitHub Actions run.
+          </p>
+          <br>
+          <table style="width:100%;font-size:0.85rem;">
+            <tr style="border-bottom:1px solid var(--navy-border);">
+              <td style="padding:10px 0;color:var(--grey-text)">Daily Email Cap</td>
+              <td style="padding:10px 0;font-weight:600;color:var(--saffron)">50 / day</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--navy-border);">
+              <td style="padding:10px 0;color:var(--grey-text)">Follow-Up Pool (max)</td>
+              <td style="padding:10px 0;font-weight:600;color:var(--followup-amber)">20 / day</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--navy-border);">
+              <td style="padding:10px 0;color:var(--grey-text)">New Outreach (min)</td>
+              <td style="padding:10px 0;font-weight:600;color:var(--sent-blue)">30 / day</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--navy-border);">
+              <td style="padding:10px 0;color:var(--grey-text)">Follow-Up Delay</td>
+              <td style="padding:10px 0;font-weight:600;color:var(--white)">5 days after initial</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--navy-border);">
+              <td style="padding:10px 0;color:var(--grey-text)">Medical Niches</td>
+              <td style="padding:10px 0;font-weight:600;color:var(--white)">35+ specialties</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 0;color:var(--grey-text)">Cities Covered</td>
+              <td style="padding:10px 0;font-weight:600;color:var(--white)">80+ Indian cities</td>
+            </tr>
+          </table>
+          <br>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <a href="../global-outreach/dashboard.html" class="btn btn-secondary">🌍 View Global Dashboard</a>
+            <a href="https://github.com" target="_blank" class="btn btn-secondary">⚡ GitHub Actions</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- .page-content -->
+  </main>
+</div><!-- .app-container -->
+
+<script src="dashboard.js"></script>
+</body>
+</html>

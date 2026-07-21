@@ -39,7 +39,8 @@ def main():
                 SUM(status = 'No Website')                           AS no_website,
                 SUM(status IN ('Old Website', 'No Booking/AI') AND email IS NOT NULL AND email != '') AS old_website,
                 SUM(status = 'Modern Website')                       AS modern_website,
-                SUM(email_status IN ('Sent','Sent (Dry Run)', 'Replied')) AS sent,
+                SUM(email_status IN ('Sent','Sent (Dry Run)', 'Follow-Up Sent', 'Replied')) AS sent,
+                SUM(email_status = 'Follow-Up Sent')                 AS followup_sent,
                 SUM(email_status = 'Replied')                        AS replied,
                 SUM(email_status = 'Failed')                         AS failed
             FROM leads
@@ -52,6 +53,15 @@ def main():
     stats["conversion_rate"] = round(
         min(replied / sent * 100, 100) if sent > 0 else 0, 1
     )
+
+    # Follow-ups due (≥5 days since sent, no followup yet)
+    with sqlite3.connect(DB_PATH) as conn:
+        stats["followups_due"] = conn.execute("""
+            SELECT COUNT(*) FROM leads
+            WHERE email_status = 'Sent'
+              AND followup_sent_at IS NULL
+              AND sent_at < datetime('now', '-5 days')
+        """).fetchone()[0] or 0
 
     # Build a pre-filtered CSV string for no-website leads (used for download)
     no_website_leads = [l for l in leads if l.get("status") == "No Website"]
