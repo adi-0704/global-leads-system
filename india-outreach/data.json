@@ -1,20 +1,55 @@
 {
-  "leads": [],
+  "leads": [
+    {
+      "id": 2,
+      "name": "Dr Abha Sharma",
+      "phone": "+91 87698 90028",
+      "address": "\ue0c8\nAdvance hospital, metro station, E - 7, New Sanganer Rd, near Vivek Vihar, Sodala, Jaipur, Rajasthan 302019, India",
+      "website": "https://drabhasharma.com/",
+      "status": "Old Website",
+      "email": "info@drabhasharma.com",
+      "email_status": "Sent",
+      "sent_at": "2026-07-21T06:16:08.786452",
+      "followup_sent_at": null,
+      "replied_at": null,
+      "reply_subject": null,
+      "reply_body": null,
+      "query": "family doctor",
+      "niche": "general",
+      "location": "Jaipur",
+      "scraped_at": "2026-07-21T06:16:06.904304",
+      "website_viewport": 0,
+      "website_ssl": 1,
+      "website_copyright_year": 2026,
+      "website_notes": "Issues found: not mobile-friendly (broken layout on phones \u2014 most patients in India browse on mobile); no AI assistant or live chat (no way to answer patient questions after hours); no website analytics (no visibility into how many patients visit or where they come from).",
+      "email_error": null
+    }
+  ],
   "stats": {
-    "total": 0,
+    "total": 1,
     "no_website": 0,
-    "old_website": 0,
+    "old_website": 1,
     "modern_website": 0,
-    "sent": 0,
+    "sent": 1,
     "followup_sent": 0,
     "replied": 0,
     "failed": 0,
-    "conversion_rate": 0,
+    "conversion_rate": 0.0,
     "followups_due": 0
   },
-  "niche_breakdown": [],
-  "city_breakdown": [],
+  "niche_breakdown": [
+    {
+      "niche": "general",
+      "count": 1
+    }
+  ],
+  "city_breakdown": [
+    {
+      "city": "Jaipur",
+      "count": 1
+    }
+  ],
   "no_website_csv": "Name,Phone,Address,Niche,Search Keyword,City,Scraped At",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-21T06:14:58.121653+00:00"
+  "generated_at": "2026-07-21T06:16:08.788316+00:00"
 }
