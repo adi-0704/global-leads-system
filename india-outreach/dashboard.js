@@ -9,6 +9,7 @@ let NICHE_DATA  = [];
 let CITY_DATA   = [];
 let NO_WEB_CSV  = "";
 let ACTIVE_TAB  = "overview";
+let selectedDate = 'ALL';
 
 const PAGE_SIZE = 25;
 let pages = {
@@ -18,6 +19,134 @@ let pages = {
 
 // Chart instances (so we can destroy/recreate on re-render)
 let chartStatus = null, chartCities = null, chartHealth = null, chartPipeline = null;
+
+function getFilteredLeads() {
+  if (selectedDate === 'ALL') {
+    return ALL_LEADS;
+  }
+  return ALL_LEADS.filter(lead => {
+    return lead.scraped_at && lead.scraped_at.startsWith(selectedDate);
+  });
+}
+
+function calculateStats(leadsList) {
+  const stats = {
+    total: 0,
+    sent: 0,
+    followup_sent: 0,
+    replied: 0,
+    conversion_rate: 0,
+    old_website: 0,
+    no_website: 0,
+    followups_due: 0,
+    failed: 0,
+    modern_website: 0
+  };
+
+  const now = Date.now();
+  const FIVE_DAY = 5 * 24 * 60 * 60 * 1000;
+
+  leadsList.forEach(l => {
+    stats.total++;
+    
+    if (l.status === "No Website") {
+      stats.no_website++;
+    } else if (l.status === "Old Website" || l.status === "No Booking/AI") {
+      stats.old_website++;
+    } else if (l.status === "Modern Website") {
+      stats.modern_website++;
+    }
+
+    if (["Sent", "Sent (Dry Run)", "Follow-Up Sent", "Replied"].includes(l.email_status)) {
+      stats.sent++;
+    }
+
+    if (l.email_status === "Follow-Up Sent" || l.followup_sent_at) {
+      stats.followup_sent++;
+    }
+
+    if (l.email_status === "Replied") {
+      stats.replied++;
+    } else if (l.email_status === "Failed") {
+      stats.failed++;
+    }
+
+    // Follow-ups due today calculation
+    const isDue = l.email_status === "Sent" && 
+                  !l.followup_sent_at && 
+                  l.sent_at && 
+                  (now - new Date(l.sent_at)) >= FIVE_DAY;
+    if (isDue) {
+      stats.followups_due++;
+    }
+  });
+
+  if (stats.sent > 0) {
+    stats.conversion_rate = Math.round((stats.replied / stats.sent) * 100);
+  }
+
+  return stats;
+}
+
+function populateDateFilterBar() {
+  const bar = document.getElementById("date-filter-bar");
+  if (!bar) return;
+
+  const dateSet = new Set();
+  ALL_LEADS.forEach(lead => {
+    if (lead.scraped_at) {
+      const datePart = lead.scraped_at.split("T")[0]; // "YYYY-MM-DD"
+      if (datePart && datePart.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        dateSet.add(datePart);
+      }
+    }
+  });
+
+  const sortedDates = Array.from(dateSet).sort().reverse();
+
+  let html = `<button class="date-tab ${selectedDate === 'ALL' ? 'active' : ''}" onclick="setDateFilter('ALL')">All Time</button>`;
+
+  sortedDates.forEach(dateStr => {
+    const dateObj = new Date(dateStr);
+    const todayLocal = new Date();
+    const offset = todayLocal.getTimezoneOffset();
+    const localDateStr = new Date(todayLocal.getTime() - (offset*60*1000)).toISOString().split('T')[0];
+
+    let label = "";
+    const formattedDate = dateObj.toLocaleDateString("en-IN", {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    });
+
+    if (dateStr === localDateStr) {
+      label = `Today (${dateObj.toLocaleDateString("en-IN", { month: "short", day: "numeric" })})`;
+    } else {
+      label = formattedDate;
+    }
+
+    html += `<button class="date-tab ${selectedDate === dateStr ? 'active' : ''}" onclick="setDateFilter('${dateStr}')">${label}</button>`;
+  });
+
+  bar.innerHTML = html;
+}
+
+function setDateFilter(dateStr) {
+  selectedDate = dateStr;
+
+  const bar = document.getElementById("date-filter-bar");
+  if (bar) {
+    bar.querySelectorAll(".date-tab").forEach(btn => {
+      btn.classList.remove("active");
+    });
+    const targetBtn = Array.from(bar.querySelectorAll(".date-tab")).find(btn => {
+      return btn.getAttribute("onclick").includes(`'${dateStr}'`);
+    });
+    if (targetBtn) targetBtn.classList.add("active");
+  }
+
+  renderAll();
+}
 
 // ── Boot ───────────────────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", fetchData);
@@ -39,6 +168,7 @@ async function fetchData() {
       : "—";
     document.getElementById("last-updated").textContent = "Updated: " + genAt;
 
+    populateDateFilterBar();
     renderAll();
   } catch (e) {
     console.error("Failed to load data.json:", e);
@@ -85,7 +215,8 @@ function switchTab(tab) {
 
 // ── Stat Cards ─────────────────────────────────────────────────────────────
 function renderStatCards() {
-  const s = STATS;
+  const filtered = getFilteredLeads();
+  const s = calculateStats(filtered);
   setText("stat-total",     fmtNum(s.total));
   setText("stat-sent",      fmtNum(s.sent));
   setText("stat-followup",  fmtNum(s.followup_sent));
@@ -97,10 +228,11 @@ function renderStatCards() {
 }
 
 function renderBadges() {
-  const noWebsite = ALL_LEADS.filter(l => l.status === "No Website").length;
-  const campaign  = ALL_LEADS.filter(l => ["Old Website","No Booking/AI"].includes(l.status) && l.email).length;
-  const followups = ALL_LEADS.filter(l => l.email_status === "Follow-Up Sent").length;
-  const replies   = ALL_LEADS.filter(l => l.email_status === "Replied").length;
+  const filtered = getFilteredLeads();
+  const noWebsite = filtered.filter(l => l.status === "No Website").length;
+  const campaign  = filtered.filter(l => ["Old Website","No Booking/AI"].includes(l.status) && l.email).length;
+  const followups = filtered.filter(l => l.email_status === "Follow-Up Sent").length;
+  const replies   = filtered.filter(l => l.email_status === "Replied").length;
 
   setText("badge-nowebsite", noWebsite);
   setText("badge-campaign",  campaign);
@@ -111,7 +243,7 @@ function renderBadges() {
 // ── Overview Table ─────────────────────────────────────────────────────────
 function renderOverviewTable() {
   const q = val("search-overview").toLowerCase();
-  const filtered = ALL_LEADS.filter(l =>
+  const filtered = getFilteredLeads().filter(l =>
     !q || (l.name || "").toLowerCase().includes(q) || (l.location || "").toLowerCase().includes(q)
   );
   const { rows, paginationHtml } = paginate(filtered, "overview");
@@ -133,7 +265,7 @@ function renderOverviewTable() {
 // ── No Website Table ───────────────────────────────────────────────────────
 function renderNoWebsiteTable() {
   const q = val("search-nowebsite").toLowerCase();
-  const leads = ALL_LEADS.filter(l =>
+  const leads = getFilteredLeads().filter(l =>
     l.status === "No Website" &&
     (!q || (l.name || "").toLowerCase().includes(q) || (l.location || "").toLowerCase().includes(q))
   );
@@ -155,7 +287,7 @@ function renderNoWebsiteTable() {
 function renderCampaignTable() {
   const q     = val("search-campaign").toLowerCase();
   const niche = val("filter-niche");
-  const leads = ALL_LEADS.filter(l =>
+  const leads = getFilteredLeads().filter(l =>
     ["Old Website","No Booking/AI"].includes(l.status) &&
     l.email &&
     (!q || (l.name || "").toLowerCase().includes(q) || (l.email || "").toLowerCase().includes(q)) &&
@@ -181,12 +313,13 @@ function renderCampaignTable() {
 function renderFollowUpTab() {
   const now      = Date.now();
   const FIVE_DAY = 5 * 24 * 60 * 60 * 1000;
+  const filtered = getFilteredLeads();
 
   // Categorise leads
-  const dueLds     = ALL_LEADS.filter(l => l.email_status === "Sent" && !l.followup_sent_at && l.sent_at && (now - new Date(l.sent_at)) >= FIVE_DAY);
-  const sentFU     = ALL_LEADS.filter(l => l.email_status === "Follow-Up Sent");
-  const pendingLds = ALL_LEADS.filter(l => l.email_status === "Sent" && !l.followup_sent_at && l.sent_at && (now - new Date(l.sent_at)) < FIVE_DAY);
-  const repliedFU  = ALL_LEADS.filter(l => l.email_status === "Replied" && l.followup_sent_at);
+  const dueLds     = filtered.filter(l => l.email_status === "Sent" && !l.followup_sent_at && l.sent_at && (now - new Date(l.sent_at)) >= FIVE_DAY);
+  const sentFU     = filtered.filter(l => l.email_status === "Follow-Up Sent");
+  const pendingLds = filtered.filter(l => l.email_status === "Sent" && !l.followup_sent_at && l.sent_at && (now - new Date(l.sent_at)) < FIVE_DAY);
+  const repliedFU  = filtered.filter(l => l.email_status === "Replied" && l.followup_sent_at);
 
   setText("fu-stat-sent",    fmtNum(sentFU.length));
   setText("fu-stat-due",     fmtNum(dueLds.length));
@@ -217,7 +350,7 @@ function renderFollowUpTable() {
   const q        = val("search-followup").toLowerCase();
   const filter   = val("filter-fu-status");
 
-  let leads = ALL_LEADS.filter(l => l.email_status === "Sent" || l.email_status === "Follow-Up Sent");
+  let leads = getFilteredLeads().filter(l => l.email_status === "Sent" || l.email_status === "Follow-Up Sent");
 
   if (filter === "due")     leads = leads.filter(l => l.email_status === "Sent" && !l.followup_sent_at && (now - new Date(l.sent_at)) >= FIVE_DAY);
   if (filter === "sent")    leads = leads.filter(l => l.email_status === "Follow-Up Sent");
@@ -246,7 +379,7 @@ function renderFollowUpTable() {
 // ── Replies Table ──────────────────────────────────────────────────────────
 function renderRepliesTable() {
   const q = val("search-replies").toLowerCase();
-  const leads = ALL_LEADS.filter(l =>
+  const leads = getFilteredLeads().filter(l =>
     l.email_status === "Replied" &&
     (!q || (l.name||"").toLowerCase().includes(q) || (l.email||"").toLowerCase().includes(q))
   );
@@ -274,9 +407,21 @@ function renderAnalyticsTab() {
 
 function renderNicheBars() {
   const container = document.getElementById("niche-bars");
-  if (!NICHE_DATA.length) { container.innerHTML = "<p style='color:var(--grey-dim);font-size:0.82rem'>No niche data yet.</p>"; return; }
-  const max = NICHE_DATA[0].count || 1;
-  container.innerHTML = NICHE_DATA.map(d => `
+  const filtered = getFilteredLeads();
+  
+  const nicheCounts = {};
+  filtered.forEach(l => {
+    if (l.niche) {
+      nicheCounts[l.niche] = (nicheCounts[l.niche] || 0) + 1;
+    }
+  });
+  const nicheData = Object.entries(nicheCounts)
+    .map(([niche, count]) => ({ niche, count }))
+    .sort((a, b) => b.count - a.count);
+
+  if (!nicheData.length) { container.innerHTML = "<p style='color:var(--grey-dim);font-size:0.82rem'>No niche data yet.</p>"; return; }
+  const max = nicheData[0].count || 1;
+  container.innerHTML = nicheData.map(d => `
     <div class="niche-bar-row">
       <div class="niche-bar-label" title="${esc(d.niche)}">${esc(nicheLabel(d.niche))}</div>
       <div class="niche-bar-track"><div class="niche-bar-fill" style="width:${Math.round(d.count/max*100)}%"></div></div>
@@ -287,8 +432,20 @@ function renderNicheBars() {
 
 function renderCityGrid() {
   const container = document.getElementById("city-grid");
-  if (!CITY_DATA.length) { container.innerHTML = "<p style='color:var(--grey-dim);font-size:0.82rem'>No city data yet.</p>"; return; }
-  container.innerHTML = CITY_DATA.map(d => `
+  const filtered = getFilteredLeads();
+  
+  const cityCounts = {};
+  filtered.forEach(l => {
+    if (l.location) {
+      cityCounts[l.location] = (cityCounts[l.location] || 0) + 1;
+    }
+  });
+  const cityData = Object.entries(cityCounts)
+    .map(([city, count]) => ({ city, count }))
+    .sort((a, b) => b.count - a.count);
+
+  if (!cityData.length) { container.innerHTML = "<p style='color:var(--grey-dim);font-size:0.82rem'>No city data yet.</p>"; return; }
+  container.innerHTML = cityData.map(d => `
     <div class="city-tile">
       <div class="city-count">${d.count}</div>
       <div class="city-name">${esc(d.city)}</div>
@@ -297,7 +454,8 @@ function renderCityGrid() {
 }
 
 function renderHealthChart() {
-  const s = STATS;
+  const filtered = getFilteredLeads();
+  const s = calculateStats(filtered);
   const ctx = document.getElementById("chart-health").getContext("2d");
   if (chartHealth) chartHealth.destroy();
   chartHealth = new Chart(ctx, {
@@ -307,7 +465,7 @@ function renderHealthChart() {
       datasets: [{
         data: [
           s.old_website || 0,
-          (ALL_LEADS.filter(l => l.status === "No Booking/AI").length),
+          (filtered.filter(l => l.status === "No Booking/AI").length),
           s.modern_website || 0,
           s.no_website || 0,
         ],
@@ -320,7 +478,8 @@ function renderHealthChart() {
 }
 
 function renderPipelineChart() {
-  const s = STATS;
+  const filtered = getFilteredLeads();
+  const s = calculateStats(filtered);
   const ctx = document.getElementById("chart-pipeline").getContext("2d");
   if (chartPipeline) chartPipeline.destroy();
   chartPipeline = new Chart(ctx, {
@@ -329,8 +488,8 @@ function renderPipelineChart() {
       labels: ["Not Sent", "Sent", "Follow-Up Sent", "Replied", "Failed"],
       datasets: [{
         data: [
-          ALL_LEADS.filter(l => l.email_status === "Not Sent").length,
-          ALL_LEADS.filter(l => l.email_status === "Sent").length,
+          filtered.filter(l => l.email_status === "Not Sent").length,
+          filtered.filter(l => l.email_status === "Sent").length,
           s.followup_sent || 0,
           s.replied || 0,
           s.failed || 0,
@@ -360,15 +519,16 @@ function renderOverviewChart() {
 function renderStatusChart() {
   const ctx = document.getElementById("chart-status").getContext("2d");
   if (chartStatus) chartStatus.destroy();
-  const s = STATS;
+  const filtered = getFilteredLeads();
+  const s = calculateStats(filtered);
   chartStatus = new Chart(ctx, {
     type: "doughnut",
     data: {
       labels: ["Not Sent", "Sent", "Follow-Up", "Replied", "Failed"],
       datasets: [{
         data: [
-          ALL_LEADS.filter(l => l.email_status === "Not Sent").length,
-          ALL_LEADS.filter(l => ["Sent","Sent (Dry Run)"].includes(l.email_status)).length,
+          filtered.filter(l => l.email_status === "Not Sent").length,
+          filtered.filter(l => ["Sent","Sent (Dry Run)"].includes(l.email_status)).length,
           s.followup_sent || 0,
           s.replied || 0,
           s.failed || 0,
@@ -382,10 +542,21 @@ function renderStatusChart() {
 }
 
 function renderCitiesChart() {
-  if (!CITY_DATA.length) return;
+  const filtered = getFilteredLeads();
+  const cityCounts = {};
+  filtered.forEach(l => {
+    if (l.location) {
+      cityCounts[l.location] = (cityCounts[l.location] || 0) + 1;
+    }
+  });
+  const cityData = Object.entries(cityCounts)
+    .map(([city, count]) => ({ city, count }))
+    .sort((a, b) => b.count - a.count);
+
+  if (!cityData.length) return;
   const ctx = document.getElementById("chart-cities").getContext("2d");
   if (chartCities) chartCities.destroy();
-  const top = CITY_DATA.slice(0, 8);
+  const top = cityData.slice(0, 8);
   chartCities = new Chart(ctx, {
     type: "bar",
     data: {
@@ -411,7 +582,7 @@ function renderCitiesChart() {
 // ── CSV Export ─────────────────────────────────────────────────────────────
 function exportCSV() {
   const headers = ["Name","Email","Phone","City","Niche","Website","Status","Email Status","Sent At","Follow-Up Sent At","Notes"];
-  const rows = ALL_LEADS.map(l => [
+  const rows = getFilteredLeads().map(l => [
     l.name, l.email, l.phone, l.location, l.niche,
     l.website, l.status, l.email_status, l.sent_at,
     l.followup_sent_at, l.website_notes,
@@ -433,7 +604,7 @@ function downloadFile(name, content, mime) {
 
 // ── Niche Filter Populate ──────────────────────────────────────────────────
 function populateNicheFilter() {
-  const niches  = [...new Set(ALL_LEADS.map(l => l.niche).filter(Boolean))].sort();
+  const niches  = [...new Set(getFilteredLeads().map(l => l.niche).filter(Boolean))].sort();
   const select  = document.getElementById("filter-niche");
   const current = select.value;
   select.innerHTML = '<option value="">All Niches</option>' +

@@ -465,6 +465,46 @@ tbody td {
 ::-webkit-scrollbar-thumb { background: rgba(255,140,0,0.25); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,140,0,0.45); }
 
+/* ── Date Filter Tabs ────────────────────────────────────────────────── */
+.date-filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 6px;
+  background: var(--navy-mid);
+  border-radius: 12px;
+  border: 1px solid var(--navy-border);
+  align-self: flex-start;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.date-tab {
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--grey-text);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.date-tab:hover {
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.date-tab.active {
+  color: var(--navy-dark);
+  background: linear-gradient(135deg, var(--saffron), #ffb84d);
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(255, 140, 0, 0.3);
+}
+
 /* ── Responsive ──────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
   .stats-grid { grid-template-columns: repeat(3, 1fr); }
