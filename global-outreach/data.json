@@ -1,6 +1,29 @@
 {
   "leads": [
     {
+      "id": 940,
+      "name": "Perth Orthopaedic & Sports Medicine Centre",
+      "phone": "+61 8 9212 4200",
+      "address": "\ue0c8\nLevel 1/1 Havelock St, West Perth WA 6005, Australia",
+      "website": "https://www.perthortho.com.au/",
+      "status": "No Booking/AI",
+      "email": "info@perthortho.com.au",
+      "email_status": "Sent",
+      "sent_at": "2026-07-22T11:55:25.839583",
+      "replied_at": null,
+      "query": "orthopedic surgeon",
+      "location": "Perth",
+      "scraped_at": "2026-07-22T11:55:23.920135",
+      "website_viewport": 1,
+      "website_ssl": 1,
+      "website_copyright_year": 2024,
+      "website_notes": "Issues found: no online booking (patients cannot schedule appointments from the website); no AI assistant or live chat (no way to answer patient questions after hours); no contact form or online enquiry form.",
+      "email_error": null,
+      "reply_subject": null,
+      "reply_body": null,
+      "followup_sent_at": null
+    },
+    {
       "id": 939,
       "name": "Dr Antony Liddell - Perth Orthopaedic Surgeon",
       "phone": "+61 8 9212 4200",
@@ -16401,11 +16424,11 @@
     }
   ],
   "stats": {
-    "total": 713,
+    "total": 714,
     "no_website": 18,
-    "old_website": 243,
+    "old_website": 244,
     "modern_website": 452,
-    "sent": 243,
+    "sent": 244,
     "followup_sent": 3,
     "replied": 4,
     "failed": 0,
@@ -16414,5 +16437,5 @@
   },
   "no_website_csv": "Name,Phone,Address,Search Keyword,City,Scraped At\n\"Men's Health and Msk\",\"+44 7375 215569\",\"\ue0c8\n38 Collingwood St, Newcastle upon Tyne NE1 1JF, United Kingdom\",\"mental health clinic\",\"Newcastle\",\"2026-07-22T11:46:25.032374\"\n\"Back To You\",\"\",\"\ue0c8\nNewcastle upon Tyne NE1 6UF, United Kingdom\",\"mental health clinic\",\"Newcastle\",\"2026-07-22T11:39:23.451895\"\n\"Arraka Wellness Hub (AWEhub)\",\"+44 7715 897120\",\"\ue0c8\n56 Acanthus Ave, Fenham, Newcastle upon Tyne NE4 9YD, United Kingdom\",\"mental health clinic\",\"Newcastle\",\"2026-07-22T11:21:55.521061\"\n\"Mindplace Newcastle\",\"+44 191 820 0542\",\"\ue0c8\nUpper Blue Mall, Metrocentre, Gateshead NE11 9YG, United Kingdom\",\"mental health clinic\",\"Newcastle\",\"2026-07-22T11:19:05.725326\"\n\"Newcastle and North Tyneside Crisis Team Clinic\",\"+44 191 814 8899\",\"\ue0c8\nNE3 3XT, Gosforth, Newcastle upon Tyne NE3, United Kingdom\",\"mental health clinic\",\"Newcastle\",\"2026-07-22T11:04:13.036670\"\n\"Ottawa Dental Clinic\",\"+1 613-580-9633\",\"\ue0c8\n40 Cobourg St, Ottawa, ON K1N 5N8, Canada\",\"dental clinic\",\"Ottawa\",\"2026-07-21T11:28:25.480845\"\n\"S8 Skin Clinic\",\"+44 7720 754935\",\"\ue0c8\n1C Greenfield Rd, Meadowhead, Sheffield S8 7RQ, United Kingdom\",\"dermatologist\",\"Sheffield\",\"2026-07-20T11:36:18.285539\"\n\"Dr Wong Aesthetics\",\"\",\"\ue0c8\nWest One Space, Unit 6, The Plaza, 8 Fitzwilliam St, Broomhall, Sheffield S1 4JB, United Kingdom\",\"dermatologist\",\"Sheffield\",\"2026-07-20T11:36:18.284647\"\n\"Derma Clinic\",\"+44 7983 919113\",\"\ue0c8\n17 Wicker, Sheffield S3 8HS, United Kingdom\",\"dermatologist\",\"Sheffield\",\"2026-07-20T11:34:50.555652\"\n\"Waterfront Skin & Laser\",\"+1 604-281-4211\",\"\ue0c8\n750 W Broadway #1212, Vancouver, BC V5Z 1J5, Canada\",\"dermatologist\",\"Vancouver\",\"2026-07-20T10:21:26.276730\"\n\"Clinic 138 - Dr. Angela Law Inc.\",\"+1 604-688-6531\",\"\ue0c8\n138 Davie St, Vancouver, BC V6Z 2V4, Canada\",\"dermatologist\",\"Vancouver\",\"2026-07-20T10:20:20.987598\"\n\"False Creek Dermatology - Dr. Christina Han MD FRCPC\",\"+1 604-283-8892\",\"\ue0c8\n1285 W Broadway #280, Vancouver, BC V6H 3X8, Canada\",\"dermatologist\",\"Vancouver\",\"2026-07-20T10:19:17.192431\"\n\"Dr N Georgy\",\"+61 8 9448 1244\",\"\ue0c8\nUnit 2/54 Arnisdale Rd, Duncraig WA 6023, Australia\",\"dermatologist\",\"Perth\",\"2026-07-19T11:23:39.012068\"\n\"Port Richmond Dental Center\",\"215) 739-8008\",\"\ue0c8\n3162 Richmond St, Philadelphia, PA 19134\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:49:00.748194\"\n\"Priority Emergency Dental Care\",\"844) 490-5591\",\"\ue0c8\n2333 Tasker St, Philadelphia, PA 19145\",\"dental clinic\",\"Philadelphia\",\"2026-07-19T10:47:54.390866\"\n\"Whiteside Dental\",\"270) 651-6471\",\"\ue0c8\n400 E Main St, Glasgow, KY 42141\",\"dentist\",\"Glasgow\",\"2026-07-19T10:34:06.670234\"\n\"Clinique Dentaire Qualit\u00e9/Quality Dental Clinic\",\"+1 514-939-3368\",\"\ue0c8\n1231 Sainte-Catherine St. West #302, Montreal, Quebec H3G 1P5, Canada\",\"dental clinic\",\"Montreal\",\"2026-07-18T06:16:44.041170\"\n\"Skin Technology\",\"+44 141 222 2503\",\"\ue0c8\n2nd floor, Central Chambers, 11 Bothwell St, Glasgow G2 6LY, United Kingdom\",\"skin clinic\",\"Glasgow\",\"2026-07-18T06:04:02.987032\"",
   "sender_email": "Aditya Tyagi <business.n8n25@gmail.com>",
-  "generated_at": "2026-07-22T11:54:19.845931+00:00"
+  "generated_at": "2026-07-22T11:55:25.847689+00:00"
 }
