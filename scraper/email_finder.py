@@ -56,7 +56,7 @@ _IGNORED_DOMAINS = {
 }
 
 # HTTP request timeout in seconds
-_TIMEOUT = 10
+_TIMEOUT = 5
 
 # Default headers to mimic a real browser visit
 _HEADERS = {
@@ -163,8 +163,8 @@ class EmailFinder:
                 if sub_url not in urls_to_check:
                     urls_to_check.append(sub_url)
 
-            # Limit checking to first 12 pages to avoid excessive request delays
-            for sub_url in urls_to_check[:12]:
+            # Limit checking to first 5 pages to avoid excessive request delays
+            for sub_url in urls_to_check[:5]:
                 time.sleep(self.delay)
                 html = self._fetch(sub_url)
                 if html:

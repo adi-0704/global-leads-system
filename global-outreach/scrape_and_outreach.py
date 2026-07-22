@@ -267,7 +267,7 @@ def analyze_website(url: str) -> dict:
 
     try:
         resp = requests.get(
-            fetch_url, timeout=8, headers=_HEADERS, allow_redirects=True
+            fetch_url, timeout=5, headers=_HEADERS, allow_redirects=True
         )
 
         # 1. SSL
@@ -431,8 +431,12 @@ async def scrape_new_leads(
             email = ""
             lead_status = analysis["status"]
             if website and lead_status in ["Old Website", "No Booking/AI"]:
-                print("      -> Searching for contact email...")
-                email = email_finder.find(website)
+                if "Could not connect" in analysis["notes"] or "timed out" in analysis["notes"]:
+                    print("      -> Website down or timed out during analysis. Skipping email finder.")
+                    email = ""
+                else:
+                    print("      -> Searching for contact email...")
+                    email = email_finder.find(website)
                 print(f"      -> Email: {email or 'not found'}")
                 if not email:
                     lead_status = "Filtered (No Email)"
