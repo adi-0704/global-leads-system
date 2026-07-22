@@ -16,15 +16,15 @@ on:
       limit:
         description: 'Max Google Maps results per single search'
         required: false
-        default: '25'
+        default: '150'
       target_global:
-        description: 'Global: target emails today (0 = use config default of 50)'
+        description: 'Global: target qualified leads today (default: 400)'
         required: false
-        default: '50'
+        default: '400'
       target_india:
-        description: 'India: target emails today (0 = use config default of 50)'
+        description: 'India: target qualified leads today (default: 400)'
         required: false
-        default: '50'
+        default: '400'
       run_global:
         description: 'Run Global outreach?'
         required: false
@@ -83,11 +83,11 @@ jobs:
           echo "  Follow-ups: max 20 | New outreach: min 30"
           echo "=============================================="
           if [ "${{ github.event_name }}" = "schedule" ]; then
-            python global-outreach/scrape_and_outreach.py --target 50 --limit 25 --max-iterations 20
+            python global-outreach/scrape_and_outreach.py --target 400 --limit 150 --max-iterations 100
           else
-            ARGS="--limit ${{ github.event.inputs.limit || '25' }}"
+            ARGS="--limit ${{ github.event.inputs.limit || '150' }}"
             [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
-            [ "${{ github.event.inputs.target_global || '50' }}" != "0" ] && ARGS="$ARGS --target ${{ github.event.inputs.target_global || '50' }}"
+            [ "${{ github.event.inputs.target_global || '400' }}" != "0" ] && ARGS="$ARGS --target ${{ github.event.inputs.target_global || '400' }}"
             echo "Running global with args: $ARGS"
             eval python global-outreach/scrape_and_outreach.py $ARGS
           fi
@@ -131,11 +131,11 @@ jobs:
           echo "  Follow-ups: max 20 | New outreach: min 30"
           echo "=============================================="
           if [ "${{ github.event_name }}" = "schedule" ]; then
-            python india-outreach/scrape_and_outreach_india.py --target 50 --limit 25 --max-iterations 25
+            python india-outreach/scrape_and_outreach_india.py --target 400 --limit 150 --max-iterations 100
           else
-            ARGS="--limit ${{ github.event.inputs.limit || '25' }}"
+            ARGS="--limit ${{ github.event.inputs.limit || '150' }}"
             [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
-            [ "${{ github.event.inputs.target_india || '50' }}" != "0" ] && ARGS="$ARGS --target ${{ github.event.inputs.target_india || '50' }}"
+            [ "${{ github.event.inputs.target_india || '400' }}" != "0" ] && ARGS="$ARGS --target ${{ github.event.inputs.target_india || '400' }}"
             echo "Running india with args: $ARGS"
             eval python india-outreach/scrape_and_outreach_india.py $ARGS
           fi
