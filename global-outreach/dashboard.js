@@ -59,8 +59,8 @@ function switchTab(tabId) {
     
     if (tabId === 'overview') {
         document.getElementById('tab-overview').classList.add('active');
-        pageTitle.innerText    = "Outreach Overview";
-        pageSubtitle.innerText = "Metrics and campaign status across dermatologists and dentists";
+        pageTitle.innerText    = "Global Doctor AI Outreach";
+        pageSubtitle.innerText = "Metrics and campaign status across global doctor practices, dermatologists, and dentists";
         renderOverview();
     } else if (tabId === 'nowebsite') {
         document.getElementById('tab-nowebsite').classList.add('active');

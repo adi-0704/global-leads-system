@@ -197,7 +197,7 @@ function switchTab(tab) {
   document.getElementById("btn-tab-" + tab).classList.add("active");
 
   const titles = {
-    overview: ["India Outreach — Overview", "All medical specialties · 80+ cities · Live tracking"],
+    overview: ["India Doctor AI Outreach", "Metrics and campaign status across Indian doctor clinics, dermatologists, and dentists"],
     nowebsite: ["No Website Leads", "Clinics with zero online presence — opportunity pipeline"],
     campaign: ["Campaign Queue", "Old/broken websites ready for outreach"],
     followup: ["Follow-Up System", "5-day follow-up queue · max 20/day · min 30 new guaranteed"],
