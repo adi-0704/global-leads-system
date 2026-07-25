@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>SoundCare ENT Clinic — Book ENT Consultation Online</title>
+  <meta name="description" content="Expert ENT care for ear, nose and throat conditions. Online booking available. Hearing tests, sinus surgery, tonsil treatment.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root{--primary:#7c3aed;--primary-light:#ede9fe;--primary-mid:#8b5cf6;--accent:#6d28d9;--text:#0f172a;--muted:#64748b;--border:#e2e8f0;--bg:#faf5ff;--white:#ffffff;--warn:#d97706;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Inter',sans-serif;background:var(--white);color:var(--text);overflow-x:hidden;}
+    .topbar{background:var(--primary);color:#fff;padding:8px 20px;display:flex;justify-content:center;gap:24px;font-size:0.78rem;flex-wrap:wrap;}
+    nav{background:var(--white);border-bottom:2px solid var(--primary-light);padding:14px 24px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(124,58,237,0.08);}
+    .nav-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:16px;}
+    .logo{display:flex;align-items:center;gap:10px;}
+    .logo-mark{width:40px;height:40px;background:linear-gradient(135deg,var(--primary-mid),var(--primary));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+    .logo-name{font-family:'Merriweather',serif;font-size:1rem;font-weight:700;color:var(--primary);}
+    .logo-tag{font-size:0.68rem;color:var(--muted);}
+    .nav-right{display:flex;align-items:center;gap:10px;}
+    .nav-badge{background:var(--primary-light);color:var(--primary);padding:8px 14px;border-radius:8px;font-size:0.8rem;font-weight:600;white-space:nowrap;}
+    .nav-book{background:var(--primary);color:#fff;padding:9px 18px;border-radius:8px;font-size:0.82rem;font-weight:700;border:none;cursor:pointer;font-family:inherit;touch-action:manipulation;}
+    .hero{background:linear-gradient(135deg,var(--primary-light) 0%,#fff 65%);padding:60px 20px 70px;}
+    .hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--primary-light);color:var(--primary);padding:6px 14px;border-radius:20px;font-size:0.75rem;font-weight:600;margin-bottom:20px;}
+    .hero h1{font-family:'Merriweather',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;line-height:1.25;margin-bottom:16px;}
+    .hero h1 span{color:var(--primary);}
+    .hero-sub{font-size:clamp(0.92rem,2vw,1.05rem);color:var(--muted);line-height:1.75;margin-bottom:28px;}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+    .btn-primary{background:var(--primary);color:#fff;font-weight:700;font-size:0.95rem;padding:14px 26px;border-radius:10px;border:none;cursor:pointer;font-family:inherit;min-height:48px;touch-action:manipulation;}
+    .btn-primary:hover{background:var(--accent);}
+    .btn-outline{background:#fff;color:var(--primary);font-weight:600;font-size:0.95rem;padding:14px 26px;border-radius:10px;border:2px solid var(--primary);cursor:pointer;font-family:inherit;min-height:48px;touch-action:manipulation;}
+    .btn-outline:hover{background:var(--primary-light);}
+    .hero-card{background:#fff;border-radius:20px;padding:28px;box-shadow:0 12px 40px rgba(124,58,237,0.12);border:1px solid var(--border);}
+    .hero-card-title{font-weight:700;color:var(--primary);margin-bottom:14px;font-size:0.95rem;}
+    .trust-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+    .trust-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+    .trust-icon{width:36px;height:36px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+    .trust-label{font-size:0.85rem;font-weight:600;}.trust-sub{font-size:0.75rem;color:var(--muted);}
+    .stats-bar{background:var(--primary);padding:28px 20px;}
+    .stats-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-around;flex-wrap:wrap;gap:20px;}
+    .stat{text-align:center;}.stat-val{font-size:clamp(1.5rem,4vw,2rem);font-weight:800;color:#fff;}.stat-lbl{font-size:0.75rem;color:rgba(255,255,255,0.75);margin-top:2px;}
+    .section{padding:60px 20px;max-width:1100px;margin:0 auto;}
+    .section-header{text-align:center;margin-bottom:32px;}
+    .section-pill{display:inline-block;background:var(--primary-light);color:var(--primary);padding:5px 14px;border-radius:20px;font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;}
+    .section-title{font-family:'Merriweather',serif;font-size:clamp(1.4rem,3.5vw,2.1rem);font-weight:700;}
+    .section-sub{color:var(--muted);font-size:0.9rem;margin-top:6px;}
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+    .svc-card{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:22px 16px;text-align:center;transition:all 0.2s;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+    .svc-card:hover{border-color:var(--primary-mid);box-shadow:0 8px 24px rgba(124,58,237,0.1);transform:translateY(-3px);}
+    .svc-icon{font-size:2rem;margin-bottom:10px;}.svc-name{font-size:0.88rem;font-weight:700;margin-bottom:5px;}.svc-desc{font-size:0.78rem;color:var(--muted);line-height:1.6;}
+    /* Symptom Checker */
+    .quiz-section{background:var(--bg);padding:60px 20px;}
+    .quiz-inner{max-width:660px;margin:0 auto;}
+    .quiz-card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 8px 28px rgba(124,58,237,0.1);}
+    .quiz-progress{display:flex;gap:8px;margin-bottom:20px;}
+    .prog-dot{flex:1;height:4px;background:var(--border);border-radius:2px;transition:background 0.3s;}.prog-dot.done{background:var(--primary);}
+    .quiz-step{display:none;}.quiz-step.active{display:block;}
+    .quiz-q{font-size:1rem;font-weight:700;margin-bottom:14px;line-height:1.5;}
+    .quiz-options{display:flex;flex-direction:column;gap:10px;}
+    .quiz-opt{background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;cursor:pointer;font-family:inherit;font-size:0.88rem;text-align:left;transition:all 0.15s;min-height:48px;display:flex;align-items:center;gap:8px;touch-action:manipulation;}
+    .quiz-opt:hover,.quiz-opt:active{border-color:var(--primary);background:var(--primary-light);color:var(--primary);font-weight:600;}
+    /* Booking */
+    .booking-section{background:#fff;padding:60px 20px;}
+    .booking-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1.1fr 0.9fr;gap:40px;align-items:start;}
+    .booking-form-card{background:var(--bg);border-radius:16px;padding:28px;border:1.5px solid var(--primary-light);}
+    .form-title{font-weight:800;font-size:1.05rem;margin-bottom:4px;}.form-sub{font-size:0.78rem;color:var(--muted);margin-bottom:18px;}
+    .form-group{margin-bottom:13px;}.form-group label{font-size:0.75rem;color:var(--muted);font-weight:600;display:block;margin-bottom:5px;}
+    .form-group input,.form-group select{width:100%;background:#fff;border:1.5px solid var(--border);border-radius:8px;padding:12px 14px;color:var(--text);font-family:inherit;font-size:16px;outline:none;-webkit-appearance:none;}
+    .form-group input:focus,.form-group select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(124,58,237,0.08);}
+    .btn-book{width:100%;background:var(--primary);color:#fff;font-weight:700;font-size:1rem;padding:15px;border-radius:10px;border:none;cursor:pointer;font-family:inherit;min-height:52px;touch-action:manipulation;}
+    .btn-book:hover{background:var(--accent);}
+    .booking-info-card{background:var(--bg);border-radius:16px;padding:24px;border:1.5px solid var(--primary-light);}
+    .binfo-head{font-weight:700;color:var(--primary);font-size:0.95rem;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+    .binfo-item{display:flex;gap:12px;align-items:flex-start;margin-bottom:13px;}
+    .binfo-icon{width:34px;height:34px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;}
+    .binfo-text strong{font-size:0.84rem;font-weight:700;display:block;}.binfo-text span{font-size:0.76rem;color:var(--muted);}
+    .guarantee-box{background:var(--primary-light);border-radius:8px;padding:12px;margin-top:14px;text-align:center;font-size:0.76rem;color:var(--primary);font-weight:600;}
+    .reviews-section{background:var(--bg);padding:60px 20px;}
+    .reviews-inner{max-width:1100px;margin:0 auto;}
+    .reviews-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:28px;}
+    .review-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px;}
+    .review-stars{color:var(--warn);margin-bottom:8px;font-size:0.9rem;}.review-text{font-size:0.84rem;color:var(--muted);line-height:1.7;margin-bottom:10px;}.review-author{font-size:0.78rem;font-weight:700;color:var(--primary);}
+    footer{background:var(--primary);color:#fff;padding:24px 20px;}
+    .footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+    .footer-brand{font-weight:700;font-size:0.95rem;}.footer-note{font-size:0.72rem;color:rgba(255,255,255,0.65);}
+    .sticky-cta{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;padding:12px 16px 20px;border-top:2px solid var(--primary-light);z-index:90;box-shadow:0 -4px 16px rgba(0,0,0,0.08);}
+    .sticky-cta button{width:100%;background:var(--primary);color:#fff;font-weight:700;font-size:1rem;padding:15px;border-radius:12px;border:none;cursor:pointer;font-family:inherit;min-height:52px;touch-action:manipulation;}
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center;padding:16px;}
+    .modal-overlay.open{display:flex;}
+    .modal-card{background:#fff;border-radius:16px;padding:36px 28px;max-width:400px;width:100%;text-align:center;}
+    .modal-icon{font-size:3rem;margin-bottom:14px;}.modal-title{font-size:1.3rem;font-weight:800;margin-bottom:8px;}.modal-sub{color:var(--muted);font-size:0.9rem;line-height:1.6;margin-bottom:24px;}
+    .btn-modal-close{background:var(--primary);color:#fff;padding:12px 32px;border-radius:10px;border:none;cursor:pointer;font-family:inherit;font-weight:700;min-height:44px;}
+    @media(max-width:900px){.hero-inner{grid-template-columns:1fr;}.hero-card{display:none;}.booking-inner{grid-template-columns:1fr;gap:20px;}}
+    @media(max-width:640px){
+      .topbar{font-size:0.7rem;gap:10px;padding:7px 12px;}
+      nav{padding:12px 16px;}.logo-tag{display:none;}.nav-badge{display:none;}
+      .hero{padding:36px 16px 60px;}.hero-actions{flex-direction:column;}.btn-primary,.btn-outline{width:100%;text-align:center;}
+      .section{padding:44px 16px;}.quiz-section{padding:44px 16px;}.booking-section{padding:44px 16px;}.reviews-section{padding:44px 16px;}
+      .services-grid{grid-template-columns:1fr 1fr;gap:12px;}.svc-card{padding:16px 10px;}
+      .booking-form-card{padding:18px 14px;}.booking-info-card{padding:18px 14px;}
+      .quiz-card{padding:20px 14px;}
+      .sticky-cta{display:block;}body{padding-bottom:84px;}
+      footer{padding:18px 16px;}.footer-inner{flex-direction:column;text-align:center;}
+    }
+    @media(max-width:380px){.services-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <span>🟢 Slots Available Today</span>
+  <span>⏰ Mon–Sat: 9am – 7pm</span>
+  <span>🔬 In-House Audiometry & Endoscopy</span>
+</div>
+<nav>
+  <div class="nav-inner">
+    <div class="logo">
+      <div class="logo-mark">👂</div>
+      <div>
+        <div class="logo-name">SoundCare ENT Clinic</div>
+        <div class="logo-tag">Ear, Nose & Throat Specialist</div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-badge">🟢 Book Online</div>
+      <button class="nav-book" onclick="document.getElementById('book-section').scrollIntoView({behavior:'smooth'})">📅 Book Now</button>
+    </div>
+  </div>
+</nav>
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">✅ MS (ENT) — 12+ Years Specialist Experience</div>
+      <h1>Breathe Better.<br>Hear Clearly. <span>Live Fully.</span></h1>
+      <p class="hero-sub">Expert ENT consultations for sinusitis, hearing loss, tonsils, snoring, and throat conditions — book your specialist slot online in under a minute.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="document.getElementById('book-section').scrollIntoView({behavior:'smooth'})">📅 Book ENT Consultation</button>
+        <button class="btn-outline" onclick="document.getElementById('quiz-section').scrollIntoView({behavior:'smooth'})">🧪 Symptom Checker</button>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-card-title">Why Patients Choose SoundCare</div>
+      <div class="trust-row"><div class="trust-icon">🏆</div><div><div class="trust-label">12+ Years ENT Experience</div><div class="trust-sub">MS (ENT) qualified surgeon</div></div></div>
+      <div class="trust-row"><div class="trust-icon">⭐</div><div><div class="trust-label">4.7 Google Rating</div><div class="trust-sub">5,100+ patients treated</div></div></div>
+      <div class="trust-row"><div class="trust-icon">🔬</div><div><div class="trust-label">In-House Audiometry</div><div class="trust-sub">Hearing tests & endoscopy on-site</div></div></div>
+      <div class="trust-row"><div class="trust-icon">💬</div><div><div class="trust-label">WhatsApp Confirmation</div><div class="trust-sub">Slot confirmed in 2 minutes</div></div></div>
+    </div>
+  </div>
+</div>
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-val">5,100+</div><div class="stat-lbl">Patients Treated</div></div>
+    <div class="stat"><div class="stat-val">⭐ 4.7</div><div class="stat-lbl">Google Rating</div></div>
+    <div class="stat"><div class="stat-val">12+</div><div class="stat-lbl">Years Experience</div></div>
+    <div class="stat"><div class="stat-val">24/7</div><div class="stat-lbl">Online Booking</div></div>
+  </div>
+</div>
+<div class="section">
+  <div class="section-header">
+    <div class="section-pill">Our Services</div>
+    <h2 class="section-title">Expert ENT Care for Every Condition</h2>
+  </div>
+  <div class="services-grid">
+    <div class="svc-card"><div class="svc-icon">👃</div><div class="svc-name">Sinusitis & Polyps</div><div class="svc-desc">Endoscopic sinus surgery and medical management for chronic sinusitis.</div></div>
+    <div class="svc-card"><div class="svc-icon">👂</div><div class="svc-name">Hearing Loss & Tinnitus</div><div class="svc-desc">Audiometry, hearing aid fitting, and microsurgery for hearing restoration.</div></div>
+    <div class="svc-card"><div class="svc-icon">🗣️</div><div class="svc-name">Tonsils & Adenoids</div><div class="svc-desc">Medical and surgical management of tonsillitis in children and adults.</div></div>
+    <div class="svc-card"><div class="svc-icon">😴</div><div class="svc-name">Snoring & Sleep Apnea</div><div class="svc-desc">Sleep study and targeted surgical solutions for obstructive sleep apnea.</div></div>
+    <div class="svc-card"><div class="svc-icon">🧬</div><div class="svc-name">Vertigo & Balance</div><div class="svc-desc">Vestibular rehabilitation for dizziness and inner ear balance disorders.</div></div>
+    <div class="svc-card"><div class="svc-icon">🎤</div><div class="svc-name">Voice & Swallowing</div><div class="svc-desc">Laryngoscopy and voice therapy for hoarseness and swallowing issues.</div></div>
+  </div>
+</div>
+<div class="quiz-section" id="quiz-section">
+  <div class="quiz-inner">
+    <div class="section-header">
+      <div class="section-pill">Symptom Checker</div>
+      <h2 class="section-title">What's Bothering You?</h2>
+      <p class="section-sub">Answer 3 quick questions for an instant recommendation</p>
+    </div>
+    <div class="quiz-card">
+      <div class="quiz-progress">
+        <div class="prog-dot done" id="d0"></div><div class="prog-dot" id="d1"></div><div class="prog-dot" id="d2"></div>
+      </div>
+      <div class="quiz-step active" id="qs0">
+        <div class="quiz-q">1. Which area is causing the most discomfort?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="nextQ(1)">👂 Ear — pain, discharge or hearing loss</button>
+          <button class="quiz-opt" onclick="nextQ(1)">👃 Nose — blockage, congestion or bleeds</button>
+          <button class="quiz-opt" onclick="nextQ(1)">🗣️ Throat — soreness or swallowing difficulty</button>
+          <button class="quiz-opt" onclick="nextQ(1)">😴 Snoring or sleep breathing issues</button>
+        </div>
+      </div>
+      <div class="quiz-step" id="qs1">
+        <div class="quiz-q">2. How long have you had these symptoms?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="nextQ(2)">Less than a week (acute)</button>
+          <button class="quiz-opt" onclick="nextQ(2)">2–4 weeks</button>
+          <button class="quiz-opt" onclick="nextQ(2)">More than a month (chronic)</button>
+          <button class="quiz-opt" onclick="nextQ(2)">Recurring for years — need a permanent fix</button>
+        </div>
+      </div>
+      <div class="quiz-step" id="qs2">
+        <div class="quiz-q">3. Is this affecting your work or sleep?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="showENTResult()">Slightly — manageable for now</button>
+          <button class="quiz-opt" onclick="showENTResult()">Yes — affecting concentration and sleep</button>
+          <button class="quiz-opt" onclick="showENTResult()">Significantly — need urgent attention</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="booking-section" id="book-section">
+  <div style="max-width:960px;margin:0 auto 28px;text-align:center;">
+    <div class="section-pill">Book Appointment</div>
+    <h2 class="section-title" style="margin-top:8px;">Book Your ENT Consultation</h2>
+    <p class="section-sub" style="margin:6px auto 0;">Slot confirmed on WhatsApp within 2 minutes</p>
+  </div>
+  <div class="booking-inner">
+    <div class="booking-form-card">
+      <div class="form-title">📅 Book Your Slot</div>
+      <div class="form-sub">Free booking — no payment required upfront</div>
+      <div class="form-group"><label>Full Name</label><input type="text" placeholder="Your full name" autocomplete="name"></div>
+      <div class="form-group"><label>WhatsApp Number</label><input type="tel" placeholder="+91 XXXXX XXXXX" autocomplete="tel"></div>
+      <div class="form-group"><label>Main Complaint</label>
+        <select>
+          <option>Ear Pain / Discharge</option><option>Hearing Loss / Tinnitus</option>
+          <option>Nasal Blockage / Sinusitis</option><option>Tonsil / Throat Pain</option>
+          <option>Snoring / Sleep Apnea</option><option>Vertigo / Dizziness</option>
+          <option>Voice / Swallowing Issue</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Preferred Time</label>
+        <select><option>Morning (9am – 1pm)</option><option>Evening (4pm – 7pm)</option><option>Weekend Slot</option></select>
+      </div>
+      <button class="btn-book" onclick="document.getElementById('success-modal').classList.add('open')">✅ Confirm Booking</button>
+    </div>
+    <div>
+      <div class="booking-info-card">
+        <div class="binfo-head">What Happens After Booking</div>
+        <div class="binfo-item"><div class="binfo-icon">💬</div><div class="binfo-text"><strong>WhatsApp Confirmation</strong><span>Slot details sent within 2 minutes</span></div></div>
+        <div class="binfo-item"><div class="binfo-icon">🔬</div><div class="binfo-text"><strong>In-House Diagnostics</strong><span>Audiometry & endoscopy available on-site</span></div></div>
+        <div class="binfo-item"><div class="binfo-icon">🏥</div><div class="binfo-text"><strong>Experienced Specialist</strong><span>MS (ENT) qualified with 12+ years experience</span></div></div>
+        <div class="binfo-item"><div class="binfo-icon">💰</div><div class="binfo-text"><strong>Consultation from ₹500</strong><span>Diagnostics priced separately</span></div></div>
+        <div class="guarantee-box">✅ Free Cancellation · No Hidden Charges</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="reviews-section">
+  <div class="reviews-inner">
+    <div class="section-header">
+      <div class="section-pill">Patient Reviews</div>
+      <h2 class="section-title">What Patients Say</h2>
+    </div>
+    <div class="reviews-cards">
+      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"Had chronic sinusitis for 3 years. After endoscopy and targeted treatment here, I can finally breathe normally. Online booking was super easy."</div><div class="review-author">— Vikram S., IT Professional</div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"My son had recurring tonsil infections every month. The doctor handled his case with so much patience. No more infections after treatment!"</div><div class="review-author">— Kavitha P., Parent</div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"The symptom checker helped me understand my issue before visiting. Booked in 30 seconds. Doctor was excellent and very thorough."</div><div class="review-author">— Arun M., Teacher</div></div>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">👂 SoundCare ENT Clinic — Ear, Nose & Throat Specialist</div>
+    <div class="footer-note">Demo site by Aditya (AI & Automation Engineer) — LeadReach System</div>
+  </div>
+</footer>
+<div class="sticky-cta">
+  <button onclick="document.getElementById('book-section').scrollIntoView({behavior:'smooth'})">📅 Book ENT Consultation Now</button>
+</div>
+<div class="modal-overlay" id="success-modal">
+  <div class="modal-card">
+    <div class="modal-icon">✅</div>
+    <div class="modal-title">Booking Confirmed!</div>
+    <div class="modal-sub">WhatsApp confirmation with appointment details arriving within 2 minutes.</div>
+    <button class="btn-modal-close" onclick="document.getElementById('success-modal').classList.remove('open')">Done</button>
+  </div>
+</div>
+<script>
+  let cQ=0;
+  function nextQ(s){document.getElementById(`qs${cQ}`).classList.remove('active');document.getElementById(`d${s}`).classList.add('done');cQ=s;document.getElementById(`qs${s}`).classList.add('active');}
+  function showENTResult(){document.getElementById('qs2').innerHTML=`<div style="text-align:center;padding:12px 0"><div style="font-size:2.5rem;margin-bottom:12px">👂</div><div style="font-size:1rem;font-weight:700;margin-bottom:10px">An ENT specialist consultation is recommended.</div><p style="color:#64748b;margin-bottom:20px;font-size:0.88rem;line-height:1.6">Don't delay — chronic ENT conditions can worsen over time. Book your slot today.</p><button class="btn-primary" onclick="document.getElementById('book-section').scrollIntoView({behavior:'smooth'})">📅 Book ENT Appointment</button></div>`;['d0','d1','d2'].forEach(id=>document.getElementById(id).classList.add('done'));}
+</script>
+</body>
+</html>

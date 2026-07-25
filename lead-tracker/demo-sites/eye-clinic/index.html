@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>ClearVision Eye Care — Book Eye Consultation</title>
+  <meta name="description" content="Expert eye care — LASIK, retinal screenings, cataract surgery. Book your specialist appointment online instantly.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root{--primary:#0369a1;--primary-light:#e0f2fe;--primary-mid:#0ea5e9;--accent:#0284c7;--text:#0f172a;--muted:#64748b;--border:#e2e8f0;--bg:#f8fafc;--white:#ffffff;--success:#059669;--warn:#d97706;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Inter',sans-serif;background:var(--white);color:var(--text);overflow-x:hidden;}
+
+    /* ── TOP BAR ── */
+    .topbar{background:var(--primary);color:#fff;padding:8px 20px;display:flex;justify-content:center;gap:24px;font-size:0.78rem;flex-wrap:wrap;}
+    .topbar span{display:flex;align-items:center;gap:5px;}
+
+    /* ── NAV ── */
+    nav{background:var(--white);border-bottom:2px solid var(--primary-light);padding:14px 24px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(3,105,161,0.08);}
+    .nav-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:16px;}
+    .logo{display:flex;align-items:center;gap:10px;}
+    .logo-mark{width:40px;height:40px;background:linear-gradient(135deg,var(--primary-mid),var(--primary));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+    .logo-text{line-height:1.2;}
+    .logo-name{font-family:'Merriweather',serif;font-size:1rem;font-weight:700;color:var(--primary);}
+    .logo-tag{font-size:0.68rem;color:var(--muted);}
+    .nav-right{display:flex;align-items:center;gap:10px;}
+    .nav-phone{background:var(--primary-light);color:var(--primary);padding:8px 14px;border-radius:8px;font-size:0.8rem;font-weight:600;white-space:nowrap;}
+    .nav-book{background:var(--primary);color:#fff;padding:9px 18px;border-radius:8px;font-size:0.82rem;font-weight:700;border:none;cursor:pointer;font-family:inherit;white-space:nowrap;touch-action:manipulation;}
+
+    /* ── HERO ── */
+    .hero{background:linear-gradient(135deg,var(--primary-light) 0%,#fff 60%);padding:60px 20px 70px;}
+    .hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--primary-light);color:var(--primary);padding:6px 14px;border-radius:20px;font-size:0.75rem;font-weight:600;margin-bottom:20px;box-shadow:0 2px 8px rgba(3,105,161,0.1);}
+    .hero h1{font-family:'Merriweather',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;color:var(--text);line-height:1.25;margin-bottom:16px;}
+    .hero h1 span{color:var(--primary);}
+    .hero-sub{font-size:clamp(0.92rem,2vw,1.05rem);color:var(--muted);line-height:1.75;margin-bottom:28px;}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+    .btn-primary{background:var(--primary);color:#fff;font-weight:700;font-size:0.95rem;padding:14px 26px;border-radius:10px;border:none;cursor:pointer;font-family:inherit;transition:background 0.2s,transform 0.15s;min-height:48px;touch-action:manipulation;}
+    .btn-primary:hover{background:var(--accent);transform:translateY(-1px);}
+    .btn-outline{background:#fff;color:var(--primary);font-weight:600;font-size:0.95rem;padding:14px 26px;border-radius:10px;border:2px solid var(--primary);cursor:pointer;font-family:inherit;min-height:48px;touch-action:manipulation;}
+    .btn-outline:hover{background:var(--primary-light);}
+    .hero-card{background:#fff;border-radius:20px;padding:28px;box-shadow:0 12px 40px rgba(3,105,161,0.12);border:1px solid var(--border);}
+    .hero-card-title{font-weight:700;color:var(--primary);margin-bottom:16px;font-size:0.95rem;}
+    .trust-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+    .trust-row:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+    .trust-icon{width:36px;height:36px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+    .trust-label{font-size:0.85rem;font-weight:600;color:var(--text);}
+    .trust-sub{font-size:0.75rem;color:var(--muted);}
+
+    /* ── STATS ── */
+    .stats-bar{background:var(--primary);padding:28px 20px;}
+    .stats-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-around;flex-wrap:wrap;gap:20px;}
+    .stat{text-align:center;}
+    .stat-val{font-size:clamp(1.5rem,4vw,2rem);font-weight:800;color:#fff;}
+    .stat-lbl{font-size:0.75rem;color:rgba(255,255,255,0.75);margin-top:2px;}
+
+    /* ── SERVICES ── */
+    .section{padding:60px 20px;max-width:1100px;margin:0 auto;}
+    .section-header{text-align:center;margin-bottom:36px;}
+    .section-pill{display:inline-block;background:var(--primary-light);color:var(--primary);padding:5px 14px;border-radius:20px;font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px;}
+    .section-title{font-family:'Merriweather',serif;font-size:clamp(1.4rem,3.5vw,2.1rem);font-weight:700;color:var(--text);}
+    .section-sub{color:var(--muted);font-size:0.92rem;margin-top:8px;}
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;}
+    .svc-card{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:22px 18px;transition:all 0.2s;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+    .svc-card:hover{border-color:var(--primary-mid);box-shadow:0 8px 24px rgba(3,105,161,0.1);transform:translateY(-3px);}
+    .svc-icon{font-size:2rem;margin-bottom:12px;}
+    .svc-name{font-size:0.9rem;font-weight:700;color:var(--text);margin-bottom:6px;}
+    .svc-desc{font-size:0.78rem;color:var(--muted);line-height:1.6;}
+
+    /* ── QUIZ ── */
+    .quiz-section{background:var(--primary-light);padding:60px 20px;}
+    .quiz-inner{max-width:680px;margin:0 auto;}
+    .quiz-card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 8px 28px rgba(3,105,161,0.1);}
+    .quiz-progress{display:flex;gap:8px;margin-bottom:20px;}
+    .prog-dot{flex:1;height:4px;background:var(--border);border-radius:2px;transition:background 0.3s;}
+    .prog-dot.done{background:var(--primary);}
+    .quiz-step{display:none;} .quiz-step.active{display:block;}
+    .quiz-q{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:16px;line-height:1.5;}
+    .quiz-options{display:flex;flex-direction:column;gap:10px;}
+    .quiz-opt{background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;cursor:pointer;font-family:inherit;font-size:0.88rem;color:var(--text);text-align:left;transition:all 0.15s;min-height:48px;display:flex;align-items:center;gap:10px;touch-action:manipulation;}
+    .quiz-opt:hover,.quiz-opt:active{border-color:var(--primary);background:var(--primary-light);color:var(--primary);font-weight:600;}
+
+    /* ── BOOKING ── */
+    .booking-section{background:var(--bg);padding:60px 20px;}
+    .booking-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1.1fr 0.9fr;gap:40px;align-items:start;}
+    .booking-form-card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 8px 28px rgba(0,0,0,0.07);border:1px solid var(--border);}
+    .form-title{font-weight:800;font-size:1.05rem;color:var(--text);margin-bottom:4px;}
+    .form-sub{font-size:0.78rem;color:var(--muted);margin-bottom:20px;}
+    .form-group{margin-bottom:14px;}
+    .form-group label{font-size:0.75rem;color:var(--muted);font-weight:600;display:block;margin-bottom:5px;}
+    .form-group input,.form-group select{width:100%;background:#fff;border:1.5px solid var(--border);border-radius:8px;padding:12px 14px;color:var(--text);font-family:inherit;font-size:16px;outline:none;transition:border-color 0.2s;-webkit-appearance:none;}
+    .form-group input:focus,.form-group select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(3,105,161,0.08);}
+    .btn-book{width:100%;background:var(--primary);color:#fff;font-weight:700;font-size:1rem;padding:15px;border-radius:10px;border:none;cursor:pointer;font-family:inherit;margin-top:6px;min-height:52px;touch-action:manipulation;letter-spacing:0.02em;}
+    .btn-book:hover{background:var(--accent);}
+    .booking-info-card{background:#fff;border-radius:16px;padding:24px;border:1px solid var(--border);}
+    .binfo-head{font-weight:700;color:var(--primary);font-size:1rem;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+    .binfo-item{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;}
+    .binfo-icon{width:34px;height:34px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0;}
+    .binfo-text strong{font-size:0.85rem;font-weight:700;display:block;color:var(--text);}
+    .binfo-text span{font-size:0.78rem;color:var(--muted);}
+    .guarantee-box{background:var(--primary-light);border-radius:10px;padding:14px;margin-top:16px;text-align:center;font-size:0.78rem;color:var(--primary);font-weight:600;}
+
+    /* ── REVIEWS ── */
+    .reviews-section{background:#fff;padding:60px 20px;}
+    .reviews-grid{max-width:1100px;margin:0 auto;}
+    .reviews-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:28px;}
+    .review-card{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:20px;}
+    .review-stars{color:var(--warn);font-size:0.9rem;margin-bottom:8px;}
+    .review-text{font-size:0.85rem;color:var(--muted);line-height:1.7;margin-bottom:12px;}
+    .review-author{font-size:0.78rem;font-weight:700;color:var(--primary);}
+
+    /* ── FOOTER ── */
+    footer{background:var(--primary);color:#fff;padding:24px 20px;}
+    .footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+    .footer-brand{font-weight:700;font-size:0.95rem;}
+    .footer-note{font-size:0.72rem;color:rgba(255,255,255,0.65);}
+
+    /* ── STICKY CTA (mobile) ── */
+    .sticky-cta{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;padding:12px 16px 20px;border-top:2px solid var(--primary-light);z-index:90;box-shadow:0 -4px 16px rgba(0,0,0,0.08);}
+    .sticky-cta button{width:100%;background:var(--primary);color:#fff;font-weight:700;font-size:1rem;padding:15px;border-radius:12px;border:none;cursor:pointer;font-family:inherit;min-height:52px;touch-action:manipulation;}
+
+    /* ── MODAL ── */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center;padding:16px;}
+    .modal-overlay.open{display:flex;}
+    .modal-card{background:#fff;border-radius:16px;padding:36px 28px;max-width:400px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
+    .modal-icon{font-size:3rem;margin-bottom:14px;}
+    .modal-title{font-size:1.3rem;font-weight:800;color:var(--text);margin-bottom:8px;}
+    .modal-sub{color:var(--muted);font-size:0.9rem;line-height:1.6;margin-bottom:24px;}
+    .btn-modal-close{background:var(--primary);color:#fff;padding:12px 32px;border-radius:10px;border:none;cursor:pointer;font-family:inherit;font-weight:700;font-size:0.95rem;min-height:44px;}
+
+    /* ── TABLET ── */
+    @media(max-width:900px){
+      .hero-inner{grid-template-columns:1fr;}
+      .hero-card{display:none;}
+      .booking-inner{grid-template-columns:1fr;gap:20px;}
+      .booking-info-card{order:2;}
+    }
+    /* ── MOBILE ── */
+    @media(max-width:640px){
+      .topbar{gap:12px;font-size:0.72rem;padding:7px 16px;}
+      nav{padding:12px 16px;}
+      .logo-name{font-size:0.9rem;}
+      .logo-tag{display:none;}
+      .nav-phone{display:none;}
+      .hero{padding:40px 16px 60px;}
+      .hero-badge{font-size:0.7rem;}
+      .hero-actions{flex-direction:column;}
+      .btn-primary,.btn-outline{width:100%;text-align:center;}
+      .stats-inner{gap:16px;}
+      .section{padding:44px 16px;}
+      .services-grid{grid-template-columns:1fr 1fr;gap:12px;}
+      .svc-card{padding:16px 12px;}
+      .svc-icon{font-size:1.6rem;}
+      .svc-name{font-size:0.82rem;}
+      .quiz-section{padding:44px 16px;}
+      .quiz-card{padding:20px 16px;}
+      .quiz-q{font-size:0.92rem;}
+      .booking-section{padding:44px 16px;}
+      .booking-form-card{padding:20px 16px;}
+      .reviews-section{padding:44px 16px;}
+      .sticky-cta{display:block;}
+      body{padding-bottom:84px;}
+      footer{padding:20px 16px;}
+      .footer-inner{flex-direction:column;text-align:center;}
+    }
+    @media(max-width:380px){
+      .services-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <span>📍 Serving patients across the city</span>
+  <span>⏰ Mon–Sat: 9am – 7pm</span>
+  <span>💬 WhatsApp booking available</span>
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">
+      <div class="logo-mark">👁️</div>
+      <div class="logo-text">
+        <div class="logo-name">ClearVision Eye Care</div>
+        <div class="logo-tag">Advanced Ophthalmology Centre</div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-phone">📞 Book Now</div>
+      <button class="nav-book" onclick="document.getElementById('book-section').scrollIntoView({behavior:'smooth'})">📅 Appointment</button>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">✅ MS (Ophthalmology) Qualified Specialist</div>
+      <h1>Expert Eye Care<br>You Can <span>Trust.</span></h1>
+      <p class="hero-sub">Advanced vision consultations, LASIK evaluations, cataract surgery, and retinal screenings — book your slot online in 60 seconds. WhatsApp confirmation guaranteed.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="document.getElementById('book-section').scrollIntoView({behavior:'smooth'})">📅 Book Consultation</button>
+        <button class="btn-outline" onclick="document.getElementById('quiz-section').scrollIntoView({behavior:'smooth'})">🔍 Vision Screener</button>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-card-title">Why Patients Choose Us</div>
+      <div class="trust-row"><div class="trust-icon">🏆</div><div><div class="trust-label">15+ Years Experience</div><div class="trust-sub">MS Ophthalmology, senior specialist</div></div></div>
+      <div class="trust-row"><div class="trust-icon">⭐</div><div><div class="trust-label">4.9 Google Rating</div><div class="trust-sub">8,400+ patients treated</div></div></div>
+      <div class="trust-row"><div class="trust-icon">⚡</div><div><div class="trust-label">LASIK from ₹25,000/eye</div><div class="trust-sub">0% EMI available</div></div></div>
+      <div class="trust-row"><div class="trust-icon">💬</div><div><div class="trust-label">WhatsApp Confirmation</div><div class="trust-sub">Slot confirmed within 2 minutes</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-val">8,400+</div><div class="stat-lbl">Patients Treated</div></div>
+    <div class="stat"><div class="stat-val">⭐ 4.9</div><div class="stat-lbl">Google Rating</div></div>
+    <div class="stat"><div class="stat-val">15+</div><div class="stat-lbl">Years Experience</div></div>
+    <div class="stat"><div class="stat-val">24/7</div><div class="stat-lbl">Online Booking</div></div>
+    <div class="stat"><div class="stat-val">2 Min</div><div class="stat-lbl">WhatsApp Confirm</div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-header">
+    <div class="section-pill">Our Services</div>
+    <h2 class="section-title">Complete Eye Care Under One Roof</h2>
+    <p class="section-sub">From routine vision checks to advanced surgical procedures</p>
+  </div>
+  <div class="services-grid">
+    <div class="svc-card"><div class="svc-icon">⚡</div><div class="svc-name">LASIK Surgery</div><div class="svc-desc">Blade-free, permanent vision correction with latest ZEISS technology.</div></div>
+    <div class="svc-card"><div class="svc-icon">🔬</div><div class="svc-name">Retinal Evaluation</div><div class="svc-desc">OCT scan for macular degeneration and diabetic retinopathy.</div></div>
+    <div class="svc-card"><div class="svc-icon">💎</div><div class="svc-name">Cataract Surgery</div><div class="svc-desc">Micro-incision cataract with premium IOL implants.</div></div>
+    <div class="svc-card"><div class="svc-icon">🌊</div><div class="svc-name">Glaucoma Care</div><div class="svc-desc">Tonometry, field testing and long-term treatment planning.</div></div>
+    <div class="svc-card"><div class="svc-icon">👓</div><div class="svc-name">Vision Correction</div><div class="svc-desc">Complete refraction, glasses and contact lens prescription.</div></div>
+    <div class="svc-card"><div class="svc-icon">🧒</div><div class="svc-name">Paediatric Eye Care</div><div class="svc-desc">Squint correction and vision screening for children.</div></div>
+  </div>
+</div>
+
+<div class="quiz-section" id="quiz-section">
+  <div class="quiz-inner">
+    <div class="section-header">
+      <div class="section-pill">Vision Screener</div>
+      <h2 class="section-title">Quick 4-Question Eye Check</h2>
+      <p class="section-sub">Get an instant specialist recommendation</p>
+    </div>
+    <div class="quiz-card">
+      <div class="quiz-progress">
+        <div class="prog-dot done" id="d0"></div>
+        <div class="prog-dot" id="d1"></div>
+        <div class="prog-dot" id="d2"></div>
+        <div class="prog-dot" id="d3"></div>
+      </div>
+      <div class="quiz-step active" id="qs0">
+        <div class="quiz-q">1. What is your main eye concern?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="nextQ(1)">👓 Blurry vision / Need glasses update</button>
+          <button class="quiz-opt" onclick="nextQ(1)">⚡ Considering LASIK or lens surgery</button>
+          <button class="quiz-opt" onclick="nextQ(1)">🔴 Eye pain, redness or irritation</button>
+          <button class="quiz-opt" onclick="nextQ(1)">🌙 Floaters or night vision problems</button>
+        </div>
+      </div>
+      <div class="quiz-step" id="qs1">
+        <div class="quiz-q">2. When was your last eye checkup?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="nextQ(2)">Never — this is my first time</button>
+          <button class="quiz-opt" onclick="nextQ(2)">Within the last 12 months</button>
+          <button class="quiz-opt" onclick="nextQ(2)">1–3 years ago</button>
+          <button class="quiz-opt" onclick="nextQ(2)">More than 3 years ago</button>
+        </div>
+      </div>
+      <div class="quiz-step" id="qs2">
+        <div class="quiz-q">3. How many hours per day do you spend on screens?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="nextQ(3)">📱 6+ hours (heavy screen user)</button>
+          <button class="quiz-opt" onclick="nextQ(3)">💻 3–6 hours</button>
+          <button class="quiz-opt" onclick="nextQ(3)">🌿 Under 3 hours</button>
+        </div>
+      </div>
+      <div class="quiz-step" id="qs3">
+        <div class="quiz-q">4. Any family history of glaucoma or retinal disease?</div>
+        <div class="quiz-options">
+          <button class="quiz-opt" onclick="showResult()">Yes — family history present</button>
+          <button class="quiz-opt" onclick="showResult()">No — not that I know of</button>
+          <button class="quiz-opt" onclick="showResult()">Unsure</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="booking-section" id="book-section">
+  <div style="max-width:1100px;margin:0 auto 28px;text-align:center;">
+    <div class="section-pill">Book Appointment</div>
+    <h2 class="section-title" style="margin-top:8px;">Book Your Eye Consultation Online</h2>
+    <p class="section-sub" style="margin:6px auto 0;max-width:440px;">Fill the form — get WhatsApp confirmation within 2 minutes</p>
+  </div>
+  <div class="booking-inner">
+    <div class="booking-form-card">
+      <div class="form-title">📅 Schedule Your Visit</div>
+      <div class="form-sub">Free slot booking — no payment required upfront</div>
+      <div class="form-group"><label>Patient Name</label><input type="text" placeholder="Your full name" autocomplete="name"></div>
+      <div class="form-group"><label>WhatsApp Number</label><input type="tel" placeholder="+91 XXXXX XXXXX" autocomplete="tel"></div>
+      <div class="form-group"><label>Concern / Purpose</label>
+        <select>
+          <option>Blurry Vision / Glasses Update</option>
+          <option>LASIK Consultation</option>
+          <option>Cataract Evaluation</option>
+          <option>Retinal Check</option>
+          <option>Glaucoma Screening</option>
+          <option>Child Eye Exam</option>
+          <option>Eye Pain / Infection</option>
+          <option>Routine Annual Checkup</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Preferred Time</label>
+        <select>
+          <option>Morning (9am – 12pm)</option>
+          <option>Afternoon (12pm – 4pm)</option>
+          <option>Evening (4pm – 7pm)</option>
+          <option>Weekend Slot</option>
+        </select>
+      </div>
+      <button class="btn-book" onclick="document.getElementById('success-modal').classList.add('open')">✅ Book My Appointment Now</button>
+    </div>
+    <div>
+      <div class="booking-info-card">
+        <div class="binfo-head">What Happens After You Book</div>
+        <div class="binfo-item"><div class="binfo-icon">💬</div><div class="binfo-text"><strong>WhatsApp Confirmation</strong><span>Slot details sent within 2 minutes</span></div></div>
+        <div class="binfo-item"><div class="binfo-icon">📋</div><div class="binfo-text"><strong>Pre-Visit Prep Note</strong><span>What to bring & how to prepare</span></div></div>
+        <div class="binfo-item"><div class="binfo-icon">🔬</div><div class="binfo-text"><strong>On-Site Diagnostics</strong><span>OCT, tonometry & refraction same day</span></div></div>
+        <div class="binfo-item"><div class="binfo-icon">💰</div><div class="binfo-text"><strong>Consultation from ₹400</strong><span>LASIK packages with 0% EMI</span></div></div>
+        <div class="guarantee-box">✅ 100% Free Cancellation · No Hidden Charges</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="reviews-section">
+  <div class="reviews-grid">
+    <div class="section-header">
+      <div class="section-pill">Patient Reviews</div>
+      <h2 class="section-title">What Our Patients Say</h2>
+    </div>
+    <div class="reviews-cards">
+      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"Got LASIK done here 2 years ago. Still 6/6 vision. Pre-op care was extremely thorough and the doctor explained everything clearly."</div><div class="review-author">— Ankit S., Software Engineer</div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"Booked online at 11pm, got WhatsApp confirmation within minutes. Cataract surgery was smooth and recovery was faster than expected."</div><div class="review-author">— Geeta P., Retired Teacher</div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"My 6-year-old had a squint. Such a patient doctor — the treatment worked within 3 months. Extremely impressed with the care."</div><div class="review-author">— Rekha M., Parent</div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">👁️ ClearVision Eye Care — Advanced Ophthalmology Centre</div>
+    <div class="footer-note">Demo site built by Aditya (AI & Automation Engineer) — LeadReach System</div>
+  </div>
+</footer>
+
+<div class="sticky-cta">
+  <button onclick="document.getElementById('book-section').scrollIntoView({behavior:'smooth'})">📅 Book Eye Consultation — Free Today</button>
+</div>
+
+<div class="modal-overlay" id="success-modal">
+  <div class="modal-card">
+    <div class="modal-icon">✅</div>
+    <div class="modal-title">Appointment Booked!</div>
+    <div class="modal-sub">Your eye consultation is confirmed. A WhatsApp message with your slot details will arrive within 2 minutes.</div>
+    <button class="btn-modal-close" onclick="document.getElementById('success-modal').classList.remove('open')">Done</button>
+  </div>
+</div>
+
+<script>
+  let cQ=0;
+  function nextQ(s){document.getElementById(`qs${cQ}`).classList.remove('active');document.getElementById(`d${s}`).classList.add('done');cQ=s;document.getElementById(`qs${s}`).classList.add('active');}
+  function showResult(){document.getElementById('qs3').innerHTML=`<div style="text-align:center;padding:12px 0"><div style="font-size:2.5rem;margin-bottom:12px">👁️</div><div style="font-size:1rem;font-weight:700;color:#0f172a;margin-bottom:10px">A comprehensive eye evaluation is recommended.</div><p style="color:#64748b;margin-bottom:20px;font-size:0.88rem;line-height:1.6">Based on your responses, a detailed eye examination including retinal screening is advised. Book now to secure your slot today.</p><button class="btn-primary" onclick="document.getElementById('book-section').scrollIntoView({behavior:'smooth'})">📅 Book Consultation Now</button></div>`;['d0','d1','d2','d3'].forEach(id=>document.getElementById(id).classList.add('done'));}
+</script>
+</body>
+</html>

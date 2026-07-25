@@ -1,16 +1,12 @@
 /**
- * app.js — Standalone Lead Tracker Dashboard Logic (LeadReach v2)
+ * app.js — LeadReach v3 — Multi-Specialty AI Engineer Outreach Tracker
  * ==========================================================================
  * Features:
- *  - Persistent LocalStorage State
- *  - Responsive Filtering & Sorting (Priority, Niche, City, Stage)
- *  - Pagination (25 rows per page)
- *  - Interactive Pipeline status stages dropdown with automatic colors
- *  - Priority Scoring based on Google ratings & review counts (High, Med, Low)
- *  - Live Chart.js analytics for conversion stages and city distribution
- *  - Customized Settings panel for live WhatsApp outreach templates
- *  - CSV Import & Export capabilities
- *  - Manual Lead creation
+ *  - Personal AI Engineer voice for ALL 8+ doctor specialties + recruitment
+ *  - Full F0 / F1 / F2 follow-up sequence per specialty
+ *  - Smart CSV import with duplicate detection (phone + name matching)
+ *  - Supabase cloud sync + LocalStorage fallback
+ *  - Pagination, Priority scoring, Analytics charts
  * ==========================================================================
  */
 
@@ -29,19 +25,38 @@ const rowsPerPage = 25;
 let pipelineChart = null;
 let cityChart = null;
 
-// ── LocalStorage Keys ──
-const STORAGE_KEY = "LEAD_TRACKER_DATA";
-const TEMPLATE_DENTAL_KEY = "OUTREACH_TEMPLATE_DENTAL";
-const TEMPLATE_DERMA_KEY = "OUTREACH_TEMPLATE_DERMA";
-const TEMPLATE_DENTAL_F1_KEY = "OUTREACH_TEMPLATE_DENTAL_F1";
-const TEMPLATE_DENTAL_F2_KEY = "OUTREACH_TEMPLATE_DENTAL_F2";
-const TEMPLATE_DERMA_F1_KEY = "OUTREACH_TEMPLATE_DERMA_F1";
-const TEMPLATE_DERMA_F2_KEY = "OUTREACH_TEMPLATE_DERMA_F2";
-const TEMPLATE_DENTAL_AUDIT_KEY = "OUTREACH_TEMPLATE_DENTAL_AUDIT";
-const TEMPLATE_DERMA_AUDIT_KEY = "OUTREACH_TEMPLATE_DERMA_AUDIT";
-const SHOW_ANALYTICS_KEY = "SHOW_ANALYTICS_DASH";
-const DB_SUPABASE_URL_KEY = "SUPABASE_DB_URL";
-const DB_SUPABASE_KEY_KEY = "SUPABASE_DB_KEY";
+// ── LocalStorage Keys — all specialties ──────────────────────────────────
+const STORAGE_KEY              = "LEAD_TRACKER_DATA";
+const SHOW_ANALYTICS_KEY       = "SHOW_ANALYTICS_DASH";
+const DB_SUPABASE_URL_KEY      = "SUPABASE_DB_URL";
+const DB_SUPABASE_KEY_KEY      = "SUPABASE_DB_KEY";
+
+// Doctor templates (initial + F1 + F2)
+const TMPL = {
+  dental:      { f0: "TMPL_DENTAL_F0",      f1: "TMPL_DENTAL_F1",      f2: "TMPL_DENTAL_F2"      },
+  derma:       { f0: "TMPL_DERMA_F0",       f1: "TMPL_DERMA_F1",       f2: "TMPL_DERMA_F2"       },
+  eye:         { f0: "TMPL_EYE_F0",         f1: "TMPL_EYE_F1",         f2: "TMPL_EYE_F2"         },
+  pediatrics:  { f0: "TMPL_PEDIA_F0",       f1: "TMPL_PEDIA_F1",       f2: "TMPL_PEDIA_F2"       },
+  ent:         { f0: "TMPL_ENT_F0",         f1: "TMPL_ENT_F1",         f2: "TMPL_ENT_F2"         },
+  ortho:       { f0: "TMPL_ORTHO_F0",       f1: "TMPL_ORTHO_F1",       f2: "TMPL_ORTHO_F2"       },
+  cardio:      { f0: "TMPL_CARDIO_F0",      f1: "TMPL_CARDIO_F1",      f2: "TMPL_CARDIO_F2"      },
+  general:     { f0: "TMPL_GENERAL_F0",     f1: "TMPL_GENERAL_F1",     f2: "TMPL_GENERAL_F2"     },
+  recruitment: { f0: "TMPL_RECRUIT_F0",     f1: "TMPL_RECRUIT_F1",     f2: "TMPL_RECRUIT_F2"     },
+};
+
+// Keep legacy keys pointing to same values for backward compat
+const TEMPLATE_DENTAL_KEY         = TMPL.dental.f0;
+const TEMPLATE_DERMA_KEY          = TMPL.derma.f0;
+const TEMPLATE_DOCTOR_KEY         = TMPL.general.f0;
+const TEMPLATE_RECRUITMENT_KEY    = TMPL.recruitment.f0;
+const TEMPLATE_DENTAL_F1_KEY      = TMPL.dental.f1;
+const TEMPLATE_DENTAL_F2_KEY      = TMPL.dental.f2;
+const TEMPLATE_DERMA_F1_KEY       = TMPL.derma.f1;
+const TEMPLATE_DERMA_F2_KEY       = TMPL.derma.f2;
+const TEMPLATE_RECRUITMENT_F1_KEY = TMPL.recruitment.f1;
+const TEMPLATE_RECRUITMENT_F2_KEY = TMPL.recruitment.f2;
+const TEMPLATE_DENTAL_AUDIT_KEY   = "TMPL_DENTAL_AUDIT";
+const TEMPLATE_DERMA_AUDIT_KEY    = "TMPL_DERMA_AUDIT";
 
 const DEFAULT_SUPABASE_URL = "https://gagkjmoxdsxjgitjxnxi.supabase.co";
 const DEFAULT_SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdhZ2tqbW94ZHN4amdpdGp4bnhpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM4NjIyMTQsImV4cCI6MjA5OTQzODIxNH0.6bhJmTt019kGBbjXnbaSMH4orkF_4hj-P5uO6rp76Ao";
@@ -49,56 +64,337 @@ const DEFAULT_SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzd
 // ── Database Client State ──
 let supabaseClient = null;
 
-// ── Default Pitch Templates ──
-const DEFAULT_DENTAL = `Hey Dr. [Doctor_Name]! 👋 
+// ══════════════════════════════════════════════════════════════════════════
+// DEFAULT WHATSAPP TEMPLATES — Personal AI & Automation Engineer Voice
+// Sender: Aditya (independent AI & automation engineer)
+// All messages include specific [Vercel_Link] + [Audit_Link] per specialty
+// ══════════════════════════════════════════════════════════════════════════
 
-Did you know that 70% of dental patients in [City] book appointments after hours when clinics are closed?
+// ─── 🦷 DENTAL ────────────────────────────────────────────────────────────
+const DEFAULT_DENTAL = `Hey Dr. [Doctor_Name] 👋
 
-We generated a personalized Digital Presence Audit showing how many patient leads [Clinic_Name] is currently missing in [City]:
+I'm Aditya — an independent AI & automation engineer. I build booking & patient flow systems for clinics.
+
+I noticed [Clinic_Name] doesn't have a website yet. I ran a quick Digital Presence Audit — it estimates how many dental patients in [City] you're losing each month to clinics that have online booking:
 👉 [Audit_Link]
 
-We also designed a "Zero-Friction Booking Flow" for your practice (demo styled as "Smile Dental Clinic") to capture these bookings:
-👉 https://smile-dental.vercel.app
+I also built a live demo — a 24/7 dental booking + patient intake flow — specifically for clinics like yours:
+👉 [Vercel_Link]
 
-We can customize this layout with your branding and treatments in under 24 hours. Worth a 2-minute look? 🦷`;
+I can have this live with your branding in under 24 hours. Worth a 2-min look? 🦷`;
 
-const DEFAULT_DERMA = `Hello Dr. [Doctor_Name]! 👋
+const DEFAULT_DENTAL_F1 = `Hey Dr. [Doctor_Name] — Aditya here again 👋
 
-Acne and melasma patients in [City] usually search online for hours before choosing a clinic. 
+Just wanted to make sure you saw the dental booking demo I built:
+👉 [Vercel_Link]
 
-We ran a Digital Presence Audit for [Clinic_Name] detailing your patient acquisition gaps and competitors' visibility:
+And your personalized presence audit (shows the monthly leads you're missing):
 👉 [Audit_Link]
 
-To solve this, we designed a smart patient onboarding flow (demo styled as "ClearSkin") with an interactive 1-minute Skin Quiz:
-👉 https://derm-site.vercel.app
+If you'd like I can walk you through it in 5 minutes over a call — no pressure at all. 🦷`;
 
-We can customize and launch this for you this week. Would you be open to a quick chat? 🌿`;
+const DEFAULT_DENTAL_F2 = `Dr. [Doctor_Name] — last message from me, I promise 🙂
 
-const DEFAULT_DENTAL_F1 = `Hey Dr. [Doctor_Name] — just following up on the zero-friction booking layout: 👉 https://smile-dental.vercel.app. Here is your practice presence audit again in case you missed it: 👉 [Audit_Link]. Let me know if you are free for a quick chat. 📞`;
+I'm setting up dental booking sites for a few clinics in [City] this week. If [Clinic_Name] wants a custom setup, I can prioritize your slot — just say the word.
 
-const DEFAULT_DERMA_F1 = `Hello Dr. [Doctor_Name] — did you get a chance to run through the 5-question Skin Quiz on the demo: 👉 https://derm-site.vercel.app? You can also check your clinic's visibility gaps in our audit report here: 👉 [Audit_Link]. Let me know your thoughts! 🌿`;
+Demo: 👉 [Vercel_Link]
 
-const DEFAULT_DENTAL_F2 = `Dr. [Doctor_Name] — checking in once last time. We're launching dental booking sites in [City] this week and have one slot left for customized branding. Let me know if [Clinic_Name] wants to claim it! 🦷`;
+No commitment — just a quick look and we take it from there. 🦷`;
 
-const DEFAULT_DERMA_F2 = `Dr. [Doctor_Name] — checking in once last time. We're setting up the "ClearSkin" patient acquisition quiz for skin clinics in [City] this week. Let me know if you'd like to test it for [Clinic_Name]! 🌿`;
+// ─── 🌿 DERMATOLOGY ───────────────────────────────────────────────────────
+const DEFAULT_DERMA = `Hey Dr. [Doctor_Name] 👋
 
-const DEFAULT_DENTAL_AUDIT = `Hey Dr. [Doctor_Name]! 👋 
+I'm Aditya — an AI & automation engineer. I build smart patient acquisition systems for skin clinics.
 
-I ran a quick Digital Presence Audit for [Clinic_Name] in [City]. It shows how many monthly search leads you are currently losing to competitors with websites. 
+Acne, pigmentation and skin patients in [City] search online for hours before picking a clinic. Most book from whoever has the most professional-looking web presence.
 
-You can view your personalized audit report here:
+I ran an audit for [Clinic_Name] showing the gap:
 👉 [Audit_Link]
 
-Let me know if you are free for a quick 2-minute call to discuss this! 📞`;
+And built a live skin clinic demo with a 1-minute "Skin Concern Screener" quiz that pre-qualifies patients before they arrive:
+👉 [Vercel_Link]
+
+Can have it customized for your clinic in 24 hours. Worth a quick look? 🌿`;
+
+const DEFAULT_DERMA_F1 = `Hey Dr. [Doctor_Name] — Aditya again 👋
+
+Did you get a chance to try the skin quiz on the demo?
+👉 [Vercel_Link]
+
+It lets patients pre-select their concern (Acne, Melasma, Hair loss) before booking — saves your receptionist time and filters serious patients.
+
+Your clinic audit is here if you haven't seen it:
+👉 [Audit_Link]
+
+Open to a 5-min chat this week? 🌿`;
+
+const DEFAULT_DERMA_F2 = `Dr. [Doctor_Name] — final message from me 🙂
+
+Launching the "ClearSkin" patient acquisition system for a few dermatology clinics in [City] this week.
+
+If [Clinic_Name] wants a spot, I can set it up with your branding:
+👉 [Vercel_Link]
+
+Just one message back and we can start. No pressure. 🌿`;
+
+// ─── 👁️ OPHTHALMOLOGY / EYE ──────────────────────────────────────────────
+const DEFAULT_EYE = `Hey Dr. [Doctor_Name] 👋
+
+I'm Aditya — an AI & automation engineer. I build appointment booking systems for specialty clinics.
+
+Eye patients in [City] searching for LASIK evaluations, retina checks, or vision exams almost always book from clinics they can find online with easy booking.
+
+I ran a quick presence audit for [Clinic_Name]:
+👉 [Audit_Link]
+
+And built a live demo — an Eye Clinic website with a Vision Screening Quiz + instant slot booking:
+👉 [Vercel_Link]
+
+I can customize and launch this for your clinic in under 24 hours. Worth a quick look? 👁️`;
+
+const DEFAULT_EYE_F1 = `Hey Dr. [Doctor_Name] — Aditya here 👋
+
+Following up on the Eye Clinic demo I sent:
+👉 [Vercel_Link]
+
+The vision screening quiz on it pre-qualifies patients (blurry vision, LASIK interest, etc.) before they even book — reduces no-shows significantly.
+
+Your clinic audit:
+👉 [Audit_Link]
+
+Happy to walk you through it in 5 mins if you're free this week. 👁️`;
+
+const DEFAULT_EYE_F2 = `Dr. [Doctor_Name] — last follow-up from my side 🙂
+
+Setting up eye clinic booking systems in [City] this week. If [Clinic_Name] wants to be included, I can start your custom setup now:
+👉 [Vercel_Link]
+
+Just one message and we go. No obligation. 👁️`;
+
+// ─── 👶 PEDIATRICS ────────────────────────────────────────────────────────
+const DEFAULT_PEDIA = `Hey Dr. [Doctor_Name] 👋
+
+I'm Aditya — an AI & automation engineer. I build booking and patient intake systems for child care clinics.
+
+Parents in [City] searching for a trusted pediatrician almost always book from clinics that have online appointment booking and WhatsApp confirmation — especially for vaccinations and urgent visits.
+
+I ran a presence audit for [Clinic_Name]:
+👉 [Audit_Link]
+
+And built a live demo — a pediatric clinic website with vaccination schedule + instant online booking:
+👉 [Vercel_Link]
+
+Can have it live with your branding in 24 hours. Worth a quick 2-min look? 👶`;
+
+const DEFAULT_PEDIA_F1 = `Hey Dr. [Doctor_Name] — Aditya again 👋
+
+Just checking — did you get to see the pediatric clinic demo?
+👉 [Vercel_Link]
+
+It includes a vaccination schedule tracker and WhatsApp slot confirmation for parents — really cuts down on missed appointments.
+
+Your presence audit:
+👉 [Audit_Link]
+
+Happy to demo it live for you this week. 👶`;
+
+const DEFAULT_PEDIA_F2 = `Dr. [Doctor_Name] — last message from me 🙂
+
+Setting up pediatric clinic websites for a few practices in [City] this week. [Clinic_Name] would be a great fit.
+
+Demo:
+👉 [Vercel_Link]
+
+One message and I'll get it started. No pressure. 👶`;
+
+// ─── 👂 ENT ───────────────────────────────────────────────────────────────
+const DEFAULT_ENT = `Hey Dr. [Doctor_Name] 👋
+
+I'm Aditya — an AI & automation engineer. I build patient booking systems for specialty clinics.
+
+ENT patients dealing with sinusitis, tonsils or hearing issues in [City] often search online for weeks before committing to a clinic. Most go with whoever has the cleanest online presence and easiest booking.
+
+I ran a quick presence audit for [Clinic_Name]:
+👉 [Audit_Link]
+
+And built a live ENT clinic demo with a Symptom Checker quiz + instant appointment booking:
+👉 [Vercel_Link]
+
+I can customize this for your clinic in under 24 hours. Worth a look? 👂`;
+
+const DEFAULT_ENT_F1 = `Hey Dr. [Doctor_Name] — Aditya here 👋
+
+Following up on the ENT clinic demo:
+👉 [Vercel_Link]
+
+The symptom checker helps patients self-diagnose (ear vs nose vs throat) and book the right slot — reduces unnecessary walk-ins.
+
+Clinic audit:
+👉 [Audit_Link]
+
+Free for a 5-min call this week? 👂`;
+
+const DEFAULT_ENT_F2 = `Dr. [Doctor_Name] — final follow-up from my side 🙂
+
+Launching ENT clinic booking systems in [City] this week. I can get [Clinic_Name] set up with a custom design:
+👉 [Vercel_Link]
+
+Just reply and I'll send over the details. 👂`;
+
+// ─── 🦴 ORTHOPEDICS ───────────────────────────────────────────────────────
+const DEFAULT_ORTHO = `Hey Dr. [Doctor_Name] 👋
+
+I'm Aditya — an AI & automation engineer. I build booking and patient intake systems for orthopedic clinics.
+
+People with joint pain, back problems or sports injuries in [City] increasingly search online and book from the first clinic that shows up with a professional, mobile-friendly website.
+
+I ran a presence audit for [Clinic_Name]:
+👉 [Audit_Link]
+
+And built a live ortho demo with a Pain Zone Selector + instant appointment booking:
+👉 [Vercel_Link]
+
+I can have this live with your branding in 24 hours. Worth a quick look? 🦴`;
+
+const DEFAULT_ORTHO_F1 = `Hey Dr. [Doctor_Name] — Aditya here 👋
+
+Following up on the ortho clinic demo:
+👉 [Vercel_Link]
+
+The pain zone selector lets patients pick their specific complaint (knee, spine, shoulder, etc.) before booking — helps route them to the right slot.
+
+Presence audit:
+👉 [Audit_Link]
+
+Happy to walk you through it in 5 mins. 🦴`;
+
+const DEFAULT_ORTHO_F2 = `Dr. [Doctor_Name] — last message 🙂
+
+Building ortho clinic websites in [City] this week. If [Clinic_Name] wants a custom slot, I can start immediately:
+👉 [Vercel_Link]
+
+One reply and we're good to go. 🦴`;
+
+// ─── 🫀 CARDIOLOGY ────────────────────────────────────────────────────────
+const DEFAULT_CARDIO = `Hey Dr. [Doctor_Name] 👋
+
+I'm Aditya — an AI & automation engineer. I build smart booking and patient intake systems for cardiology clinics.
+
+Patients in [City] looking for a cardiologist — especially those with chest pain, hypertension or preventive check-ups — almost always book from clinics with online booking and easy access to consultation info.
+
+I ran a presence audit for [Clinic_Name]:
+👉 [Audit_Link]
+
+And built a live cardiology demo with a Heart Risk Score Calculator + instant consultation booking:
+👉 [Vercel_Link]
+
+I can customize and launch this for your clinic in under 24 hours. Worth a quick look? 🫀`;
+
+const DEFAULT_CARDIO_F1 = `Hey Dr. [Doctor_Name] — Aditya again 👋
+
+Following up on the cardiology demo:
+👉 [Vercel_Link]
+
+The heart risk score calculator on it helps patients self-assess their risk and book urgently or for preventive check-ups — great for driving serious consultations.
+
+Clinic audit:
+👉 [Audit_Link]
+
+Free for a quick call this week? 🫀`;
+
+const DEFAULT_CARDIO_F2 = `Dr. [Doctor_Name] — final follow-up from me 🙂
+
+Setting up cardiology clinic websites in [City] this week. I can slot in [Clinic_Name] with a custom design:
+👉 [Vercel_Link]
+
+Just one message and I'll send over the setup details. 🫀`;
+
+// ─── 🏥 GENERAL MEDICAL ───────────────────────────────────────────────────
+const DEFAULT_DOCTOR_GENERAL = `Hey Dr. [Doctor_Name] 👋
+
+I'm Aditya — an AI & automation engineer. I build 24/7 online booking and patient flow systems for clinics.
+
+Patients in [City] searching for a general physician or specialist now expect instant online booking — most won't call. They just move on to the next clinic that has a website.
+
+I ran a presence audit for [Clinic_Name]:
+👉 [Audit_Link]
+
+And built a live demo — an AI-powered clinic website with instant appointment booking and 24/7 patient intake:
+👉 [Vercel_Link]
+
+I can have this live with your branding in under 24 hours. Worth a quick 2-min look? 🏥`;
+
+const DEFAULT_GENERAL_F1 = `Hey Dr. [Doctor_Name] — Aditya here 👋
+
+Following up on the clinic booking demo I sent:
+👉 [Vercel_Link]
+
+It's a simple 24/7 booking page that takes patient name, concern, and slot preference — and sends them a WhatsApp confirmation. Super easy to set up.
+
+Your presence audit:
+👉 [Audit_Link]
+
+Happy to show you how it works in 5 mins. 🏥`;
+
+const DEFAULT_GENERAL_F2 = `Dr. [Doctor_Name] — last message from me 🙂
+
+Setting up online booking systems for clinics in [City] this week. If [Clinic_Name] wants to be included, I can start right away:
+👉 [Vercel_Link]
+
+Just one reply. No pressure. 🏥`;
+
+// ─── 💼 RECRUITMENT AGENCY ────────────────────────────────────────────────
+const DEFAULT_RECRUITMENT = `Hey [Contact_Name] 👋
+
+I'm Aditya — an AI & automation engineer. I build automated candidate screening and ATS integration systems for recruitment agencies.
+
+Most agencies in [City] are still manually screening applicants over the phone, which kills hours every week. I can automate this with a 24/7 AI pre-screening flow on your website.
+
+I ran a quick workflow audit for [Agency_Name] to show where the bottlenecks are:
+👉 [Audit_Link]
+
+And built a live demo — an AI Candidate Screening flow that pre-qualifies applicants before they reach your recruiters:
+👉 [Vercel_Link]
+
+I can connect this to your ATS in under 24 hours. Worth a quick 2-min look? 💼`;
+
+const DEFAULT_RECRUITMENT_F1 = `Hey [Contact_Name] — Aditya here again 👋
+
+Following up on the AI candidate screening demo for [Agency_Name]:
+👉 [Vercel_Link]
+
+It pre-screens candidates for skills, notice period, and salary expectations — so your recruiters only talk to people who are actually a fit.
+
+Workflow audit:
+👉 [Audit_Link]
+
+Free for a 5-min call this week? 💼`;
+
+const DEFAULT_RECRUITMENT_F2 = `[Contact_Name] — last message from my side 🙂
+
+Building AI pre-screening flows for recruitment agencies in [City] this week. I can set up a custom one for [Agency_Name] with your intake questions:
+👉 [Vercel_Link]
+
+Just one message and I'll start. No obligation. 💼`;
+
+// ─── Legacy audit templates ────────────────────────────────────────────────
+const DEFAULT_DENTAL_AUDIT = `Hey Dr. [Doctor_Name]! 👋
+
+I'm Aditya — an AI engineer. I ran a quick Digital Presence Audit for [Clinic_Name] in [City]. It shows how many monthly dental patients you're losing to competitors with websites.
+
+Personalized audit report:
+👉 [Audit_Link]
+
+Free for a 2-minute call to discuss this? 📞`;
 
 const DEFAULT_DERMA_AUDIT = `Hello Dr. [Doctor_Name]! 👋
 
-I ran a quick Digital Presence Audit for [Clinic_Name] in [City] regarding your patient acquisition gaps and competitors' visibility.
+I'm Aditya — an AI engineer. I ran a quick Digital Presence Audit for [Clinic_Name] in [City] — it shows your patient acquisition gaps vs competitors.
 
-You can view your personalized report here:
+Personalized report:
 👉 [Audit_Link]
 
-Would you be open to a quick 2-minute call to discuss this? 🌿`;
+Open to a quick 2-minute call? 🌿`;
 
 // ── Initialization ────────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", async () => {
@@ -601,7 +897,69 @@ function updateRemark(id, value) {
   }
 }
 
-// ── WhatsApp Automator with settings ─────────────────────────────────────
+// ── Vercel Link Resolver — maps specialty → demo site URL ──────────────
+function getVercelLink(lead) {
+  if (lead && lead.vercelUrl && lead.vercelUrl.trim() !== "") {
+    return lead.vercelUrl.trim();
+  }
+  const spec = ((lead && lead.specialty) || "").toLowerCase();
+  if (spec.includes("recruitment") || spec.includes("staffing") || spec.includes("exec") || spec.includes("headhunt")) {
+    return "https://recruitment-ai-assistant.vercel.app/";
+  } else if (spec.includes("dental")) {
+    return "https://smile-dental.vercel.app";
+  } else if (spec.includes("derm") || spec.includes("skin")) {
+    return "https://derm-site.vercel.app";
+  } else if (spec.includes("eye") || spec.includes("ophthalm")) {
+    return "https://clearvision-eye-demo.vercel.app";
+  } else if (spec.includes("pediatr") || spec.includes("child") || spec.includes("pedia")) {
+    return "https://tinysteps-pedia-demo.vercel.app";
+  } else if (spec.includes("ent")) {
+    return "https://soundcare-ent-demo.vercel.app";
+  } else if (spec.includes("ortho")) {
+    return "https://bonestrong-ortho-demo.vercel.app";
+  } else if (spec.includes("cardio")) {
+    return "https://heartguard-cardio-demo.vercel.app";
+  } else {
+    return "https://doctor-ai-assistant.vercel.app/";
+  }
+}
+
+// ── Specialty Key Resolver — maps specialty string → TMPL key group ─────
+function getSpecialtyKey(specialty) {
+  const s = (specialty || "").toLowerCase();
+  if (s.includes("recruitment") || s.includes("staffing") || s.includes("exec") || s.includes("headhunt")) return "recruitment";
+  if (s.includes("dental"))                    return "dental";
+  if (s.includes("derm") || s.includes("skin")) return "derma";
+  if (s.includes("eye") || s.includes("ophthalm")) return "eye";
+  if (s.includes("pediatr") || s.includes("child") || s.includes("pedia")) return "pediatrics";
+  if (s.includes("ent"))                       return "ent";
+  if (s.includes("ortho"))                     return "ortho";
+  if (s.includes("cardio"))                    return "cardio";
+  return "general";
+}
+
+// ── Default template lookup ──────────────────────────────────────────────
+const DEFAULT_TEMPLATES = {
+  dental:      { f0: () => DEFAULT_DENTAL,           f1: () => DEFAULT_DENTAL_F1,        f2: () => DEFAULT_DENTAL_F2        },
+  derma:       { f0: () => DEFAULT_DERMA,            f1: () => DEFAULT_DERMA_F1,         f2: () => DEFAULT_DERMA_F2         },
+  eye:         { f0: () => DEFAULT_EYE,              f1: () => DEFAULT_EYE_F1,           f2: () => DEFAULT_EYE_F2           },
+  pediatrics:  { f0: () => DEFAULT_PEDIA,            f1: () => DEFAULT_PEDIA_F1,         f2: () => DEFAULT_PEDIA_F2         },
+  ent:         { f0: () => DEFAULT_ENT,              f1: () => DEFAULT_ENT_F1,           f2: () => DEFAULT_ENT_F2           },
+  ortho:       { f0: () => DEFAULT_ORTHO,            f1: () => DEFAULT_ORTHO_F1,         f2: () => DEFAULT_ORTHO_F2         },
+  cardio:      { f0: () => DEFAULT_CARDIO,           f1: () => DEFAULT_CARDIO_F1,        f2: () => DEFAULT_CARDIO_F2        },
+  general:     { f0: () => DEFAULT_DOCTOR_GENERAL,   f1: () => DEFAULT_GENERAL_F1,       f2: () => DEFAULT_GENERAL_F2       },
+  recruitment: { f0: () => DEFAULT_RECRUITMENT,      f1: () => DEFAULT_RECRUITMENT_F1,   f2: () => DEFAULT_RECRUITMENT_F2   },
+};
+
+function getTemplate(specialtyKey, stage) {
+  const group = TMPL[specialtyKey] || TMPL.general;
+  const stageKey = stage === 0 ? "f0" : stage === 1 ? "f1" : "f2";
+  const stored = localStorage.getItem(group[stageKey]);
+  if (stored && stored.trim()) return stored;
+  return (DEFAULT_TEMPLATES[specialtyKey] || DEFAULT_TEMPLATES.general)[stageKey]();
+}
+
+// ── WhatsApp Automator — Specialty-specific personal AI engineer pitch ───
 function sendPersonalizedWa(id) {
   const lead = leads.find(l => l.id === id);
   if (!lead || !lead.phone) {
@@ -610,58 +968,42 @@ function sendPersonalizedWa(id) {
   }
 
   let cleanPhone = lead.phone.replace(/[^\d]/g, "");
-  if (cleanPhone.length === 10) {
-    cleanPhone = "91" + cleanPhone;
-  }
+  if (cleanPhone.length === 10) cleanPhone = "91" + cleanPhone;
 
-  const name = lead.name;
-  const city = lead.city;
-  const specialty = lead.specialty;
+  // Extract doctor/contact first name
+  let docName = lead.name;
+  const drMatch = lead.name.match(/Dr\.?\s*([A-Za-z]+)/i);
+  if (drMatch) docName = drMatch[1];
+  else docName = lead.name.split(" ").slice(0, 2).join(" ");
 
-  // Clean doctor prefix to avoid double Dr. Dr. prefixes
-  let docName = name;
-  const drMatch = name.match(/Dr\.\s*([A-Za-z]+)/i);
-  if (drMatch) {
-    docName = drMatch[1]; // Get just the name without the "Dr."
-  } else {
-    docName = name.split(" ").slice(0, 2).join(" ");
-  }
+  // Resolve specialty key and load template
+  const specKey = getSpecialtyKey(lead.specialty);
+  const template = getTemplate(specKey, 0);
 
-  // Load custom templates from localStorage
-  let template = "";
-  if (specialty === "Dermatology") {
-    template = localStorage.getItem(TEMPLATE_DERMA_KEY) || DEFAULT_DERMA;
-  } else {
-    template = localStorage.getItem(TEMPLATE_DENTAL_KEY) || DEFAULT_DENTAL;
-  }
+  const auditLink  = getAuditLink(lead);
+  const vercelLink = getVercelLink(lead);
+  const text = template
+    .replace(/\[Doctor_Name\]/g, docName)
+    .replace(/\[Contact_Name\]/g, docName)
+    .replace(/\[Clinic_Name\]/g, lead.name)
+    .replace(/\[Agency_Name\]/g, lead.name)
+    .replace(/\[City\]/g, lead.city)
+    .replace(/\[Audit_Link\]/g, auditLink)
+    .replace(/\[Vercel_Link\]/g, vercelLink);
 
-  // Inject variables
-  const auditLink = getAuditLink(lead);
-  const text = template.replace(/\[Doctor_Name\]/g, docName)
-                       .replace(/\[Clinic_Name\]/g, name)
-                       .replace(/\[City\]/g, city)
-                       .replace(/\[Audit_Link\]/g, auditLink);
-
-  // Set pipeline state and timestamps
   lead.status = "Demo Sent";
   lead.lastContacted = new Date().toISOString();
-  lead.followupStage = 0; // Stage 0: Initial Pitch Sent
+  lead.followupStage = 0;
   saveToStorage();
   updateStats();
-  
-  // Update table row in UI instantly
+
   const row = document.getElementById(`row-${id}`);
   if (row) {
     const sel = row.querySelector(".status-select");
-    if (sel) {
-      sel.value = "Demo Sent";
-      sel.className = "status-select demo-sent";
-    }
+    if (sel) { sel.value = "Demo Sent"; sel.className = "status-select demo-sent"; }
   }
 
-  // Open in new window
-  const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`;
-  window.open(url, "_blank");
+  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`, "_blank");
 }
 
 // ── Open Dynamic Audit Report ──
@@ -865,62 +1207,42 @@ function renderFollowupTable() {
   });
 }
 
-// ── Send WhatsApp Follow-up ──
+// ── Send WhatsApp Follow-up — Specialty-specific F1 / F2 messages ────────
 function sendFollowupWa(id, nextStage) {
   const lead = leads.find(l => l.id === id);
   if (!lead) return;
 
   let cleanPhone = lead.phone.replace(/[^\d]/g, "");
-  if (cleanPhone.length === 10) {
-    cleanPhone = "91" + cleanPhone;
-  }
+  if (cleanPhone.length === 10) cleanPhone = "91" + cleanPhone;
 
-  const name = lead.name;
-  const city = lead.city;
-  const specialty = lead.specialty;
+  let docName = lead.name;
+  const drMatch = lead.name.match(/Dr\.?\s*([A-Za-z]+)/i);
+  if (drMatch) docName = drMatch[1];
+  else docName = lead.name.split(" ").slice(0, 2).join(" ");
 
-  let docName = name;
-  const drMatch = name.match(/Dr\.\s+[A-Za-z]+/i);
-  if (drMatch) {
-    docName = drMatch[0];
-  } else {
-    docName = name.split(" ").slice(0, 3).join(" ");
-  }
+  // Resolve specialty key and load correct F1 or F2 template
+  const specKey = getSpecialtyKey(lead.specialty);
+  const template = getTemplate(specKey, nextStage);
 
-  // Choose the correct follow-up template
-  let key = "";
-  if (specialty === "Dermatology") {
-    key = nextStage === 1 ? TEMPLATE_DERMA_F1_KEY : TEMPLATE_DERMA_F2_KEY;
-  } else {
-    key = nextStage === 1 ? TEMPLATE_DENTAL_F1_KEY : TEMPLATE_DENTAL_F2_KEY;
-  }
+  const auditLink  = getAuditLink(lead);
+  const vercelLink = getVercelLink(lead);
+  const text = template
+    .replace(/\[Doctor_Name\]/g, docName)
+    .replace(/\[Contact_Name\]/g, docName)
+    .replace(/\[Clinic_Name\]/g, lead.name)
+    .replace(/\[Agency_Name\]/g, lead.name)
+    .replace(/\[City\]/g, lead.city)
+    .replace(/\[Audit_Link\]/g, auditLink)
+    .replace(/\[Vercel_Link\]/g, vercelLink);
 
-  const defaultTemplate = specialty === "Dermatology" 
-    ? (nextStage === 1 ? DEFAULT_DERMA_F1 : DEFAULT_DERMA_F2)
-    : (nextStage === 1 ? DEFAULT_DENTAL_F1 : DEFAULT_DENTAL_F2);
-
-  const template = localStorage.getItem(key) || defaultTemplate;
-
-  // Inject variables
-  const auditLink = getAuditLink(lead);
-  const text = template.replace(/\[Doctor_Name\]/g, docName)
-                       .replace(/\[Clinic_Name\]/g, name)
-                       .replace(/\[City\]/g, city)
-                       .replace(/\[Audit_Link\]/g, auditLink);
-
-  // Update lead stage & contact timestamps
   lead.status = "Follow-up";
   lead.lastContacted = new Date().toISOString();
   lead.followupStage = nextStage;
   saveToStorage();
   updateStats();
-
-  // Rerender follow-up table
   renderFollowupTable();
 
-  // Open WhatsApp Link in a new tab
-  const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`;
-  window.open(url, "_blank");
+  window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`, "_blank");
 }
 
 // ── Time helper ──
@@ -1114,10 +1436,24 @@ function openSettingsModal() {
   document.getElementById("settings-modal").classList.add("open");
   document.getElementById("template-dental").value = localStorage.getItem(TEMPLATE_DENTAL_KEY) || DEFAULT_DENTAL;
   document.getElementById("template-derma").value = localStorage.getItem(TEMPLATE_DERMA_KEY) || DEFAULT_DERMA;
+  if (document.getElementById("template-doctor")) {
+    document.getElementById("template-doctor").value = localStorage.getItem(TEMPLATE_DOCTOR_KEY) || DEFAULT_DOCTOR_GENERAL;
+  }
+  if (document.getElementById("template-recruitment")) {
+    document.getElementById("template-recruitment").value = localStorage.getItem(TEMPLATE_RECRUITMENT_KEY) || DEFAULT_RECRUITMENT;
+  }
+
   document.getElementById("template-dental-f1").value = localStorage.getItem(TEMPLATE_DENTAL_F1_KEY) || DEFAULT_DENTAL_F1;
   document.getElementById("template-derma-f1").value = localStorage.getItem(TEMPLATE_DERMA_F1_KEY) || DEFAULT_DERMA_F1;
+  if (document.getElementById("template-recruitment-f1")) {
+    document.getElementById("template-recruitment-f1").value = localStorage.getItem(TEMPLATE_RECRUITMENT_F1_KEY) || DEFAULT_RECRUITMENT_F1;
+  }
+
   document.getElementById("template-dental-f2").value = localStorage.getItem(TEMPLATE_DENTAL_F2_KEY) || DEFAULT_DENTAL_F2;
   document.getElementById("template-derma-f2").value = localStorage.getItem(TEMPLATE_DERMA_F2_KEY) || DEFAULT_DERMA_F2;
+  if (document.getElementById("template-recruitment-f2")) {
+    document.getElementById("template-recruitment-f2").value = localStorage.getItem(TEMPLATE_RECRUITMENT_F2_KEY) || DEFAULT_RECRUITMENT_F2;
+  }
   
   // Database Config fields
   document.getElementById("db-supabase-url").value = localStorage.getItem(DB_SUPABASE_URL_KEY) || DEFAULT_SUPABASE_URL;
@@ -1152,21 +1488,33 @@ function switchSettingsTab(tabName) {
 async function saveSettings() {
   const dental = document.getElementById("template-dental").value.trim();
   const derma = document.getElementById("template-derma").value.trim();
+  const doctor = document.getElementById("template-doctor") ? document.getElementById("template-doctor").value.trim() : "";
+  const recruitment = document.getElementById("template-recruitment") ? document.getElementById("template-recruitment").value.trim() : "";
+
   const dentalF1 = document.getElementById("template-dental-f1").value.trim();
   const dermaF1 = document.getElementById("template-derma-f1").value.trim();
+  const recruitmentF1 = document.getElementById("template-recruitment-f1") ? document.getElementById("template-recruitment-f1").value.trim() : "";
+
   const dentalF2 = document.getElementById("template-dental-f2").value.trim();
   const dermaF2 = document.getElementById("template-derma-f2").value.trim();
-  
+  const recruitmentF2 = document.getElementById("template-recruitment-f2") ? document.getElementById("template-recruitment-f2").value.trim() : "";
+
   // Database configs
   const dbUrl = document.getElementById("db-supabase-url").value.trim();
   const dbKey = document.getElementById("db-supabase-key").value.trim();
-  
+
   localStorage.setItem(TEMPLATE_DENTAL_KEY, dental);
   localStorage.setItem(TEMPLATE_DERMA_KEY, derma);
+  if (doctor) localStorage.setItem(TEMPLATE_DOCTOR_KEY, doctor);
+  if (recruitment) localStorage.setItem(TEMPLATE_RECRUITMENT_KEY, recruitment);
+
   localStorage.setItem(TEMPLATE_DENTAL_F1_KEY, dentalF1);
   localStorage.setItem(TEMPLATE_DERMA_F1_KEY, dermaF1);
+  if (recruitmentF1) localStorage.setItem(TEMPLATE_RECRUITMENT_F1_KEY, recruitmentF1);
+
   localStorage.setItem(TEMPLATE_DENTAL_F2_KEY, dentalF2);
   localStorage.setItem(TEMPLATE_DERMA_F2_KEY, dermaF2);
+  if (recruitmentF2) localStorage.setItem(TEMPLATE_RECRUITMENT_F2_KEY, recruitmentF2);
   
   // Update database config
   const oldUrl = localStorage.getItem(DB_SUPABASE_URL_KEY) || "";
@@ -1303,117 +1651,242 @@ function updateCharts() {
   }
 }
 
-// ── CSV Import ────────────────────────────────────────────────────────────
+// ── CSV Import — with smart dedup preview modal ──────────────────────────
 function handleCsvImport(e) {
   const file = e.target.files[0];
   if (!file) return;
-
   const reader = new FileReader();
   reader.onload = function(evt) {
-    const text = evt.target.result;
-    parseAndImportCsv(text);
+    parseAndImportCsv(evt.target.result);
   };
   reader.readAsText(file);
 }
 
-function parseAndImportCsv(text) {
+// ── CSV line parser (handles quoted fields with embedded newlines/commas) ─
+function parseCsvRows(text) {
   const rows = [];
-  const lines = text.split(/\r\n|\n/);
-  
-  lines.forEach(line => {
-    if (!line.trim()) return;
-    const cols = [];
-    let insideQuote = false;
-    let entry = "";
-    
-    for (let i = 0; i < line.length; i++) {
-      const char = line[i];
-      if (char === '"') {
-        insideQuote = !insideQuote;
-      } else if (char === ',' && !insideQuote) {
-        cols.push(entry.trim().replace(/^"|"$/g, ''));
-        entry = "";
-      } else {
-        entry += char;
-      }
+  let row = [];
+  let field = "";
+  let inQuote = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    const next = text[i + 1];
+    if (inQuote) {
+      if (ch === '"' && next === '"') { field += '"'; i++; }
+      else if (ch === '"') { inQuote = false; }
+      else { field += ch; }
+    } else {
+      if (ch === '"') { inQuote = true; }
+      else if (ch === ',') { row.push(field.trim()); field = ""; }
+      else if (ch === '\n') {
+        row.push(field.trim()); field = "";
+        if (row.some(c => c)) rows.push(row);
+        row = [];
+      } else if (ch === '\r') { /* skip */ }
+      else { field += ch; }
     }
-    cols.push(entry.trim().replace(/^"|"$/g, ''));
-    rows.push(cols);
-  });
-
-  if (rows.length < 2) {
-    alert("Invalid CSV format or empty file.");
-    return;
   }
+  if (field || row.length) { row.push(field.trim()); if (row.some(c => c)) rows.push(row); }
+  return rows;
+}
 
-  const headers = rows[0].map(h => h.toLowerCase());
-  const idxName = headers.findIndex(h => h.includes("name") || h.includes("title"));
-  const idxPhone = headers.findIndex(h => h.includes("phone") || h.includes("tel"));
-  const idxEmail = headers.findIndex(h => h.includes("email") || h.includes("mail"));
-  const idxAddress = headers.findIndex(h => h.includes("address") || h.includes("addr"));
-  const idxCity = headers.findIndex(h => h.includes("city") || h.includes("loc"));
-  const idxSpecialty = headers.findIndex(h => h.includes("spec") || h.includes("type") || h.includes("niche"));
-  const idxTier = headers.findIndex(h => h.includes("tier"));
-  const idxRating = headers.findIndex(h => h.includes("rating") || h.includes("score"));
-  const idxReviews = headers.findIndex(h => h.includes("reviews") || h.includes("count"));
+// ── Specialty normalizer — maps scraped niche → our standard specialty ───
+function normalizeSpecialty(raw) {
+  const r = (raw || "").toLowerCase();
+  if (r.includes("dental") || r.includes("dentist") || r.includes("orthodont")) return "Dental";
+  if (r.includes("derm") || r.includes("skin") || r.includes("cosmet")) return "Dermatology";
+  if (r.includes("eye") || r.includes("ophthalm") || r.includes("lasik") || r.includes("vision")) return "Ophthalmology";
+  if (r.includes("pediatr") || r.includes("child") || r.includes("pedia") || r.includes("neonat") || r.includes("kids")) return "Pediatrics";
+  if (r.includes("ent") || r.includes("ear") || r.includes("nose") || r.includes("throat") || r.includes("sinus")) return "ENT";
+  if (r.includes("ortho") || r.includes("bone") || r.includes("joint") || r.includes("spine") || r.includes("fracture")) return "Orthopedics";
+  if (r.includes("cardio") || r.includes("heart") || r.includes("ecg") || r.includes("echo")) return "Cardiology";
+  if (r.includes("recruit") || r.includes("staffing") || r.includes("hr ") || r.includes("placement")) return "Tech Recruitment";
+  return "General Medical";
+}
 
-  if (idxName === -1 || idxPhone === -1) {
-    alert("CSV must contain at least 'Name' and 'Phone' headers.");
-    return;
-  }
+let _pendingImportLeads = [];
 
-  let importCount = 0;
-  let dupCount = 0;
+function parseAndImportCsv(text) {
+  const rows = parseCsvRows(text);
+  if (rows.length < 2) { alert("Invalid CSV or empty file."); return; }
+
+  const headers = rows[0].map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ""));
+
+  // Flexible header detection — supports both our format and scraped format
+  const idx = (terms) => headers.findIndex(h => terms.some(t => h.includes(t)));
+  const idxName     = idx(["name", "title", "clinic", "doctor"]);
+  const idxPhone    = idx(["phone", "tel", "mobile", "contact"]);
+  const idxEmail    = idx(["email", "mail"]);
+  const idxAddress  = idx(["address", "addr", "location"]);
+  const idxCity     = idx(["city", "loc"]);
+  const idxSpecialty= idx(["spec", "niche", "type", "keyword", "category"]);
+  const idxTier     = idx(["tier"]);
+  const idxRating   = idx(["rating", "score"]);
+  const idxReviews  = idx(["reviews", "count"]);
+
+  if (idxName === -1) { alert("CSV must have a 'Name' column."); return; }
+
+  // Build existing phone set for fast dedup
+  const existingPhones = new Set(leads.map(l => l.phone.replace(/[^\d]/g, "")));
+  const existingNames  = new Set(leads.map(l => l.name.toLowerCase().trim()));
+
+  // Track phones seen within this CSV to deduplicate within the file too
+  const seenInFile = new Set();
+
   let currentMaxId = leads.length > 0 ? Math.max(...leads.map(l => l.id)) : 0;
+  const toImport = [];
+  const dupPhone = [];
+  const dupName  = [];
+  const noPhone  = [];
 
   for (let i = 1; i < rows.length; i++) {
     const row = rows[i];
-    if (row.length < 2) continue;
+    const name  = (row[idxName]  || "").trim();
+    const rawPhone = (idxPhone !== -1 ? row[idxPhone] : "").trim();
+    const cleanPh = rawPhone.replace(/[^\d]/g, "");
 
-    const name = row[idxName] || "";
-    const phone = row[idxPhone] || "";
-    if (!name || !phone) continue;
+    if (!name) continue;
 
-    const isDup = leads.some(l => l.phone.replace(/[^\d]/g, "") === phone.replace(/[^\d]/g, ""));
-    if (isDup) {
-      dupCount++;
+    // Skip if no phone
+    if (!rawPhone || cleanPh.length < 7) {
+      noPhone.push(name);
+      continue;
+    }
+
+    // Deduplicate within this CSV batch
+    if (seenInFile.has(cleanPh)) {
+      dupPhone.push({ name, phone: rawPhone, reason: "Duplicate within CSV" });
+      continue;
+    }
+    seenInFile.add(cleanPh);
+
+    // Deduplicate against existing DB (by phone)
+    if (existingPhones.has(cleanPh)) {
+      dupPhone.push({ name, phone: rawPhone, reason: "Already in tracker (phone match)" });
+      continue;
+    }
+
+    // Soft-deduplicate by name
+    const nameLower = name.toLowerCase().trim();
+    if (existingNames.has(nameLower)) {
+      dupName.push({ name, phone: rawPhone, reason: "Already in tracker (name match)" });
       continue;
     }
 
     currentMaxId++;
-    
-    // Fallback ratings
-    const rating = idxRating !== -1 ? parseFloat(row[idxRating]) : parseFloat((3.8 + ((currentMaxId * 7) % 12) / 10).toFixed(1));
-    const reviews = idxReviews !== -1 ? parseInt(row[idxReviews]) : ((currentMaxId * 17) % 360 + 5);
+    const rating  = idxRating  !== -1 ? parseFloat(row[idxRating])  || 4.2 : parseFloat((3.8 + ((currentMaxId * 7) % 12) / 10).toFixed(1));
+    const reviews = idxReviews !== -1 ? parseInt(row[idxReviews])   || 20  : ((currentMaxId * 17) % 360 + 5);
+    const rawSpec  = idxSpecialty !== -1 ? row[idxSpecialty] : "";
+    const specialty = normalizeSpecialty(rawSpec);
+    const city      = (idxCity !== -1 ? row[idxCity] : "Imported").trim() || "Imported";
 
-    const newLead = {
+    toImport.push({
       id: currentMaxId,
       name,
-      phone,
-      email: idxEmail !== -1 ? row[idxEmail] : "",
-      address: idxAddress !== -1 ? row[idxAddress] : "",
-      city: idxCity !== -1 ? row[idxCity] : "Imported",
-      tier: idxTier !== -1 ? row[idxTier] : "Metro",
-      specialty: idxSpecialty !== -1 ? row[idxSpecialty] : "Dental",
+      phone: rawPhone,
+      email:   idxEmail   !== -1 ? row[idxEmail]   : "",
+      address: idxAddress !== -1 ? (row[idxAddress] || "").replace(/\n/g, " ") : "",
+      city,
+      tier:    idxTier    !== -1 ? row[idxTier]    : (city.match(/mumbai|delhi|bangalore|chennai|kolkata|pune|hyderabad/i) ? "Metro" : "Tier-2"),
+      specialty,
       status: "New",
-      rating,
-      reviews,
-      remark: "",
-      lastContacted: null,
-      followupStage: 0
-    };
-
-    leads.push(newLead);
-    importCount++;
+      rating, reviews,
+      remark: "", lastContacted: null, followupStage: 0
+    });
+    existingPhones.add(cleanPh);
+    existingNames.add(nameLower);
   }
 
+  // Show dedup preview modal before committing
+  _pendingImportLeads = toImport;
+  showImportPreview(toImport, dupPhone, dupName, noPhone);
+  document.getElementById("csv-file-input").value = "";
+}
+
+function showImportPreview(toImport, dupPhone, dupName, noPhone) {
+  const total    = toImport.length + dupPhone.length + dupName.length + noPhone.length;
+  const dupTotal = dupPhone.length + dupName.length;
+
+  // Build specialty breakdown
+  const specCount = {};
+  toImport.forEach(l => { specCount[l.specialty] = (specCount[l.specialty] || 0) + 1; });
+  const specBreakdown = Object.entries(specCount)
+    .sort((a, b) => b[1] - a[1])
+    .map(([s, c]) => `<span style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.25);border-radius:6px;padding:2px 8px;font-size:0.78rem;">${s}: ${c}</span>`)
+    .join(" ");
+
+  // Detect existing modal or create one
+  let modal = document.getElementById("csv-import-modal");
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "csv-import-modal";
+    modal.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;display:flex;align-items:center;justify-content:center;";
+    document.body.appendChild(modal);
+  }
+
+  modal.innerHTML = `
+    <div style="background:#0d1526;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:36px;max-width:560px;width:92%;max-height:85vh;overflow-y:auto;">
+      <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:6px;">📥 CSV Import Preview</h2>
+      <p style="color:#94a3b8;font-size:0.85rem;margin-bottom:20px;">Review the dedup results before importing into your tracker.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
+        <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);border-radius:10px;padding:14px;text-align:center;">
+          <div style="font-size:1.8rem;font-weight:800;color:#34d399;">${toImport.length}</div>
+          <div style="font-size:0.75rem;color:#94a3b8;">New Leads to Import</div>
+        </div>
+        <div style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.25);border-radius:10px;padding:14px;text-align:center;">
+          <div style="font-size:1.8rem;font-weight:800;color:#f97316;">${dupTotal}</div>
+          <div style="font-size:0.75rem;color:#94a3b8;">Duplicates Removed</div>
+        </div>
+        <div style="background:rgba(100,116,139,0.1);border:1px solid rgba(100,116,139,0.25);border-radius:10px;padding:14px;text-align:center;">
+          <div style="font-size:1.8rem;font-weight:800;color:#94a3b8;">${noPhone.length}</div>
+          <div style="font-size:0.75rem;color:#94a3b8;">No Phone — Skipped</div>
+        </div>
+      </div>
+
+      ${specBreakdown ? `<div style="margin-bottom:16px;"><div style="font-size:0.75rem;color:#94a3b8;font-weight:600;margin-bottom:8px;">SPECIALTY BREAKDOWN</div><div style="display:flex;flex-wrap:wrap;gap:6px;">${specBreakdown}</div></div>` : ""}
+
+      ${dupPhone.length > 0 ? `
+        <div style="background:rgba(249,115,22,0.05);border:1px solid rgba(249,115,22,0.15);border-radius:10px;padding:14px;margin-bottom:14px;">
+          <div style="font-size:0.78rem;font-weight:700;color:#f97316;margin-bottom:8px;">⚠️ REMOVED — PHONE DUPLICATES (${dupPhone.length})</div>
+          <div style="max-height:100px;overflow-y:auto;">
+            ${dupPhone.slice(0, 15).map(d => `<div style="font-size:0.75rem;color:#94a3b8;padding:2px 0;">• ${d.name} — ${d.phone} <span style="color:#64748b;">(${d.reason})</span></div>`).join("")}
+            ${dupPhone.length > 15 ? `<div style="font-size:0.72rem;color:#64748b;">...and ${dupPhone.length - 15} more</div>` : ""}
+          </div>
+        </div>` : ""}
+
+      ${toImport.length === 0 ? `<div style="background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.25);border-radius:10px;padding:14px;text-align:center;color:#f43f5e;font-weight:600;">No new unique leads found to import.</div>` : ""}
+
+      <div style="display:flex;gap:10px;margin-top:20px;">
+        <button onclick="closeImportModal()" style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#f8fafc;padding:12px;border-radius:10px;cursor:pointer;font-family:inherit;font-size:0.95rem;">Cancel</button>
+        ${toImport.length > 0 ? `<button onclick="confirmImport()" style="flex:2;background:linear-gradient(135deg,#8b5cf6,#06b6d4);color:#fff;font-weight:700;padding:12px;border-radius:10px;border:none;cursor:pointer;font-family:inherit;font-size:0.95rem;">✅ Import ${toImport.length} New Leads</button>` : ""}
+      </div>
+    </div>`;
+  modal.style.display = "flex";
+}
+
+function closeImportModal() {
+  const modal = document.getElementById("csv-import-modal");
+  if (modal) modal.style.display = "none";
+  _pendingImportLeads = [];
+}
+
+function confirmImport() {
+  if (!_pendingImportLeads.length) return;
+  leads.push(..._pendingImportLeads);
   saveToStorage();
   populateCityFilter();
   applyFilters();
   updateStats();
-
-  alert(`Import complete!\n📥 Imported: ${importCount} new leads\n⚠️ Skipped duplicates: ${dupCount}`);
-  document.getElementById("csv-file-input").value = ""; 
+  closeImportModal();
+  
+  // Brief success toast
+  const toast = document.createElement("div");
+  toast.style.cssText = "position:fixed;bottom:24px;right:24px;background:linear-gradient(135deg,#8b5cf6,#06b6d4);color:#fff;font-weight:700;padding:14px 24px;border-radius:12px;z-index:9999;font-size:0.95rem;box-shadow:0 8px 24px rgba(0,0,0,0.4);";
+  toast.textContent = `✅ ${_pendingImportLeads.length} leads imported successfully!`;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3500);
+  _pendingImportLeads = [];
 }
 
 // ── CSV Export ────────────────────────────────────────────────────────────

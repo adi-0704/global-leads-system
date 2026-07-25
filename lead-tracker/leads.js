@@ -3126,9 +3126,90 @@ const DEFAULT_LEADS = [
     "name": "The Dentofacial Studio | Pattom",
     "phone": "9447777010",
     "email": "",
-    "address": "\ue0c8 Ground Floor - Menathottam Chambers, Thiruvananthapuram, Kerala 695004",
+    "address": "Ground Floor - Menathottam Chambers, Thiruvananthapuram, Kerala 695004",
     "specialty": "Dental",
     "city": "Thiruvananthapuram",
     "tier": "Tier-2"
+  },
+  {
+    "name": "Dr. Agarwal Eye Hospital & Vision Care Centre",
+    "phone": "9840012345",
+    "email": "contact@agarwaleye.com",
+    "address": "15 Cathedral Road, Chennai, Tamil Nadu 600086",
+    "specialty": "Ophthalmology",
+    "city": "Chennai",
+    "tier": "Metro"
+  },
+  {
+    "name": "Little Stars Pediatric & Child Health Clinic",
+    "phone": "9820123456",
+    "email": "info@littlestarsclinic.in",
+    "address": "Bandra West, Mumbai, Maharashtra 400050",
+    "specialty": "Pediatrics",
+    "city": "Mumbai",
+    "tier": "Metro"
+  },
+  {
+    "name": "Dr. Mehta ENT & Head Neck Care Centre",
+    "phone": "9811223344",
+    "email": "care@mehtaent.org",
+    "address": "Connaught Place, New Delhi, Delhi 110001",
+    "specialty": "ENT",
+    "city": "Delhi",
+    "tier": "Metro"
+  },
+  {
+    "name": "Apex Orthopedic & Spine Surgery Institute",
+    "phone": "9880112233",
+    "email": "appointments@apexortho.co.in",
+    "address": "Indiranagar, Bengaluru, Karnataka 560038",
+    "specialty": "Orthopedics",
+    "city": "Bangalore",
+    "tier": "Metro"
+  },
+  {
+    "name": "Pulse Cardiac Care & Heart Institute",
+    "phone": "9876543210",
+    "email": "contact@pulsecardio.in",
+    "address": "Jubilee Hills, Hyderabad, Telangana 500033",
+    "specialty": "Cardiology",
+    "city": "Hyderabad",
+    "tier": "Metro"
+  },
+  {
+    "name": "Pioneer Consultants - Employment & Placement Services",
+    "phone": "7976338633",
+    "email": "recruitment@thepioneerjobs.com",
+    "address": "Meghnad Saha Sarani, Jaipur, Rajasthan 302001",
+    "specialty": "General Staffing",
+    "city": "Jaipur",
+    "tier": "Tier-2"
+  },
+  {
+    "name": "Ritu Placements & Executive Recruitment",
+    "phone": "9636990059",
+    "email": "rituplacementsjpr@gmail.com",
+    "address": "MI Road, Jaipur, Rajasthan 302001",
+    "specialty": "Executive Search",
+    "city": "Jaipur",
+    "tier": "Tier-2"
+  },
+  {
+    "name": "Pranam Recruiters & HR Solutions",
+    "phone": "9001791441",
+    "email": "contact@pranamrecruiters.com",
+    "address": "Tonk Road, Jaipur, Rajasthan 302015",
+    "specialty": "Tech Recruitment",
+    "city": "Jaipur",
+    "tier": "Tier-2"
+  },
+  {
+    "name": "PrideStaff Tech & Finance Talent Partners",
+    "phone": "9726611617",
+    "email": "outreach@pridestaff.com",
+    "address": "Dallas Tech Center, Dallas, Texas 75201",
+    "specialty": "Healthcare Staffing",
+    "city": "Dallas",
+    "tier": "Global"
   }
 ];

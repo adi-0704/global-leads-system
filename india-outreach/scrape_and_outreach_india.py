@@ -333,22 +333,31 @@ def send_single_email(
 
     templates = config.get("email_templates", {})
     if is_followup:
-        template = templates.get("followup") or templates.get("default") or list(templates.values())[0]
+        template = (
+            templates.get("followup")
+            or templates.get("default")
+            or (list(templates.values()) or [None])[0]
+        )
     elif lead_status == "No Booking/AI":
         template = (
             templates.get(f"{niche}_no_booking_ai")
             or templates.get(niche)
             or templates.get("default")
-            or list(templates.values())[0]
+            or (list(templates.values()) or [None])[0]
         )
     else:
         template = (
             templates.get(niche)
             or templates.get("default")
-            or list(templates.values())[0]
+            or (list(templates.values()) or [None])[0]
         )
 
-    promo_url = config["promo_urls"].get(niche, config["promo_urls"].get("general", ""))
+    if not template:
+        print(f"  [India Outreach] No template for niche '{niche}' — skipping {email}.")
+        return False
+
+    promo_urls = config.get("promo_urls", {})
+    promo_url = promo_urls.get(niche) or promo_urls.get("general") or ""
     subject   = template["subject"].format(business_name=name, city=city or "your city")
     body      = template["body"].format(
         business_name=name,

@@ -1,89 +1,339 @@
 {
-  "smtp_user":     "business.n8n25@gmail.com",
+  "smtp_user": "business.n8n25@gmail.com",
   "smtp_password": "",
-  "smtp_host":     "smtp.gmail.com",
-  "smtp_port":     587,
-  "smtp_from":     "Aditya Tyagi <business.n8n25@gmail.com>",
+  "smtp_host": "smtp.gmail.com",
+  "smtp_port": 587,
+  "smtp_from": "Aditya Tyagi <business.n8n25@gmail.com>",
   "keywords": [
-    { "term": "dentist", "niche": "dental" },
-    { "term": "dental clinic", "niche": "dental" },
-    { "term": "orthodontist", "niche": "dental" },
-    { "term": "dental hospital", "niche": "dental" },
-    { "term": "dermatologist", "niche": "derm" },
-    { "term": "skin clinic", "niche": "derm" },
-    { "term": "general physician", "niche": "general" },
-    { "term": "family doctor", "niche": "general" },
-    { "term": "GP clinic", "niche": "general" },
-    { "term": "multispecialty clinic", "niche": "general" },
-    { "term": "skin and hair clinic", "niche": "derm" },
-    { "term": "cosmetic dermatologist", "niche": "derm" },
-    { "term": "cardiologist", "niche": "cardiology" },
-    { "term": "heart specialist", "niche": "cardiology" },
-    { "term": "cardiac clinic", "niche": "cardiology" },
-    { "term": "orthopedic surgeon", "niche": "orthopedic" },
-    { "term": "orthopedic clinic", "niche": "orthopedic" },
-    { "term": "bone and joint specialist", "niche": "orthopedic" },
-    { "term": "ENT specialist", "niche": "ent" },
-    { "term": "ENT clinic", "niche": "ent" },
-    { "term": "ear nose throat doctor", "niche": "ent" },
-    { "term": "gynecologist", "niche": "gynecology" },
-    { "term": "obstetrics and gynecology clinic", "niche": "gynecology" },
-    { "term": "women's clinic", "niche": "gynecology" },
-    { "term": "maternity clinic", "niche": "gynecology" },
-    { "term": "pediatrician", "niche": "pediatrics" },
-    { "term": "child specialist", "niche": "pediatrics" },
-    { "term": "children clinic", "niche": "pediatrics" },
-    { "term": "ophthalmologist", "niche": "ophthalmology" },
-    { "term": "eye specialist", "niche": "ophthalmology" },
-    { "term": "eye clinic", "niche": "ophthalmology" },
-    { "term": "neurologist", "niche": "neurology" },
-    { "term": "neurology clinic", "niche": "neurology" },
-    { "term": "psychiatrist", "niche": "psychiatry" },
-    { "term": "mental health clinic", "niche": "psychiatry" },
-    { "term": "psychologist clinic", "niche": "psychiatry" },
-    { "term": "urologist", "niche": "urology" },
-    { "term": "urology clinic", "niche": "urology" },
-    { "term": "gastroenterologist", "niche": "gastro" },
-    { "term": "gastro clinic", "niche": "gastro" },
-    { "term": "diabetologist", "niche": "diabetes" },
-    { "term": "diabetes clinic", "niche": "diabetes" },
-    { "term": "endocrinologist", "niche": "diabetes" },
-    { "term": "physiotherapist", "niche": "physio" },
-    { "term": "physiotherapy clinic", "niche": "physio" },
-    { "term": "rehabilitation center", "niche": "physio" },
-    { "term": "homeopathic doctor", "niche": "homeopathy" },
-    { "term": "homeopathy clinic", "niche": "homeopathy" },
-    { "term": "ayurvedic clinic", "niche": "ayurveda" },
-    { "term": "ayurveda hospital", "niche": "ayurveda" },
-    { "term": "panchkarma center", "niche": "ayurveda" },
-    { "term": "hair clinic", "niche": "hair" },
-    { "term": "hair transplant clinic", "niche": "hair" },
-    { "term": "hair loss treatment", "niche": "hair" },
-    { "term": "weight loss clinic", "niche": "weightloss" },
-    { "term": "obesity clinic", "niche": "weightloss" },
-    { "term": "bariatric surgery clinic", "niche": "weightloss" },
-    { "term": "IVF clinic", "niche": "ivf" },
-    { "term": "fertility clinic", "niche": "ivf" },
-    { "term": "infertility treatment", "niche": "ivf" },
-    { "term": "oncologist", "niche": "oncology" },
-    { "term": "cancer clinic", "niche": "oncology" },
-    { "term": "nephrologist", "niche": "nephrology" },
-    { "term": "kidney specialist", "niche": "nephrology" },
-    { "term": "pulmonologist", "niche": "pulmonology" },
-    { "term": "chest specialist", "niche": "pulmonology" },
-    { "term": "rheumatologist", "niche": "rheumatology" },
-    { "term": "plastic surgeon", "niche": "cosmetic" },
-    { "term": "cosmetic surgery clinic", "niche": "cosmetic" },
-    { "term": "laser clinic", "niche": "cosmetic" }
+    {
+      "term": "dentist",
+      "niche": "dental"
+    },
+    {
+      "term": "dental clinic",
+      "niche": "dental"
+    },
+    {
+      "term": "orthodontist",
+      "niche": "dental"
+    },
+    {
+      "term": "dental hospital",
+      "niche": "dental"
+    },
+    {
+      "term": "dermatologist",
+      "niche": "derm"
+    },
+    {
+      "term": "skin clinic",
+      "niche": "derm"
+    },
+    {
+      "term": "general physician",
+      "niche": "general"
+    },
+    {
+      "term": "family doctor",
+      "niche": "general"
+    },
+    {
+      "term": "GP clinic",
+      "niche": "general"
+    },
+    {
+      "term": "multispecialty clinic",
+      "niche": "general"
+    },
+    {
+      "term": "skin and hair clinic",
+      "niche": "derm"
+    },
+    {
+      "term": "cosmetic dermatologist",
+      "niche": "derm"
+    },
+    {
+      "term": "cardiologist",
+      "niche": "cardiology"
+    },
+    {
+      "term": "heart specialist",
+      "niche": "cardiology"
+    },
+    {
+      "term": "cardiac clinic",
+      "niche": "cardiology"
+    },
+    {
+      "term": "orthopedic surgeon",
+      "niche": "orthopedic"
+    },
+    {
+      "term": "orthopedic clinic",
+      "niche": "orthopedic"
+    },
+    {
+      "term": "bone and joint specialist",
+      "niche": "orthopedic"
+    },
+    {
+      "term": "ENT specialist",
+      "niche": "ent"
+    },
+    {
+      "term": "ENT clinic",
+      "niche": "ent"
+    },
+    {
+      "term": "ear nose throat doctor",
+      "niche": "ent"
+    },
+    {
+      "term": "gynecologist",
+      "niche": "gynecology"
+    },
+    {
+      "term": "obstetrics and gynecology clinic",
+      "niche": "gynecology"
+    },
+    {
+      "term": "women's clinic",
+      "niche": "gynecology"
+    },
+    {
+      "term": "maternity clinic",
+      "niche": "gynecology"
+    },
+    {
+      "term": "pediatrician",
+      "niche": "pediatrics"
+    },
+    {
+      "term": "child specialist",
+      "niche": "pediatrics"
+    },
+    {
+      "term": "children clinic",
+      "niche": "pediatrics"
+    },
+    {
+      "term": "ophthalmologist",
+      "niche": "ophthalmology"
+    },
+    {
+      "term": "eye specialist",
+      "niche": "ophthalmology"
+    },
+    {
+      "term": "eye clinic",
+      "niche": "ophthalmology"
+    },
+    {
+      "term": "neurologist",
+      "niche": "neurology"
+    },
+    {
+      "term": "neurology clinic",
+      "niche": "neurology"
+    },
+    {
+      "term": "psychiatrist",
+      "niche": "psychiatry"
+    },
+    {
+      "term": "mental health clinic",
+      "niche": "psychiatry"
+    },
+    {
+      "term": "psychologist clinic",
+      "niche": "psychiatry"
+    },
+    {
+      "term": "urologist",
+      "niche": "urology"
+    },
+    {
+      "term": "urology clinic",
+      "niche": "urology"
+    },
+    {
+      "term": "gastroenterologist",
+      "niche": "gastro"
+    },
+    {
+      "term": "gastro clinic",
+      "niche": "gastro"
+    },
+    {
+      "term": "diabetologist",
+      "niche": "diabetes"
+    },
+    {
+      "term": "diabetes clinic",
+      "niche": "diabetes"
+    },
+    {
+      "term": "endocrinologist",
+      "niche": "diabetes"
+    },
+    {
+      "term": "physiotherapist",
+      "niche": "physio"
+    },
+    {
+      "term": "physiotherapy clinic",
+      "niche": "physio"
+    },
+    {
+      "term": "rehabilitation center",
+      "niche": "physio"
+    },
+    {
+      "term": "homeopathic doctor",
+      "niche": "homeopathy"
+    },
+    {
+      "term": "homeopathy clinic",
+      "niche": "homeopathy"
+    },
+    {
+      "term": "ayurvedic clinic",
+      "niche": "ayurveda"
+    },
+    {
+      "term": "ayurveda hospital",
+      "niche": "ayurveda"
+    },
+    {
+      "term": "panchkarma center",
+      "niche": "ayurveda"
+    },
+    {
+      "term": "hair clinic",
+      "niche": "hair"
+    },
+    {
+      "term": "hair transplant clinic",
+      "niche": "hair"
+    },
+    {
+      "term": "hair loss treatment",
+      "niche": "hair"
+    },
+    {
+      "term": "weight loss clinic",
+      "niche": "weightloss"
+    },
+    {
+      "term": "obesity clinic",
+      "niche": "weightloss"
+    },
+    {
+      "term": "bariatric surgery clinic",
+      "niche": "weightloss"
+    },
+    {
+      "term": "IVF clinic",
+      "niche": "ivf"
+    },
+    {
+      "term": "fertility clinic",
+      "niche": "ivf"
+    },
+    {
+      "term": "infertility treatment",
+      "niche": "ivf"
+    },
+    {
+      "term": "oncologist",
+      "niche": "oncology"
+    },
+    {
+      "term": "cancer clinic",
+      "niche": "oncology"
+    },
+    {
+      "term": "nephrologist",
+      "niche": "nephrology"
+    },
+    {
+      "term": "kidney specialist",
+      "niche": "nephrology"
+    },
+    {
+      "term": "pulmonologist",
+      "niche": "pulmonology"
+    },
+    {
+      "term": "chest specialist",
+      "niche": "pulmonology"
+    },
+    {
+      "term": "rheumatologist",
+      "niche": "rheumatology"
+    },
+    {
+      "term": "plastic surgeon",
+      "niche": "cosmetic"
+    },
+    {
+      "term": "cosmetic surgery clinic",
+      "niche": "cosmetic"
+    },
+    {
+      "term": "laser clinic",
+      "niche": "cosmetic"
+    }
   ],
   "cities": [
-    "London", "Birmingham", "Manchester", "Leeds", "Glasgow", "Liverpool", "Newcastle", "Bristol", "Sheffield",
-    "New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "San Diego", "Dallas",
-    "Toronto", "Montreal", "Vancouver", "Calgary", "Ottawa", "Edmonton", "Winnipeg",
-    "Sydney", "Melbourne", "Brisbane", "Perth", "Adelaide",
-    "Dublin", "Auckland", "Singapore", "Cape Town",
-    "Oxford", "Cambridge", "Bath", "York", "Edinburgh", "Cardiff",
-    "Seattle", "Boston", "Denver", "Miami", "San Francisco", "Austin", "Atlanta"
+    "London",
+    "Birmingham",
+    "Manchester",
+    "Leeds",
+    "Glasgow",
+    "Liverpool",
+    "Newcastle",
+    "Bristol",
+    "Sheffield",
+    "New York",
+    "Los Angeles",
+    "Chicago",
+    "Houston",
+    "Phoenix",
+    "Philadelphia",
+    "San Antonio",
+    "San Diego",
+    "Dallas",
+    "Toronto",
+    "Montreal",
+    "Vancouver",
+    "Calgary",
+    "Ottawa",
+    "Edmonton",
+    "Winnipeg",
+    "Sydney",
+    "Melbourne",
+    "Brisbane",
+    "Perth",
+    "Adelaide",
+    "Dublin",
+    "Auckland",
+    "Singapore",
+    "Cape Town",
+    "Oxford",
+    "Cambridge",
+    "Bath",
+    "York",
+    "Edinburgh",
+    "Cardiff",
+    "Seattle",
+    "Boston",
+    "Denver",
+    "Miami",
+    "San Francisco",
+    "Austin",
+    "Atlanta"
   ],
   "daily_email_limit": 50,
   "followup_max_per_day": 20,
@@ -91,31 +341,31 @@
   "follow_up_days": 5,
   "send_gap_seconds": 60,
   "promo_urls": {
-    "general":     "https://smile-dental.vercel.app/",
-    "dental":      "https://smile-dental.vercel.app/",
-    "derm":        "https://derm-site.vercel.app/",
-    "cardiology":  "https://smile-dental.vercel.app/",
-    "orthopedic":  "https://smile-dental.vercel.app/",
-    "ent":         "https://smile-dental.vercel.app/",
-    "gynecology":  "https://smile-dental.vercel.app/",
-    "pediatrics":  "https://smile-dental.vercel.app/",
+    "general": "https://smile-dental.vercel.app/",
+    "dental": "https://smile-dental.vercel.app/",
+    "derm": "https://derm-site.vercel.app/",
+    "cardiology": "https://smile-dental.vercel.app/",
+    "orthopedic": "https://smile-dental.vercel.app/",
+    "ent": "https://smile-dental.vercel.app/",
+    "gynecology": "https://smile-dental.vercel.app/",
+    "pediatrics": "https://smile-dental.vercel.app/",
     "ophthalmology": "https://smile-dental.vercel.app/",
-    "neurology":   "https://smile-dental.vercel.app/",
-    "psychiatry":  "https://smile-dental.vercel.app/",
-    "urology":     "https://smile-dental.vercel.app/",
-    "gastro":      "https://smile-dental.vercel.app/",
-    "diabetes":    "https://smile-dental.vercel.app/",
-    "physio":      "https://smile-dental.vercel.app/",
-    "homeopathy":  "https://smile-dental.vercel.app/",
-    "ayurveda":    "https://smile-dental.vercel.app/",
-    "hair":        "https://derm-site.vercel.app/",
-    "weightloss":  "https://smile-dental.vercel.app/",
-    "ivf":         "https://smile-dental.vercel.app/",
-    "oncology":    "https://smile-dental.vercel.app/",
-    "nephrology":  "https://smile-dental.vercel.app/",
+    "neurology": "https://smile-dental.vercel.app/",
+    "psychiatry": "https://smile-dental.vercel.app/",
+    "urology": "https://smile-dental.vercel.app/",
+    "gastro": "https://smile-dental.vercel.app/",
+    "diabetes": "https://smile-dental.vercel.app/",
+    "physio": "https://smile-dental.vercel.app/",
+    "homeopathy": "https://smile-dental.vercel.app/",
+    "ayurveda": "https://smile-dental.vercel.app/",
+    "hair": "https://derm-site.vercel.app/",
+    "weightloss": "https://smile-dental.vercel.app/",
+    "ivf": "https://smile-dental.vercel.app/",
+    "oncology": "https://smile-dental.vercel.app/",
+    "nephrology": "https://smile-dental.vercel.app/",
     "pulmonology": "https://smile-dental.vercel.app/",
     "rheumatology": "https://smile-dental.vercel.app/",
-    "cosmetic":    "https://derm-site.vercel.app/"
+    "cosmetic": "https://derm-site.vercel.app/"
   },
   "email_templates": {
     "general": {
@@ -153,6 +403,90 @@
     "followup": {
       "subject": "Re: Website audit for {business_name}",
       "body": "Hi there,\n\nI reached out a few days ago about {business_name}'s website ({website_url}) — just wanted to follow up in case my email got buried.\n\nThe main issues I flagged were:\n\n{website_issues}\n\nA quick fact: clinics in {city} that added online booking and a modern website saw 2-3x more online appointment requests within the first month.\n\nIf you'd like to see exactly what this would look like for {business_name}, I'm happy to share a 2-minute demo — no commitment needed.\n\n{promo_url}\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "ent": {
+      "subject": "Quick website audit for {business_name} — ENT & ear clinic",
+      "body": "Hi there,\n\nI ran a quick audit of {business_name}'s website ({website_url}) and found a few issues affecting how patients find you online:\n\n{website_issues}\n\nPatients in {city} searching for ENT specialists increasingly book online. Clinics with modern, mobile-friendly websites and online booking see significantly more new patient enquiries.\n\nI'm an AI & web automation engineer who builds modern clinic websites with online booking and automated patient reminders.\n\nSee a live example:\n{promo_url}\n\nAre you open to a quick 5-minute call to see how I can help {business_name}?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "ophthalmology": {
+      "subject": "Quick website audit for {business_name} — Eye clinic",
+      "body": "Hi there,\n\nI ran a quick audit of {business_name}'s website ({website_url}) and noticed a few technical gaps:\n\n{website_issues}\n\nPatients in {city} searching for eye specialists often book based on their first website impression. I build mobile-first eye clinic websites with online booking and automated appointment reminders.\n\nSee a live demo:\n{promo_url}\n\nWould you be open to a quick 5-minute call this week?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "orthopedic": {
+      "subject": "Quick website audit for {business_name} — Orthopaedic clinic",
+      "body": "Hi there,\n\nI audited {business_name}'s website ({website_url}) and found some technical issues that may be limiting new patient bookings:\n\n{website_issues}\n\nPatients with bone & joint issues in {city} often search online before choosing a specialist. A modern website with online booking can significantly increase new patient flow.\n\nI build clinic websites with online booking and automated patient reminders for orthopaedic practices.\n\nSee a live demo:\n{promo_url}\n\nAre you open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "pediatrics": {
+      "subject": "Quick website audit for {business_name} — Paediatric clinic",
+      "body": "Hi there,\n\nI reviewed {business_name}'s website ({website_url}) and found some areas that may be affecting how parents find and book appointments:\n\n{website_issues}\n\nParents in {city} searching for paediatricians expect a fast, mobile-friendly website with easy online booking. Clinics that offer this see more new patient registrations.\n\nI build modern paediatric clinic websites with online booking and automated reminders.\n\nSee a live demo:\n{promo_url}\n\nWould you be open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "gynecology": {
+      "subject": "Quick website audit for {business_name} — Women's health clinic",
+      "body": "Hi there,\n\nI ran a quick audit of {business_name}'s website ({website_url}) and found some technical gaps:\n\n{website_issues}\n\nPatients in {city} searching for gynaecology & women's health services increasingly prefer clinics with easy online booking and a professional web presence.\n\nI build modern women's health clinic websites with discreet online booking and automated appointment reminders.\n\nSee a live demo:\n{promo_url}\n\nAre you open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "neurology": {
+      "subject": "Quick website audit for {business_name} — Neurology clinic",
+      "body": "Hi there,\n\nI audited {business_name}'s website ({website_url}) and found a few issues affecting patient experience:\n\n{website_issues}\n\nNeurology patients in {city} often research specialists online before booking. A professional, mobile-optimised website with online booking can significantly increase new patient enquiries.\n\nI build modern clinic websites for neurology practices with automated booking and patient follow-ups.\n\nSee a live demo:\n{promo_url}\n\nWould you be open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "psychiatry": {
+      "subject": "Quick website audit for {business_name} — Mental health clinic",
+      "body": "Hi there,\n\nI ran a quick audit of {business_name}'s website ({website_url}) and found some technical areas to improve:\n\n{website_issues}\n\nPatients seeking mental health support in {city} often take extra time researching their provider online. A calming, professional website with discreet online booking builds trust and increases new patient conversions.\n\nI build mental health clinic websites with secure online booking and automated appointment reminders.\n\nSee a live demo:\n{promo_url}\n\nAre you open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "urology": {
+      "subject": "Quick website audit for {business_name} — Urology clinic",
+      "body": "Hi there,\n\nI audited {business_name}'s website ({website_url}) and found some technical issues:\n\n{website_issues}\n\nPatients in {city} looking for urology specialists prefer discreet, professional online booking. A mobile-friendly clinic website with automated booking can meaningfully increase your new patient flow.\n\nI build modern urology clinic websites with online booking and automated patient reminders.\n\nSee a live demo:\n{promo_url}\n\nWould you be open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "gastro": {
+      "subject": "Quick website audit for {business_name} — Gastroenterology clinic",
+      "body": "Hi there,\n\nI ran a quick audit of {business_name}'s website ({website_url}) and found a few technical gaps:\n\n{website_issues}\n\nGastroenterology patients in {city} often search online before booking consultations. A professional, mobile-optimised website with online booking increases new patient registrations.\n\nI build modern gastroenterology clinic websites with automated appointment booking and patient reminders.\n\nSee a live demo:\n{promo_url}\n\nAre you open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "diabetes": {
+      "subject": "Quick website audit for {business_name} — Diabetes & endocrinology clinic",
+      "body": "Hi there,\n\nI audited {business_name}'s website ({website_url}) and found some issues affecting patient experience:\n\n{website_issues}\n\nDiabetes and endocrinology patients in {city} often need frequent follow-up appointments. A clinic with online booking and automated reminders sees better patient retention and new referrals.\n\nI build modern diabetes clinic websites with automated booking and appointment reminders.\n\nSee a live demo:\n{promo_url}\n\nWould you be open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "physio": {
+      "subject": "Quick website audit for {business_name} — Physiotherapy clinic",
+      "body": "Hi there,\n\nI ran a quick audit of {business_name}'s website ({website_url}) and found some technical gaps:\n\n{website_issues}\n\nPhysiotherapy patients in {city} often need to book recurring sessions. A mobile-friendly website with online booking and automated session reminders significantly reduces no-shows and increases bookings.\n\nI build modern physiotherapy clinic websites with automated booking and patient reminders.\n\nSee a live demo:\n{promo_url}\n\nAre you open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "hair": {
+      "subject": "Quick website audit for {business_name} — Hair clinic",
+      "body": "Hi there,\n\nI audited {business_name}'s website ({website_url}) and found some technical issues:\n\n{website_issues}\n\nHair clinic patients in {city} research and compare clinics online extensively before booking. A modern, professional website with online consultation booking and before/after galleries significantly increases patient enquiries.\n\nI build modern hair clinic websites with automated booking and patient follow-up systems.\n\nSee a live demo:\n{promo_url}\n\nWould you be open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "weightloss": {
+      "subject": "Quick website audit for {business_name} — Weight loss clinic",
+      "body": "Hi there,\n\nI ran a quick audit of {business_name}'s website ({website_url}) and found some areas to improve:\n\n{website_issues}\n\nWeight loss clinic patients in {city} often research multiple providers online before booking a consultation. A professional website with clear before/after results and easy online booking significantly increases conversion.\n\nI build modern weight loss clinic websites with automated booking and patient follow-up systems.\n\nSee a live demo:\n{promo_url}\n\nAre you open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "ivf": {
+      "subject": "Quick website audit for {business_name} — IVF & fertility clinic",
+      "body": "Hi there,\n\nI audited {business_name}'s website ({website_url}) and found some technical gaps that may be affecting patient enquiries:\n\n{website_issues}\n\nCouple seeking IVF & fertility treatment in {city} research providers extensively online. A professional, empathetic website with easy online consultation booking builds trust and increases new enquiries.\n\nI build modern fertility clinic websites with automated booking and sensitive patient communication systems.\n\nSee a live demo:\n{promo_url}\n\nWould you be open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "oncology": {
+      "subject": "Quick website audit for {business_name} — Oncology clinic",
+      "body": "Hi there,\n\nI ran a quick audit of {business_name}'s website ({website_url}) and found some technical issues:\n\n{website_issues}\n\nCancer patients and their families in {city} research oncology specialists online very carefully. A professional, reassuring website with easy appointment scheduling can meaningfully improve patient access to care.\n\nI build modern oncology clinic websites with automated appointment booking and patient communication systems.\n\nSee a live demo:\n{promo_url}\n\nAre you open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "nephrology": {
+      "subject": "Quick website audit for {business_name} — Kidney & nephrology clinic",
+      "body": "Hi there,\n\nI audited {business_name}'s website ({website_url}) and found some technical gaps:\n\n{website_issues}\n\nKidney disease patients in {city} often need regular monitoring appointments. A mobile-friendly website with online booking and automated appointment reminders reduces administrative burden and increases patient retention.\n\nI build modern nephrology clinic websites with automated booking and patient follow-up systems.\n\nSee a live demo:\n{promo_url}\n\nWould you be open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "pulmonology": {
+      "subject": "Quick website audit for {business_name} — Pulmonology & chest clinic",
+      "body": "Hi there,\n\nI ran a quick audit of {business_name}'s website ({website_url}) and found some technical issues:\n\n{website_issues}\n\nRespiratory patients in {city} increasingly search for pulmonologists online. A professional website with mobile-friendly design and online booking significantly increases new patient enquiries.\n\nI build modern pulmonology clinic websites with automated booking and patient reminders.\n\nSee a live demo:\n{promo_url}\n\nAre you open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "rheumatology": {
+      "subject": "Quick website audit for {business_name} — Rheumatology clinic",
+      "body": "Hi there,\n\nI audited {business_name}'s website ({website_url}) and found some technical gaps:\n\n{website_issues}\n\nRheumatology patients in {city} often need regular long-term care. A professional clinic website with online booking and automated appointment reminders significantly improves patient retention and new referrals.\n\nI build modern rheumatology clinic websites with automated booking and patient communication systems.\n\nSee a live demo:\n{promo_url}\n\nWould you be open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "cosmetic": {
+      "subject": "Quick website audit for {business_name} — Cosmetic clinic",
+      "body": "Hi there,\n\nI ran a quick audit of {business_name}'s website ({website_url}) and found some technical issues:\n\n{website_issues}\n\nCosmetic clinic patients in {city} research providers online extensively, comparing results and reviews before booking. A premium, visually impressive website with online consultation booking and before/after galleries significantly increases enquiries.\n\nI build modern cosmetic clinic websites with automated booking and patient follow-up systems.\n\nSee a live demo:\n{promo_url}\n\nAre you open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "homeopathy": {
+      "subject": "Quick website audit for {business_name} — Homeopathy clinic",
+      "body": "Hi there,\n\nI audited {business_name}'s website ({website_url}) and found some technical areas to improve:\n\n{website_issues}\n\nPatients seeking homeopathy in {city} often prefer clinics with a professional online presence and easy appointment booking. A modern website with online booking can significantly increase new patient enquiries.\n\nI build modern homeopathy clinic websites with automated booking and patient communication systems.\n\nSee a live demo:\n{promo_url}\n\nWould you be open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
+    },
+    "ayurveda": {
+      "subject": "Quick website audit for {business_name} — Ayurveda clinic",
+      "body": "Hi there,\n\nI ran a quick audit of {business_name}'s website ({website_url}) and found some technical gaps:\n\n{website_issues}\n\nAyurveda patients in {city} increasingly search online for authentic practitioners. A professional, calming website with online consultation booking significantly increases new patient enquiries and builds trust.\n\nI build modern Ayurveda clinic websites with automated booking and patient communication systems.\n\nSee a live demo:\n{promo_url}\n\nAre you open to a quick 5-minute call?\n\nBest regards,\nAditya Tyagi\nAI & Automation Engineer"
     }
   }
 }

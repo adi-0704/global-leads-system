@@ -29,7 +29,7 @@
         <div class="logo">🚀</div>
         <div class="titles">
           <h1>LeadReach</h1>
-          <p>Dental & Dermatology All-India Outreach & Lead Tracker</p>
+          <p>Multi-Specialty Doctor & Recruitment Lead Tracker (WhatsApp & Vercel Links)</p>
         </div>
       </div>
       <div class="header-actions">
@@ -140,9 +140,23 @@
 
         <div class="select-wrapper">
           <select id="filter-specialty" onchange="applyFilters()">
-            <option value="">All Specialties</option>
-            <option value="Dental">Dental</option>
-            <option value="Dermatology">Dermatology</option>
+            <option value="">All Specialties & Niches</option>
+            <optgroup label="🩺 Doctor Clinics">
+              <option value="Dental">🦷 Dental</option>
+              <option value="Dermatology">🌿 Dermatology & Skin</option>
+              <option value="Ophthalmology">👁️ Eye & Ophthalmology</option>
+              <option value="Pediatrics">👶 Pediatrics & Child Care</option>
+              <option value="ENT">👂 ENT Clinic</option>
+              <option value="Orthopedics">🦴 Orthopedics & Spine</option>
+              <option value="Cardiology">🫀 Cardiology</option>
+              <option value="General Medical">🏥 General Medical</option>
+            </optgroup>
+            <optgroup label="💼 Recruitment Agencies">
+              <option value="Tech Recruitment">💼 Tech Staffing</option>
+              <option value="Executive Search">💼 Executive Search</option>
+              <option value="Healthcare Staffing">💼 Healthcare Staffing</option>
+              <option value="General Staffing">💼 General Staffing</option>
+            </optgroup>
           </select>
         </div>
 
@@ -289,10 +303,24 @@
           </div>
 
           <div class="form-group">
-            <label for="lead-specialty">Specialty *</label>
+            <label for="lead-specialty">Specialty / Niche *</label>
             <select id="lead-specialty" required>
-              <option value="Dental">Dental</option>
-              <option value="Dermatology">Dermatology</option>
+              <optgroup label="🩺 Doctor Clinics">
+                <option value="Dental">🦷 Dental</option>
+                <option value="Dermatology">🌿 Dermatology & Skin</option>
+                <option value="Ophthalmology">👁️ Eye & Ophthalmology</option>
+                <option value="Pediatrics">👶 Pediatrics</option>
+                <option value="ENT">👂 ENT Clinic</option>
+                <option value="Orthopedics">🦴 Orthopedics</option>
+                <option value="Cardiology">🫀 Cardiology</option>
+                <option value="General Medical">🏥 General Medical</option>
+              </optgroup>
+              <optgroup label="💼 Recruitment Agencies">
+                <option value="Tech Recruitment">💼 Tech Staffing</option>
+                <option value="Executive Search">💼 Executive Search</option>
+                <option value="Healthcare Staffing">💼 Healthcare Staffing</option>
+                <option value="General Staffing">💼 General Staffing</option>
+              </optgroup>
             </select>
           </div>
 
@@ -357,11 +385,19 @@
         <div id="settings-section-initial" class="settings-sec-tab">
           <div class="form-group" style="margin-bottom: 12px;">
             <label for="template-dental">🦷 Dental Initial Pitch</label>
-            <textarea id="template-dental" rows="5" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
+            <textarea id="template-dental" rows="4" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="template-derma">🌿 Dermatology Initial Pitch</label>
+            <textarea id="template-derma" rows="4" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="template-doctor">🩺 General Doctor & Other Medical Pitch</label>
+            <textarea id="template-doctor" rows="4" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
           </div>
           <div class="form-group">
-            <label for="template-derma">🌿 Dermatology Initial Pitch</label>
-            <textarea id="template-derma" rows="5" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
+            <label for="template-recruitment">💼 Recruitment & Staffing Agency Pitch</label>
+            <textarea id="template-recruitment" rows="4" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
           </div>
         </div>
 
@@ -369,11 +405,15 @@
         <div id="settings-section-follow1" class="settings-sec-tab hidden">
           <div class="form-group" style="margin-bottom: 12px;">
             <label for="template-dental-f1">🦷 Dental Follow-up 1 (Send after 2 days)</label>
-            <textarea id="template-dental-f1" rows="5" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
+            <textarea id="template-dental-f1" rows="4" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="template-derma-f1">🌿 Dermatology Follow-up 1 (Send after 2 days)</label>
+            <textarea id="template-derma-f1" rows="4" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
           </div>
           <div class="form-group">
-            <label for="template-derma-f1">🌿 Dermatology Follow-up 1 (Send after 2 days)</label>
-            <textarea id="template-derma-f1" rows="5" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
+            <label for="template-recruitment-f1">💼 Recruitment Agency Follow-up 1 (Send after 2 days)</label>
+            <textarea id="template-recruitment-f1" rows="4" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
           </div>
         </div>
 
@@ -381,11 +421,15 @@
         <div id="settings-section-follow2" class="settings-sec-tab hidden">
           <div class="form-group" style="margin-bottom: 12px;">
             <label for="template-dental-f2">🦷 Dental Follow-up 2 (Send after 4 days)</label>
-            <textarea id="template-dental-f2" rows="5" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
+            <textarea id="template-dental-f2" rows="4" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="template-derma-f2">🌿 Dermatology Follow-up 2 (Send after 4 days)</label>
+            <textarea id="template-derma-f2" rows="4" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
           </div>
           <div class="form-group">
-            <label for="template-derma-f2">🌿 Dermatology Follow-up 2 (Send after 4 days)</label>
-            <textarea id="template-derma-f2" rows="5" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
+            <label for="template-recruitment-f2">💼 Recruitment Agency Follow-up 2 (Send after 4 days)</label>
+            <textarea id="template-recruitment-f2" rows="4" style="width: 100%; font-family: inherit; font-size: 0.85rem;"></textarea>
           </div>
         </div>
 

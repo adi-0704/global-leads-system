@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>BoneStrong Orthopedic Clinic — Book Bone & Joint Consultation</title>
+  <meta name="description" content="Expert orthopedic care for joint pain, sports injuries, fractures and spine conditions. Book your specialist appointment online.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root{--primary:#c2410c;--primary-light:#ffedd5;--primary-mid:#ea580c;--accent:#9a3412;--text:#0f172a;--muted:#64748b;--border:#e2e8f0;--bg:#fff7ed;--white:#ffffff;--warn:#d97706;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Inter',sans-serif;background:var(--white);color:var(--text);overflow-x:hidden;}
+    .topbar{background:var(--primary);color:#fff;padding:8px 20px;display:flex;justify-content:center;gap:24px;font-size:0.78rem;flex-wrap:wrap;}
+    nav{background:var(--white);border-bottom:2px solid var(--primary-light);padding:14px 24px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(194,65,12,0.08);}
+    .nav-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:16px;}
+    .logo{display:flex;align-items:center;gap:10px;}
+    .logo-mark{width:40px;height:40px;background:linear-gradient(135deg,var(--primary-mid),var(--primary));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+    .logo-name{font-family:'Merriweather',serif;font-size:1rem;font-weight:700;color:var(--primary);}
+    .logo-tag{font-size:0.68rem;color:var(--muted);}
+    .nav-right{display:flex;align-items:center;gap:10px;}
+    .nav-badge{background:var(--primary-light);color:var(--primary);padding:8px 14px;border-radius:8px;font-size:0.8rem;font-weight:600;white-space:nowrap;}
+    .nav-book{background:var(--primary);color:#fff;padding:9px 18px;border-radius:8px;font-size:0.82rem;font-weight:700;border:none;cursor:pointer;font-family:inherit;touch-action:manipulation;}
+    .hero{background:linear-gradient(135deg,var(--primary-light) 0%,#fff 65%);padding:60px 20px 70px;}
+    .hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--primary-light);color:var(--primary);padding:6px 14px;border-radius:20px;font-size:0.75rem;font-weight:600;margin-bottom:20px;}
+    .hero h1{font-family:'Merriweather',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;line-height:1.25;margin-bottom:16px;}
+    .hero h1 span{color:var(--primary);}
+    .hero-sub{font-size:clamp(0.92rem,2vw,1.05rem);color:var(--muted);line-height:1.75;margin-bottom:28px;}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+    .btn-primary{background:var(--primary);color:#fff;font-weight:700;font-size:0.95rem;padding:14px 26px;border-radius:10px;border:none;cursor:pointer;font-family:inherit;min-height:48px;touch-action:manipulation;}
+    .btn-primary:hover{background:var(--accent);}
+    .btn-outline{background:#fff;color:var(--primary);font-weight:600;font-size:0.95rem;padding:14px 26px;border-radius:10px;border:2px solid var(--primary);cursor:pointer;font-family:inherit;min-height:48px;touch-action:manipulation;}
+    .btn-outline:hover{background:var(--primary-light);}
+    .hero-card{background:#fff;border-radius:20px;padding:28px;box-shadow:0 12px 40px rgba(194,65,12,0.12);border:1px solid var(--border);}
+    .hero-card-title{font-weight:700;color:var(--primary);margin-bottom:14px;font-size:0.95rem;}
+    .trust-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+    .trust-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+    .trust-icon{width:36px;height:36px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+    .trust-label{font-size:0.85rem;font-weight:600;}.trust-sub{font-size:0.75rem;color:var(--muted);}
+    .stats-bar{background:var(--primary);padding:28px 20px;}
+    .stats-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-around;flex-wrap:wrap;gap:20px;}
+    .stat{text-align:center;}.stat-val{font-size:clamp(1.5rem,4vw,2rem);font-weight:800;color:#fff;}.stat-lbl{font-size:0.75rem;color:rgba(255,255,255,0.75);margin-top:2px;}
+    .section{padding:60px 20px;max-width:1100px;margin:0 auto;}
+    .section-header{text-align:center;margin-bottom:32px;}
+    .section-pill{display:inline-block;background:var(--primary-light);color:var(--primary);padding:5px 14px;border-radius:20px;font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;}
+    .section-title{font-family:'Merriweather',serif;font-size:clamp(1.4rem,3.5vw,2.1rem);font-weight:700;}
+    .section-sub{color:var(--muted);font-size:0.9rem;margin-top:6px;}
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+    .svc-card{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:22px 16px;text-align:center;transition:all 0.2s;box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+    .svc-card:hover{border-color:var(--primary-mid);box-shadow:0 8px 24px rgba(194,65,12,0.1);transform:translateY(-3px);}
+    .svc-icon{font-size:2rem;margin-bottom:10px;}.svc-name{font-size:0.88rem;font-weight:700;margin-bottom:5px;}.svc-desc{font-size:0.78rem;color:var(--muted);line-height:1.6;}
+    .pain-section{background:var(--bg);padding:60px 20px;}
+    .pain-inner{max-width:700px;margin:0 auto;}
+    .pain-card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 8px 28px rgba(194,65,12,0.1);}
+    .pain-q{font-size:1rem;font-weight:700;margin-bottom:16px;}
+    .body-map{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0;}
+    .zone{background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:16px 10px;text-align:center;cursor:pointer;transition:all 0.15s;touch-action:manipulation;}
+    .zone:hover,.zone.active{border-color:var(--primary);background:var(--primary-light);color:var(--primary);}
+    .zone-icon{font-size:1.5rem;display:block;margin-bottom:6px;}
+    .zone-label{font-size:0.78rem;font-weight:600;}
+    .zone-result{margin-top:20px;display:none;}
+    .booking-section{background:#fff;padding:60px 20px;}
+    .booking-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1.1fr 0.9fr;gap:40px;align-items:start;}
+    .booking-form-card{background:var(--bg);border-radius:16px;padding:28px;border:1.5px solid var(--primary-light);}
+    .form-title{font-weight:800;font-size:1.05rem;margin-bottom:4px;}.form-sub{font-size:0.78rem;color:var(--muted);margin-bottom:18px;}
+    .form-group{margin-bottom:13px;}.form-group label{font-size:0.75rem;color:var(--muted);font-weight:600;display:block;margin-bottom:5px;}
+    .form-group input,.form-group select{width:100%;background:#fff;border:1.5px solid var(--border);border-radius:8px;padding:12px 14px;color:var(--text);font-family:inherit;font-size:16px;outline:none;-webkit-appearance:none;}
+    .form-group input:focus,.form-group select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(194,65,12,0.08);}
+    .btn-book{width:100%;background:var(--primary);color:#fff;font-weight:700;font-size:1rem;padding:15px;border-radius:10px;border:none;cursor:pointer;font-family:inherit;min-height:52px;touch-action:manipulation;}
+    .btn-book:hover{background:var(--accent);}
+    .booking-info-card{background:var(--bg);border-radius:16px;padding:24px;border:1.5px solid var(--primary-light);}
+    .binfo-head{font-weight:700;color:var(--primary);font-size:0.95rem;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+    .binfo-item{display:flex;gap:12px;align-items:flex-start;margin-bottom:13px;}
+    .binfo-icon{width:34px;height:34px;background:var(--primary-light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;}
+    .binfo-text strong{font-size:0.84rem;font-weight:700;display:block;}.binfo-text span{font-size:0.76rem;color:var(--muted);}
+    .guarantee-box{background:var(--primary-light);border-radius:8px;padding:12px;margin-top:14px;text-align:center;font-size:0.76rem;color:var(--primary);font-weight:600;}
+    .reviews-section{background:var(--bg);padding:60px 20px;}
+    .reviews-inner{max-width:1100px;margin:0 auto;}
+    .reviews-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:28px;}
+    .review-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px;}
+    .review-stars{color:var(--warn);margin-bottom:8px;font-size:0.9rem;}.review-text{font-size:0.84rem;color:var(--muted);line-height:1.7;margin-bottom:10px;}.review-author{font-size:0.78rem;font-weight:700;color:var(--primary);}
+    footer{background:var(--primary);color:#fff;padding:24px 20px;}
+    .footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+    .footer-brand{font-weight:700;font-size:0.95rem;}.footer-note{font-size:0.72rem;color:rgba(255,255,255,0.65);}
+    .sticky-cta{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;padding:12px 16px 20px;border-top:2px solid var(--primary-light);z-index:90;box-shadow:0 -4px 16px rgba(0,0,0,0.08);}
+    .sticky-cta button{width:100%;background:var(--primary);color:#fff;font-weight:700;font-size:1rem;padding:15px;border-radius:12px;border:none;cursor:pointer;font-family:inherit;min-height:52px;touch-action:manipulation;}
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center;padding:16px;}
+    .modal-overlay.open{display:flex;}
+    .modal-card{background:#fff;border-radius:16px;padding:36px 28px;max-width:400px;width:100%;text-align:center;}
+    .modal-icon{font-size:3rem;margin-bottom:14px;}.modal-title{font-size:1.3rem;font-weight:800;margin-bottom:8px;}.modal-sub{color:var(--muted);font-size:0.9rem;line-height:1.6;margin-bottom:24px;}
+    .btn-modal-close{background:var(--primary);color:#fff;padding:12px 32px;border-radius:10px;border:none;cursor:pointer;font-family:inherit;font-weight:700;min-height:44px;}
+    @media(max-width:900px){.hero-inner{grid-template-columns:1fr;}.hero-card{display:none;}.booking-inner{grid-template-columns:1fr;gap:20px;}}
+    @media(max-width:640px){
+      .topbar{font-size:0.7rem;gap:10px;padding:7px 12px;}
+      nav{padding:12px 16px;}.logo-tag{display:none;}.nav-badge{display:none;}
+      .hero{padding:36px 16px 60px;}.hero-actions{flex-direction:column;}.btn-primary,.btn-outline{width:100%;text-align:center;}
+      .section{padding:44px 16px;}.pain-section{padding:44px 16px;}.booking-section{padding:44px 16px;}.reviews-section{padding:44px 16px;}
+      .services-grid{grid-template-columns:1fr 1fr;gap:12px;}.svc-card{padding:16px 10px;}
+      .body-map{grid-template-columns:repeat(2,1fr);}
+      .pain-card{padding:20px 14px;}
+      .booking-form-card{padding:18px 14px;}.booking-info-card{padding:18px 14px;}
+      .sticky-cta{display:block;}body{padding-bottom:84px;}
+      footer{padding:18px 16px;}.footer-inner{flex-direction:column;text-align:center;}
+    }
+    @media(max-width:380px){.services-grid{grid-template-columns:1fr;}.body-map{grid-template-columns:1fr 1fr;}}
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <span>🟢 Same-Day Emergency Slots</span>
+  <span>⏰ Mon–Sat: 9am – 7pm</span>
+  <span>🔬 On-Site X-Ray & MRI Referral</span>
+</div>
+<nav>
+  <div class="nav-inner">
+    <div class="logo">
+      <div class="logo-mark">🦴</div>
+      <div>
+        <div class="logo-name">BoneStrong Orthopedic</div>
+        <div class="logo-tag">Joint, Spine & Sports Medicine</div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-badge">🟢 Book in 60 Sec</div>
+      <button class="nav-book" onclick="document.getElementById('book-section').scrollIntoView({behavior:'smooth'})">📅 Book Now</button>
+    </div>
+  </div>
+</nav>
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">✅ MS Orthopedics — 20+ Years Experience</div>
+      <h1>Move Without Pain.<br><span>Live Without Limits.</span></h1>
+      <p class="hero-sub">Expert orthopedic care for joint pain, sports injuries, spine conditions, and fractures — book your specialist slot online in under a minute. WhatsApp confirmation guaranteed.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="document.getElementById('book-section').scrollIntoView({behavior:'smooth'})">📅 Book Consultation</button>
+        <button class="btn-outline" onclick="document.getElementById('pain-section').scrollIntoView({behavior:'smooth'})">🎯 Pain Zone Check</button>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-card-title">Why Patients Choose BoneStrong</div>
+      <div class="trust-row"><div class="trust-icon">🏆</div><div><div class="trust-label">20+ Years Experience</div><div class="trust-sub">MS Orthopedics, sports medicine specialist</div></div></div>
+      <div class="trust-row"><div class="trust-icon">⭐</div><div><div class="trust-label">4.8 Google Rating</div><div class="trust-sub">7,400+ patients treated</div></div></div>
+      <div class="trust-row"><div class="trust-icon">💊</div><div><div class="trust-label">Non-Surgical First</div><div class="trust-sub">Exhausting all non-invasive options first</div></div></div>
+      <div class="trust-row"><div class="trust-icon">💳</div><div><div class="trust-label">Insurance Accepted</div><div class="trust-sub">Cashless for all major health insurers</div></div></div>
+    </div>
+  </div>
+</div>
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-val">7,400+</div><div class="stat-lbl">Patients Treated</div></div>
+    <div class="stat"><div class="stat-val">⭐ 4.8</div><div class="stat-lbl">Google Rating</div></div>
+    <div class="stat"><div class="stat-val">20+</div><div class="stat-lbl">Years Experience</div></div>
+    <div class="stat"><div class="stat-val">24/7</div><div class="stat-lbl">Online Booking</div></div>
+  </div>
+</div>
+<div class="section">
+  <div class="section-header">
+    <div class="section-pill">Our Services</div>
+    <h2 class="section-title">Comprehensive Orthopedic Care</h2>
+    <p class="section-sub">From sports injuries to complex joint replacements</p>
+  </div>
+  <div class="services-grid">
+    <div class="svc-card"><div class="svc-icon">🦵</div><div class="svc-name">Knee Replacement & ACL</div><div class="svc-desc">Minimally invasive total/partial knee replacement and ACL reconstruction.</div></div>
+    <div class="svc-card"><div class="svc-icon">🔋</div><div class="svc-name">Spine & Disc Disorders</div><div class="svc-desc">Disc herniation, spondylitis and spine deformity treatment.</div></div>
+    <div class="svc-card"><div class="svc-icon">💪</div><div class="svc-name">Shoulder Surgery</div><div class="svc-desc">Rotator cuff repair, arthroscopy, and frozen shoulder treatment.</div></div>
+    <div class="svc-card"><div class="svc-icon">🏃</div><div class="svc-name">Sports Medicine</div><div class="svc-desc">Ligament tears, muscle injuries, and sports performance rehab.</div></div>
+    <div class="svc-card"><div class="svc-icon">🦴</div><div class="svc-name">Fracture Management</div><div class="svc-desc">Advanced fixation for complex fractures with fast recovery protocols.</div></div>
+    <div class="svc-card"><div class="svc-icon">🧘</div><div class="svc-name">Physiotherapy & Rehab</div><div class="svc-desc">Post-surgery rehab, manual therapy, and pain management.</div></div>
+  </div>
+</div>
+<div class="pain-section" id="pain-section">
+  <div class="pain-inner">
+    <div class="section-header">
+      <div class="section-pill">Pain Zone Check</div>
+      <h2 class="section-title">Where Does It Hurt?</h2>
+      <p class="section-sub">Select your pain area for an instant recommendation</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-q">Tap the area causing you pain:</div>
+      <div class="body-map" id="body-map">
+        <div class="zone" onclick="selectZone(this,'Shoulder & Neck')"><span class="zone-icon">💪</span><span class="zone-label">Shoulder / Neck</span></div>
+        <div class="zone" onclick="selectZone(this,'Spine & Back')"><span class="zone-icon">🔋</span><span class="zone-label">Spine / Back</span></div>
+        <div class="zone" onclick="selectZone(this,'Hip & Pelvis')"><span class="zone-icon">🦱</span><span class="zone-label">Hip / Pelvis</span></div>
+        <div class="zone" onclick="selectZone(this,'Knee Pain')"><span class="zone-icon">🦵</span><span class="zone-label">Knee Pain</span></div>
+        <div class="zone" onclick="selectZone(this,'Foot & Ankle')"><span class="zone-icon">🦶</span><span class="zone-label">Foot / Ankle</span></div>
+        <div class="zone" onclick="selectZone(this,'Sports Injury')"><span class="zone-icon">⚽</span><span class="zone-label">Sports Injury</span></div>
+      </div>
+      <div class="zone-result" id="zone-result"></div>
+    </div>
+  </div>
+</div>
+<div class="booking-section" id="book-section">
+  <div style="max-width:960px;margin:0 auto 28px;text-align:center;">
+    <div class="section-pill">Book Appointment</div>
+    <h2 class="section-title" style="margin-top:8px;">Book Your Ortho Consultation</h2>
+    <p class="section-sub" style="margin:6px auto 0;">WhatsApp confirmation within 2 minutes</p>
+  </div>
+  <div class="booking-inner">
+    <div class="booking-form-card">
+      <div class="form-title">📅 Book Ortho Slot</div>
+      <div class="form-sub">No payment required — free slot booking</div>
+      <div class="form-group"><label>Full Name</label><input type="text" placeholder="Your full name" autocomplete="name"></div>
+      <div class="form-group"><label>WhatsApp Number</label><input type="tel" placeholder="+91 XXXXX XXXXX" autocomplete="tel"></div>
+      <div class="form-group"><label>Problem Area</label>
+        <select>
+          <option>Knee Pain / ACL</option><option>Back / Spine</option><option>Shoulder Pain</option>
+          <option>Hip Pain</option><option>Ankle / Foot</option><option>Sports Injury</option><option>Fracture / Trauma</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Pain Duration</label>
+        <select><option>Just started (acute)</option><option>1–4 weeks</option><option>More than a month (chronic)</option></select>
+      </div>
+      <button class="btn-book" onclick="document.getElementById('success-modal').classList.add('open')">✅ Confirm Booking</button>
+    </div>
+    <div>
+      <div class="booking-info-card">
+        <div class="binfo-head">What Happens After Booking</div>
+        <div class="binfo-item"><div class="binfo-icon">📅</div><div class="binfo-text"><strong>Same-Day Appointments</strong><span>Emergency ortho slots available</span></div></div>
+        <div class="binfo-item"><div class="binfo-icon">🔬</div><div class="binfo-text"><strong>On-Site X-Ray & MRI</strong><span>Digital imaging available same visit</span></div></div>
+        <div class="binfo-item"><div class="binfo-icon">💊</div><div class="binfo-text"><strong>Non-Surgical First</strong><span>All non-invasive options tried first</span></div></div>
+        <div class="binfo-item"><div class="binfo-icon">💳</div><div class="binfo-text"><strong>Insurance & Cashless</strong><span>All major health insurers accepted</span></div></div>
+        <div class="guarantee-box">✅ Free Cancellation · No Hidden Charges</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="reviews-section">
+  <div class="reviews-inner">
+    <div class="section-header">
+      <div class="section-pill">Patient Reviews</div>
+      <h2 class="section-title">Real Patient Outcomes</h2>
+    </div>
+    <div class="reviews-cards">
+      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"Had severe knee pain for 2 years. After consultation and physiotherapy here, I'm pain-free in 6 weeks. Online booking was instant."</div><div class="review-author">— Mahesh T., 48 yrs</div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"Got my ACL reconstructed after a football injury. Excellent care, was back playing in 5 months as promised."</div><div class="review-author">— Rohan D., Football Player</div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"Disc herniation managed completely without surgery. They tried every non-invasive option first. Highly recommend."</div><div class="review-author">— Seema V., Teacher</div></div>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">🦴 BoneStrong Orthopedic — Joint, Spine & Sports Medicine</div>
+    <div class="footer-note">Demo site by Aditya (AI & Automation Engineer) — LeadReach System</div>
+  </div>
+</footer>
+<div class="sticky-cta">
+  <button onclick="document.getElementById('book-section').scrollIntoView({behavior:'smooth'})">📅 Book Ortho Consultation Now</button>
+</div>
+<div class="modal-overlay" id="success-modal">
+  <div class="modal-card">
+    <div class="modal-icon">✅</div>
+    <div class="modal-title">Appointment Booked!</div>
+    <div class="modal-sub">Your slot is confirmed. WhatsApp confirmation arriving within 2 minutes.</div>
+    <button class="btn-modal-close" onclick="document.getElementById('success-modal').classList.remove('open')">Done</button>
+  </div>
+</div>
+<script>
+  function selectZone(el,zone){document.querySelectorAll('.zone').forEach(z=>z.classList.remove('active'));el.classList.add('active');const r=document.getElementById('zone-result');r.style.display='block';r.innerHTML=`<div style="background:var(--primary-light);border-radius:10px;padding:16px;"><div style="font-weight:700;color:var(--primary);margin-bottom:8px">🎯 ${zone} — Specialist Consultation Recommended</div><p style="font-size:0.84rem;color:var(--muted);margin-bottom:14px;">Our orthopedic specialist will assess your condition with clinical examination and imaging.</p><button class="btn-primary" onclick="document.getElementById('book-section').scrollIntoView({behavior:'smooth'})" style="font-size:0.88rem;padding:11px 20px;">📅 Book Now</button></div>`;}
+</script>
+</body>
+</html>

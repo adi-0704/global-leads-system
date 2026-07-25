@@ -989,7 +989,7 @@ def send_outreach_emails(
                     print(f"  [Wait] Pausing 10 minutes before next email ({remaining} remaining)...")
                     time.sleep(SEND_GAP_SEC)
 
-    print(f"[Outreach] Finished. {sent_count} emails dispatched today (total today: {sent_count + sent_today}).")
+    print(f"[Outreach] Finished. {sent_count} emails dispatched today (total today: {sent_count + budget_used}).")
     return sent_count
 
 
