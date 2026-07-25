@@ -823,9 +823,19 @@ def send_single_email(
             config["email_templates"].get(template_key)
             or config["email_templates"].get("no_booking_ai")
             or config["email_templates"].get(niche)
+            or config["email_templates"].get("default")
+            or (list(config["email_templates"].values()) or [None])[0]
         )
     else:
-        template = config["email_templates"].get(niche) or list(config["email_templates"].values())[0]
+        template = (
+            config["email_templates"].get(niche)
+            or config["email_templates"].get("default")
+            or (list(config["email_templates"].values()) or [None])[0]
+        )
+
+    if not template:
+        print(f"  [Outreach] No email template found for niche '{niche}' — skipping {email}.")
+        return False
 
     promo_url = config["promo_urls"].get(niche, config["promo_urls"].get("dental", ""))
     subject   = template["subject"].format(business_name=name, city=city)
@@ -969,7 +979,7 @@ def send_outreach_emails(
         )
         if success:
             sent_count += 1
-            if sent_count + sent_today >= DAILY_CAP:
+            if sent_count + budget_used >= DAILY_CAP:
                 print(f"  [Cap] Daily limit of {DAILY_CAP} reached. Stopping.")
                 break
             # Wait between sends
