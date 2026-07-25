@@ -438,8 +438,63 @@
                             </div>
                         </form>
                     </div>
+
+                    <!-- ──── EMAIL SETTINGS & SEND EMAILS CARD ──── -->
+                    <div class="card" style="border:2px solid #f59e0b;grid-column:1/-1;">
+                        <div class="card-header">
+                            <h2>📧 Email Settings &amp; Send Emails</h2>
+                            <p>Enter your Gmail App Password to enable real outreach email sending</p>
+                        </div>
+
+                        <div id="smtp-status-banner" style="background:#fef3c7;border:1px solid #f59e0b;border-radius:8px;padding:12px 16px;margin-bottom:18px;font-size:0.85rem;color:#92400e;">
+                            <strong>⚠️ Emails are currently in DRY RUN mode</strong> — they are logged but NOT sent.<br>
+                            Enter your Gmail App Password below, click Save, then click <strong>Send Outreach Emails Now</strong>.
+                        </div>
+
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+                            <!-- SMTP Form -->
+                            <form id="form-smtp" class="form-vertical" onsubmit="saveSmtp(event)">
+                                <div class="form-group">
+                                    <label for="smtp-user">Gmail Address (From)</label>
+                                    <input type="email" id="smtp-user" class="form-control" placeholder="yourname@gmail.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="smtp-password">Gmail App Password</label>
+                                    <input type="password" id="smtp-password" class="form-control" placeholder="xxxx xxxx xxxx xxxx" autocomplete="new-password">
+                                    <span class="input-hint">Not your normal password. Generate at: <a href="https://myaccount.google.com/apppasswords" target="_blank" style="color:#f59e0b;">myaccount.google.com/apppasswords</a> → App: Mail → Generate</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="smtp-from">Display Name</label>
+                                    <input type="text" id="smtp-from" class="form-control" placeholder="Aditya Tyagi &lt;yourname@gmail.com&gt;">
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary" id="btn-save-smtp">💾 Save Email Settings</button>
+                                </div>
+                            </form>
+
+                            <!-- Send Panel -->
+                            <div>
+                                <h3 style="font-size:1rem;font-weight:700;margin-bottom:10px;">🚀 Send Outreach Emails</h3>
+                                <p style="font-size:0.82rem;color:#94a3b8;margin-bottom:16px;">Sends emails to all Campaign Queue leads not yet contacted. Save your App Password first.</p>
+                                <div class="form-group">
+                                    <label for="send-limit">Number of Emails to Send (max 50)</label>
+                                    <input type="number" id="send-limit" class="form-control" value="20" min="1" max="50">
+                                </div>
+                                <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+                                    <input type="checkbox" id="chk-dry-run" style="width:16px;height:16px;cursor:pointer;">
+                                    <label for="chk-dry-run" style="font-size:0.85rem;cursor:pointer;color:#94a3b8;">Dry Run — preview only, no emails sent</label>
+                                </div>
+                                <button class="btn btn-primary" onclick="sendEmails()" id="btn-send-emails" style="background:linear-gradient(135deg,#059669,#047857);width:100%;padding:14px;font-size:1rem;letter-spacing:0.02em;">
+                                    📤 Send Outreach Emails Now
+                                </button>
+                                <div id="send-emails-status" style="margin-top:12px;display:none;padding:12px 14px;border-radius:8px;font-size:0.84rem;line-height:1.6;"></div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </section>
+
 
         </main>
     </div>

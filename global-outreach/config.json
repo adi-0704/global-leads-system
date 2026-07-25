@@ -1,4 +1,9 @@
 {
+  "smtp_user":     "business.n8n25@gmail.com",
+  "smtp_password": "",
+  "smtp_host":     "smtp.gmail.com",
+  "smtp_port":     587,
+  "smtp_from":     "Aditya Tyagi <business.n8n25@gmail.com>",
   "keywords": [
     { "term": "dentist", "niche": "dental" },
     { "term": "dental clinic", "niche": "dental" },

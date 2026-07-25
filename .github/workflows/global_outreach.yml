@@ -10,7 +10,7 @@ on:
       dry_run:
         description: 'Dry-run only? (true = log, false = send real emails)'
         required: false
-        default: 'true'
+        default: 'false'
         type: choice
         options: ['true', 'false']
       limit:

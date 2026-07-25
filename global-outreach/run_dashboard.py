@@ -202,7 +202,7 @@ def trigger_scrape():
     limit   = int(data.get("limit", 20))
     keyword = data.get("keyword") or None
     city    = data.get("city")    or None
-    dry_run = bool(data.get("dry_run", True))
+    dry_run = bool(data.get("dry_run", False))
 
     def _run_bg():
         script = os.path.join(SCRIPT_DIR, "scrape_and_outreach.py")
@@ -225,6 +225,58 @@ def trigger_scrape():
             "Refresh the dashboard in ~60 seconds to see new leads."
         ),
     })
+
+# ---------------------------------------------------------------------------
+# API — Send Emails (reads SMTP creds from config.json)
+# ---------------------------------------------------------------------------
+
+@app.route("/api/send-emails", methods=["POST"])
+def send_emails():
+    """Trigger outreach email sending with SMTP credentials from config.json."""
+    data     = request.get_json(force=True) or {}
+    dry_run  = bool(data.get("dry_run", False))
+    limit    = int(data.get("limit", 50))
+
+    # Load config to get SMTP credentials
+    if not os.path.exists(CONFIG_PATH):
+        return jsonify({"error": "config.json not found"}), 404
+    with open(CONFIG_PATH, "r", encoding="utf-8") as fh:
+        config = json.load(fh)
+
+    smtp_user     = config.get("smtp_user", "").strip()
+    smtp_password = config.get("smtp_password", "").strip()
+    smtp_host     = config.get("smtp_host", "smtp.gmail.com").strip()
+    smtp_port     = str(config.get("smtp_port", 587))
+    smtp_from     = config.get("smtp_from", smtp_user).strip()
+
+    if not dry_run and not (smtp_user and smtp_password):
+        return jsonify({
+            "error": "SMTP credentials not set. Go to Settings → Email Settings and enter your Gmail address and App Password."
+        }), 400
+
+    def _run_bg():
+        script = os.path.join(SCRIPT_DIR, "scrape_and_outreach.py")
+        cmd = [sys.executable, script, "--no-scrape", f"--limit={limit}"]
+        if dry_run:
+            cmd.append("--dry-run")
+        env = os.environ.copy()
+        env["SMTP_HOST"]     = smtp_host
+        env["SMTP_PORT"]     = smtp_port
+        env["SMTP_USER"]     = smtp_user
+        env["SMTP_PASSWORD"] = smtp_password
+        env["SMTP_FROM"]     = smtp_from or smtp_user
+        print(f"[Dashboard] Sending emails: dry_run={dry_run}, user={smtp_user}")
+        subprocess.run(cmd, cwd=SCRIPT_DIR, env=env)
+        print("[Dashboard] Email job finished.")
+
+    threading.Thread(target=_run_bg, daemon=True).start()
+    mode = "Dry Run (preview only)" if dry_run else "LIVE — emails will be sent"
+    return jsonify({
+        "success": True,
+        "message": f"Email job started ({mode}). Refresh the dashboard in ~30 seconds to see updated statuses.",
+        "dry_run": dry_run,
+    })
+
 
 # ---------------------------------------------------------------------------
 # Entry Point

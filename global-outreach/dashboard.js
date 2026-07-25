@@ -95,8 +95,9 @@ function switchTab(tabId) {
     } else if (tabId === 'settings') {
         document.getElementById('tab-settings').classList.add('active');
         pageTitle.innerText = "Outreach Settings";
-        pageSubtitle.innerText = "Configure campaign limits, templates, and promotional endpoints";
+        pageSubtitle.innerText = "Configure email credentials, campaign limits, templates, and demo URLs";
         fetchConfig();
+        loadSmtpSettings();  // Load SMTP creds into form
     }
 }
 
@@ -972,4 +973,154 @@ function renderAnalyticsChart() {
             }
         }
     });
+}
+
+// ─── Email Settings & Send Emails ─────────────────────────────────────────────
+
+// Load saved SMTP settings into the form fields when Settings tab opens
+function loadSmtpSettings() {
+    if (IS_STATIC) return;
+    fetch('/api/config')
+        .then(r => r.json())
+        .then(cfg => {
+            const u = document.getElementById('smtp-user');
+            const p = document.getElementById('smtp-password');
+            const f = document.getElementById('smtp-from');
+            if (u) u.value = cfg.smtp_user || '';
+            if (p) p.value = '';  // Never pre-fill password for security
+            if (f) f.value = cfg.smtp_from || '';
+
+            // Update banner based on whether password is saved
+            const banner = document.getElementById('smtp-status-banner');
+            if (banner && cfg.smtp_password) {
+                banner.style.background = '#d1fae5';
+                banner.style.borderColor = '#059669';
+                banner.style.color = '#065f46';
+                banner.innerHTML = '<strong>✅ Gmail App Password is saved.</strong> Email sending is enabled. Click "Send Outreach Emails Now" below to start.';
+            }
+        })
+        .catch(() => {});
+}
+
+// Save SMTP credentials to config.json via the backend
+async function saveSmtp(evt) {
+    evt.preventDefault();
+    if (IS_STATIC) return;
+
+    const smtp_user     = document.getElementById('smtp-user').value.trim();
+    const smtp_password = document.getElementById('smtp-password').value.trim();
+    const smtp_from     = document.getElementById('smtp-from').value.trim() || smtp_user;
+    const btn           = document.getElementById('btn-save-smtp');
+
+    if (!smtp_user) { alert('Please enter your Gmail address.'); return; }
+
+    btn.textContent = 'Saving...';
+    btn.disabled = true;
+
+    try {
+        // Get existing config first
+        const existingResp = await fetch('/api/config');
+        const existingCfg  = await existingResp.json();
+
+        // Merge SMTP fields
+        const newCfg = {
+            ...existingCfg,
+            smtp_user,
+            smtp_from,
+        };
+        // Only update password if a new one was entered
+        if (smtp_password) {
+            newCfg.smtp_password = smtp_password;
+        }
+
+        const resp = await fetch('/api/config', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newCfg),
+        });
+        const result = await resp.json();
+
+        if (result.success) {
+            btn.textContent = '✅ Saved!';
+            btn.style.background = '#059669';
+            const banner = document.getElementById('smtp-status-banner');
+            if (banner) {
+                banner.style.background = '#d1fae5';
+                banner.style.borderColor = '#059669';
+                banner.style.color = '#065f46';
+                banner.innerHTML = '<strong>✅ Gmail App Password saved.</strong> Email sending is now enabled. Click "Send Outreach Emails Now" to start sending.';
+            }
+        } else {
+            alert('Error saving: ' + (result.error || 'Unknown error'));
+        }
+    } catch (e) {
+        alert('Failed to save: ' + e.message);
+    } finally {
+        setTimeout(() => { btn.textContent = '💾 Save Email Settings'; btn.disabled = false; btn.style.background = ''; }, 3000);
+    }
+}
+
+// Trigger real email sending via /api/send-emails
+async function sendEmails() {
+    if (IS_STATIC) { alert('Email sending is not available in read-only mode.'); return; }
+
+    const limit   = parseInt(document.getElementById('send-limit')?.value || 20);
+    const dry_run = document.getElementById('chk-dry-run')?.checked || false;
+    const btn     = document.getElementById('btn-send-emails');
+    const status  = document.getElementById('send-emails-status');
+
+    if (!dry_run) {
+        const confirmed = confirm(
+            `You are about to send REAL emails to up to ${limit} doctors.\n\n` +
+            `Make sure you have:\n` +
+            `1. Saved your Gmail App Password\n` +
+            `2. Reviewed the email templates in Settings\n\n` +
+            `Proceed?`
+        );
+        if (!confirmed) return;
+    }
+
+    btn.textContent = dry_run ? '🔍 Running dry run...' : '📤 Sending emails...';
+    btn.disabled = true;
+    if (status) { status.style.display = 'block'; status.style.background = '#1e293b'; status.textContent = 'Starting email job...'; }
+
+    try {
+        const resp = await fetch('/api/send-emails', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ dry_run, limit }),
+        });
+        const result = await resp.json();
+
+        if (resp.ok && result.success) {
+            if (status) {
+                status.style.background = dry_run ? '#1e293b' : '#064e3b';
+                status.style.border = '1px solid ' + (dry_run ? '#475569' : '#059669');
+                status.style.color = dry_run ? '#94a3b8' : '#d1fae5';
+                status.innerHTML = `<strong>${dry_run ? '🔍 Dry Run Started' : '✅ Email Job Started!'}</strong><br>${result.message}<br><br><em>Refresh the Campaign Queue tab in 30 seconds to see updated email statuses.</em>`;
+            }
+        } else {
+            const errMsg = result.error || 'Unknown error';
+            if (status) {
+                status.style.background = '#450a0a';
+                status.style.border = '1px solid #dc2626';
+                status.style.color = '#fecaca';
+                status.innerHTML = `<strong>❌ Error:</strong> ${errMsg}`;
+            }
+            if (errMsg.includes('App Password') || errMsg.includes('credentials')) {
+                alert('❌ ' + errMsg);
+            }
+        }
+    } catch (e) {
+        if (status) {
+            status.style.display = 'block';
+            status.style.background = '#450a0a';
+            status.innerHTML = `<strong>❌ Connection error:</strong> Make sure the dashboard server (run_dashboard.py) is running.`;
+        }
+    } finally {
+        setTimeout(() => {
+            btn.textContent = '📤 Send Outreach Emails Now';
+            btn.disabled = false;
+        }, 5000);
+    }
 }
