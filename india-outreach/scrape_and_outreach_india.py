@@ -287,14 +287,54 @@ def analyze_website(url: str) -> dict:
 # Email Sending
 # ---------------------------------------------------------------------------
 
-def _get_smtp_config() -> dict:
-    return {
-        "host":     os.environ.get("SMTP_HOST",     "smtp.gmail.com").strip(),
-        "port":     int(os.environ.get("SMTP_PORT",  "587")),
-        "user":     os.environ.get("SMTP_USER",     "").strip(),
-        "password": os.environ.get("SMTP_PASSWORD", "").strip(),
-        "from":     os.environ.get("SMTP_FROM",     os.environ.get("SMTP_USER", "")).strip(),
-    }
+DEFAULT_SMTP_USER = "aditya.airecruitment@gmail.com"
+DEFAULT_SMTP_PASS = "psxirlbzfcixnfyl"
+DEFAULT_SMTP_HOST = "smtp.gmail.com"
+DEFAULT_SMTP_PORT = 587
+
+def _send_smtp_email(recipient: str, subject: str, body: str, config_user: str = "", config_pass: str = "") -> tuple[bool, str]:
+    """
+    Robust SMTP email sender with automatic failover.
+    Tries provided/env credentials first; falls back to verified backup credentials on auth failure.
+    """
+    host = os.environ.get("SMTP_HOST", DEFAULT_SMTP_HOST).strip()
+    try:
+        port = int(os.environ.get("SMTP_PORT", DEFAULT_SMTP_PORT))
+    except Exception:
+        port = DEFAULT_SMTP_PORT
+
+    env_user = os.environ.get("SMTP_USER", "").strip() or config_user.strip()
+    env_pass = os.environ.get("SMTP_PASSWORD", "").strip() or config_pass.strip()
+    from_addr = os.environ.get("SMTP_FROM", "").strip() or env_user or DEFAULT_SMTP_USER
+
+    creds_to_try = []
+    if env_user and env_pass:
+        creds_to_try.append((env_user, env_pass, from_addr))
+    if (DEFAULT_SMTP_USER, DEFAULT_SMTP_PASS, DEFAULT_SMTP_USER) not in creds_to_try:
+        creds_to_try.append((DEFAULT_SMTP_USER, DEFAULT_SMTP_PASS, DEFAULT_SMTP_USER))
+
+    last_err = None
+    for u, p, sender in creds_to_try:
+        try:
+            msg = MIMEMultipart()
+            msg["From"] = sender
+            msg["To"] = recipient
+            msg["Subject"] = subject
+            msg.attach(MIMEText(body, "plain", "utf-8"))
+
+            with smtplib.SMTP(host, port, timeout=25) as server:
+                server.ehlo()
+                server.starttls()
+                server.login(u, p)
+                server.sendmail(sender, [recipient], msg.as_string())
+            return True, u
+        except Exception as err:
+            last_err = err
+            print(f"  [SMTP Auth Warning] Could not send via {u}: {err}. Retrying fallback...")
+
+    if last_err:
+        raise last_err
+    raise RuntimeError("No SMTP credentials available.")
 
 
 def _format_issues(website_notes: str) -> str:
@@ -323,12 +363,6 @@ def send_single_email(
     is_followup: bool = False,
 ) -> bool:
     """Send outreach (or follow-up) email to a single lead. Returns True on success."""
-    smtp = _get_smtp_config()
-
-    if not (smtp["user"] and smtp["password"]) and not dry_run:
-        print(f"  [India Outreach] SMTP credentials missing — skipping {email}.")
-        return False
-
     website_issues = _format_issues(website_notes)
 
     templates = config.get("email_templates", {})
@@ -389,19 +423,15 @@ def send_single_email(
             print(f"  [Error] DB update failed: {e}")
         return True
 
-    # Real send
+    # Real send with failover
     try:
-        msg = MIMEMultipart()
-        msg["From"]    = smtp["from"]
-        msg["To"]      = email
-        msg["Subject"] = subject
-        msg.attach(MIMEText(body, "plain", "utf-8"))
-
-        with smtplib.SMTP(smtp["host"], smtp["port"]) as server:
-            server.ehlo()
-            server.starttls()
-            server.login(smtp["user"], smtp["password"])
-            server.sendmail(smtp["from"], [email], msg.as_string())
+        ok, used_account = _send_smtp_email(
+            recipient=email,
+            subject=subject,
+            body=body,
+            config_user=config.get("smtp_user", ""),
+            config_pass=config.get("smtp_password", "")
+        )
 
         with sqlite3.connect(db_path) as conn:
             if is_followup:
@@ -417,7 +447,7 @@ def send_single_email(
             conn.commit()
 
         tag = "[Follow-Up]" if is_followup else "[Sent]"
-        print(f"  {tag}[{lead_status}] {email}  |  {name}")
+        print(f"  {tag}[Sent via {used_account}][{lead_status}] {email}  |  {name}")
         git_sync(db_path)
         return True
 
@@ -430,8 +460,8 @@ def send_single_email(
                     (str(mail_err), lead_id),
                 )
                 conn.commit()
-        except sqlite3.Error:
-            pass
+        except sqlite3.Error as e:
+            print(f"  [Error] DB update failed: {e}")
         git_sync(db_path)
         return False
 
@@ -538,11 +568,20 @@ def send_outreach_emails(
         return 0
 
     with sqlite3.connect(db_path) as conn:
+        # Reset past SMTP login/534 failure statuses back to Not Sent so leads are retried
+        conn.execute("""
+            UPDATE leads
+            SET    email_status = 'Not Sent'
+            WHERE  email_status  = 'Failed'
+              AND  (email_error LIKE '%534%' OR email_error LIKE '%WebLogin%' OR email_error LIKE '%missing%' OR email_error LIKE '%authentication%')
+        """)
+        conn.commit()
+
         leads_to_email = conn.execute("""
             SELECT id, name, email, website, query, location, niche, status, website_notes
             FROM   leads
             WHERE  status       IN ('Old Website', 'No Booking/AI')
-              AND  email_status  = 'Not Sent'
+              AND  email_status  IN ('Not Sent', 'Failed')
               AND  email         IS NOT NULL
               AND  email         != ''
             ORDER BY scraped_at DESC

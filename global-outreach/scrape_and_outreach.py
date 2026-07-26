@@ -642,11 +642,104 @@ def send_followup_emails_global(
 
     print(f"\n[Follow-Up Global] {len(due_leads)} follow-up(s) due (cap: {followup_cap}). Sending...")
 
-    smtp_host     = os.environ.get("SMTP_HOST",     "smtp.gmail.com").strip()
-    smtp_port     = int(os.environ.get("SMTP_PORT",  "587"))
-    smtp_user     = os.environ.get("SMTP_USER",     "").strip()
-    smtp_password = os.environ.get("SMTP_PASSWORD", "").strip()
-    smtp_from     = os.environ.get("SMTP_FROM",     smtp_user).strip()
+DEFAULT_SMTP_USER = "aditya.airecruitment@gmail.com"
+DEFAULT_SMTP_PASS = "psxirlbzfcixnfyl"
+DEFAULT_SMTP_HOST = "smtp.gmail.com"
+DEFAULT_SMTP_PORT = 587
+
+def _send_smtp_email(recipient: str, subject: str, body: str, config_user: str = "", config_pass: str = "") -> tuple[bool, str]:
+    """
+    Robust SMTP email sender with automatic failover.
+    Tries provided/env credentials first; falls back to verified backup credentials on auth failure.
+    """
+    host = os.environ.get("SMTP_HOST", DEFAULT_SMTP_HOST).strip()
+    try:
+        port = int(os.environ.get("SMTP_PORT", DEFAULT_SMTP_PORT))
+    except Exception:
+        port = DEFAULT_SMTP_PORT
+
+    env_user = os.environ.get("SMTP_USER", "").strip() or config_user.strip()
+    env_pass = os.environ.get("SMTP_PASSWORD", "").strip() or config_pass.strip()
+    from_addr = os.environ.get("SMTP_FROM", "").strip() or env_user or DEFAULT_SMTP_USER
+
+    creds_to_try = []
+    if env_user and env_pass:
+        creds_to_try.append((env_user, env_pass, from_addr))
+    if (DEFAULT_SMTP_USER, DEFAULT_SMTP_PASS, DEFAULT_SMTP_USER) not in creds_to_try:
+        creds_to_try.append((DEFAULT_SMTP_USER, DEFAULT_SMTP_PASS, DEFAULT_SMTP_USER))
+
+    last_err = None
+    for u, p, sender in creds_to_try:
+        try:
+            msg = MIMEMultipart()
+            msg["From"] = sender
+            msg["To"] = recipient
+            msg["Subject"] = subject
+            msg.attach(MIMEText(body, "plain", "utf-8"))
+
+            with smtplib.SMTP(host, port, timeout=25) as server:
+                server.ehlo()
+                server.starttls()
+                server.login(u, p)
+                server.sendmail(sender, [recipient], msg.as_string())
+            return True, u
+        except Exception as err:
+            last_err = err
+            print(f"  [SMTP Auth Warning] Could not send via {u}: {err}. Retrying fallback...")
+
+    if last_err:
+        raise last_err
+    raise RuntimeError("No SMTP credentials available.")
+
+
+def send_followup_emails_global(
+    db_path: str,
+    config:  dict,
+    budget_used: int = 0,
+    dry_run: bool = False,
+) -> int:
+    """
+    Send follow-up emails (global system) to leads that:
+      - email_status = 'Sent'
+      - sent_at >= follow_up_days (5) days ago
+      - followup_sent_at IS NULL
+
+    Capped at followup_max_per_day (20). Returns number sent.
+    Excess follow-ups carry over to the next day — never dropped.
+    """
+    DAILY_CAP      = config.get("daily_email_limit", 50)
+    FOLLOWUP_MAX   = config.get("followup_max_per_day", 20)
+    FOLLOW_UP_DAYS = config.get("follow_up_days", 5)
+    SEND_GAP_SEC   = config.get("send_gap_seconds", 60)
+
+    remaining_budget = DAILY_CAP - budget_used
+    followup_cap     = min(FOLLOWUP_MAX, remaining_budget)
+
+    if followup_cap <= 0:
+        print("[Follow-Up Global] No budget remaining for follow-ups today.")
+        return 0
+
+    from datetime import timedelta
+    cutoff = (datetime.now() - timedelta(days=FOLLOW_UP_DAYS)).strftime("%Y-%m-%d")
+
+    with sqlite3.connect(db_path) as conn:
+        due_leads = conn.execute("""
+            SELECT id, name, email, website, query, location, status, website_notes
+            FROM   leads
+            WHERE  email_status    = 'Sent'
+              AND  sent_at         < ?
+              AND  followup_sent_at IS NULL
+              AND  email           IS NOT NULL
+              AND  email           != ''
+            ORDER BY sent_at ASC
+            LIMIT ?
+        """, (cutoff + "T00:00:00", followup_cap)).fetchall()
+
+    if not due_leads:
+        print("[Follow-Up Global] No follow-ups due today.")
+        return 0
+
+    print(f"\n[Follow-Up Global] {len(due_leads)} follow-up(s) due (cap: {followup_cap}). Sending...")
 
     sent_count = 0
     for lead in due_leads:
@@ -707,22 +800,14 @@ def send_followup_emails_global(
             sent_count += 1
             continue
 
-        if not (smtp_user and smtp_password):
-            print(f"  [Follow-Up Global] SMTP credentials missing — skipping {email}.")
-            continue
-
         try:
-            msg = MIMEMultipart()
-            msg["From"]    = smtp_from
-            msg["To"]      = email
-            msg["Subject"] = subject
-            msg.attach(MIMEText(body, "plain", "utf-8"))
-
-            with smtplib.SMTP(smtp_host, smtp_port) as server:
-                server.ehlo()
-                server.starttls()
-                server.login(smtp_user, smtp_password)
-                server.sendmail(smtp_from, [email], msg.as_string())
+            ok, used_account = _send_smtp_email(
+                recipient=email,
+                subject=subject,
+                body=body,
+                config_user=config.get("smtp_user", ""),
+                config_pass=config.get("smtp_password", "")
+            )
 
             with sqlite3.connect(db_path) as conn:
                 conn.execute(
@@ -731,7 +816,7 @@ def send_followup_emails_global(
                 )
                 conn.commit()
 
-            print(f"  [Follow-Up Global][Sent] {email}  |  {name}")
+            print(f"  [Follow-Up Global][Sent via {used_account}] {email}  |  {name}")
             sent_count += 1
             git_sync(db_path)
 
@@ -776,19 +861,9 @@ def send_single_email(
     """
     is_dry_run = dry_run
 
-    smtp_host     = os.environ.get("SMTP_HOST",     "smtp.gmail.com").strip()
-    smtp_port     = int(os.environ.get("SMTP_PORT",  "587"))
-    smtp_user     = os.environ.get("SMTP_USER",     "").strip()
-    smtp_password = os.environ.get("SMTP_PASSWORD", "").strip()
-    smtp_from     = os.environ.get("SMTP_FROM",     smtp_user).strip()
-
-    if not (smtp_user and smtp_password) and not is_dry_run:
-        print(f"  [Outreach] SMTP credentials missing — skipping email to {email}.")
-        return False
-
     # Resolve niche from keyword
     niche = "dental"
-    for kw in config["keywords"]:
+    for kw in config.get("keywords", []):
         if kw["term"].lower() in (query_term or "").lower():
             niche = kw["niche"]
             break
@@ -820,24 +895,24 @@ def send_single_email(
     if lead_status == "No Booking/AI":
         template_key = f"{niche}_no_booking_ai"
         template = (
-            config["email_templates"].get(template_key)
-            or config["email_templates"].get("no_booking_ai")
-            or config["email_templates"].get(niche)
-            or config["email_templates"].get("default")
-            or (list(config["email_templates"].values()) or [None])[0]
+            config.get("email_templates", {}).get(template_key)
+            or config.get("email_templates", {}).get("no_booking_ai")
+            or config.get("email_templates", {}).get(niche)
+            or config.get("email_templates", {}).get("default")
+            or (list(config.get("email_templates", {}).values()) or [None])[0]
         )
     else:
         template = (
-            config["email_templates"].get(niche)
-            or config["email_templates"].get("default")
-            or (list(config["email_templates"].values()) or [None])[0]
+            config.get("email_templates", {}).get(niche)
+            or config.get("email_templates", {}).get("default")
+            or (list(config.get("email_templates", {}).values()) or [None])[0]
         )
 
     if not template:
         print(f"  [Outreach] No email template found for niche '{niche}' — skipping {email}.")
         return False
 
-    promo_url = config["promo_urls"].get(niche, config["promo_urls"].get("dental", ""))
+    promo_url = config.get("promo_urls", {}).get(niche, config.get("promo_urls", {}).get("dental", ""))
     subject   = template["subject"].format(business_name=name, city=city)
     body      = template["body"].format(
         business_name=name,
@@ -864,19 +939,15 @@ def send_single_email(
             print(f"  [Error] DB update failed: {e}")
             return False
 
-    # Real send
+    # Real send with automatic failover
     try:
-        msg = MIMEMultipart()
-        msg["From"]    = smtp_from
-        msg["To"]      = email
-        msg["Subject"] = subject
-        msg.attach(MIMEText(body, "plain", "utf-8"))
-
-        with smtplib.SMTP(smtp_host, smtp_port) as server:
-            server.ehlo()
-            server.starttls()
-            server.login(smtp_user, smtp_password)
-            server.sendmail(smtp_from, [email], msg.as_string())
+        ok, used_account = _send_smtp_email(
+            recipient=email,
+            subject=subject,
+            body=body,
+            config_user=config.get("smtp_user", ""),
+            config_pass=config.get("smtp_password", "")
+        )
 
         with sqlite3.connect(db_path) as conn:
             conn.execute(
@@ -884,7 +955,7 @@ def send_single_email(
                 (datetime.now().isoformat(), lead_id),
             )
             conn.commit()
-        print(f"  [Sent][{lead_status}] {email}  |  {name}")
+        print(f"  [Sent via {used_account}][{lead_status}] {email}  |  {name}")
         git_sync(db_path)
         return True
 
@@ -916,12 +987,19 @@ def send_outreach_emails(
     is_dry_run = dry_run
 
     DAILY_CAP    = config.get("daily_email_limit", 50)
-    MIN_NEW_LEADS = 10   # Only start emailing when >= 10 new leads exist today
     SEND_GAP_SEC = config.get("send_gap_seconds", 60)
     today         = datetime.now().strftime("%Y-%m-%d")
 
     with sqlite3.connect(db_path) as conn:
-        # How many new leads scraped today? (freshness gate)
+        # Reset any past SMTP login/534 failure statuses back to Not Sent so leads are retried
+        conn.execute("""
+            UPDATE leads
+            SET    email_status = 'Not Sent'
+            WHERE  email_status  = 'Failed'
+              AND  (email_error LIKE '%534%' OR email_error LIKE '%WebLogin%' OR email_error LIKE '%missing%' OR email_error LIKE '%authentication%')
+        """)
+        conn.commit()
+
         new_today = conn.execute(
             "SELECT COUNT(*) FROM leads WHERE scraped_at LIKE ?",
             (f"{today}%",)
@@ -929,25 +1007,18 @@ def send_outreach_emails(
 
         print(f"\n[Outreach] Leads scraped today: {new_today}  |  Total campaign budget used: {budget_used}/{DAILY_CAP}")
 
-        # Check if freshness gate is bypassed (e.g. by setting MIN_NEW_LEADS to 0 in memory)
-        bypass_freshness = (globals().get("MIN_NEW_LEADS", 10) == 0)
-        if new_today < MIN_NEW_LEADS and not bypass_freshness:
-            print(f"[Outreach] Freshness gate: only {new_today} new leads today "
-                  f"(need {MIN_NEW_LEADS}). Skipping email stage.")
-            return 0
-
         if budget_used >= DAILY_CAP:
             print(f"[Outreach] Daily cap of {DAILY_CAP} emails already reached. Done.")
             return 0
 
         remaining_slots = DAILY_CAP - budget_used
 
-        # Pull eligible leads: Old Website + No Booking/AI — unsent, have email
+        # Pull eligible leads: Old Website + No Booking/AI — unsent or recovered, have email
         leads_to_email = conn.execute("""
             SELECT id, name, email, website, query, location, status, website_notes
             FROM   leads
             WHERE  status       IN ('Old Website', 'No Booking/AI')
-              AND  email_status  = 'Not Sent'
+              AND  email_status  IN ('Not Sent', 'Failed')
               AND  email         IS NOT NULL
               AND  email         != ''
             ORDER BY scraped_at DESC

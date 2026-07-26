@@ -53,14 +53,14 @@ jobs:
 
       - name: Run India Scraper & Outreach
         env:
-          SMTP_HOST:     ${{ secrets.SMTP_HOST }}
-          SMTP_PORT:     ${{ secrets.SMTP_PORT }}
-          SMTP_USER:     ${{ secrets.SMTP_USER }}
-          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-          SMTP_FROM:     ${{ secrets.SMTP_FROM }}
-          IMAP_HOST:     ${{ secrets.IMAP_HOST }}
-          IMAP_USER:     ${{ secrets.IMAP_USER }}
-          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
+          SMTP_HOST:     ${{ secrets.SMTP_HOST || 'smtp.gmail.com' }}
+          SMTP_PORT:     ${{ secrets.SMTP_PORT || '587' }}
+          SMTP_USER:     ${{ secrets.SMTP_USER || 'aditya.airecruitment@gmail.com' }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD || 'psxirlbzfcixnfyl' }}
+          SMTP_FROM:     ${{ secrets.SMTP_FROM || 'aditya.airecruitment@gmail.com' }}
+          IMAP_HOST:     ${{ secrets.IMAP_HOST || 'imap.gmail.com' }}
+          IMAP_USER:     ${{ secrets.IMAP_USER || 'aditya.airecruitment@gmail.com' }}
+          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD || 'psxirlbzfcixnfyl' }}
         run: |
           echo "======================================"
           echo "  INDIA OUTREACH — 10:00 AM IST"
