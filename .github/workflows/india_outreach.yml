@@ -55,12 +55,12 @@ jobs:
         env:
           SMTP_HOST:     ${{ secrets.SMTP_HOST || 'smtp.gmail.com' }}
           SMTP_PORT:     ${{ secrets.SMTP_PORT || '587' }}
-          SMTP_USER:     ${{ secrets.SMTP_USER || 'aditya.airecruitment@gmail.com' }}
-          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD || 'psxirlbzfcixnfyl' }}
-          SMTP_FROM:     ${{ secrets.SMTP_FROM || 'aditya.airecruitment@gmail.com' }}
+          SMTP_USER:     ${{ secrets.SMTP_USER || 'business.n8n25@gmail.com' }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD || 'gtea ikdk yoat jekq' }}
+          SMTP_FROM:     ${{ secrets.SMTP_FROM || 'business.n8n25@gmail.com' }}
           IMAP_HOST:     ${{ secrets.IMAP_HOST || 'imap.gmail.com' }}
-          IMAP_USER:     ${{ secrets.IMAP_USER || 'aditya.airecruitment@gmail.com' }}
-          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD || 'psxirlbzfcixnfyl' }}
+          IMAP_USER:     ${{ secrets.IMAP_USER || 'business.n8n25@gmail.com' }}
+          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD || 'gtea ikdk yoat jekq' }}
         run: |
           echo "======================================"
           echo "  INDIA OUTREACH — 10:00 AM IST"
