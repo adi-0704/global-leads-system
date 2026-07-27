@@ -386,7 +386,7 @@
   "followup_max_per_day": 10,
   "new_outreach_min_per_day": 15,
   "follow_up_days": 5,
-  "send_gap_seconds": 60,
+  "send_gap_seconds": 300,
   "promo_urls": {
     "general": "https://smile-dental.vercel.app/",
     "dental": "https://smile-dental.vercel.app/",
