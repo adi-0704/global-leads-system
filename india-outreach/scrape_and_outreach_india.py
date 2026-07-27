@@ -294,8 +294,8 @@ DEFAULT_SMTP_PORT = 587
 
 def _send_smtp_email(recipient: str, subject: str, body: str, config_user: str = "", config_pass: str = "") -> tuple[bool, str]:
     """
-    Robust SMTP email sender with automatic failover.
-    Tries provided/env credentials first; falls back to verified backup credentials on auth failure.
+    Robust SMTP email sender with automatic multi-tier failover.
+    Tries primary doctor account (business.n8n25@gmail.com) first; falls back to aditya.airecruitment@gmail.com on 534/auth failure.
     """
     host = os.environ.get("SMTP_HOST", DEFAULT_SMTP_HOST).strip()
     try:
@@ -310,8 +310,10 @@ def _send_smtp_email(recipient: str, subject: str, body: str, config_user: str =
     creds_to_try = []
     if env_user and env_pass:
         creds_to_try.append((env_user, env_pass, from_addr))
-    if (DEFAULT_SMTP_USER, DEFAULT_SMTP_PASS, DEFAULT_SMTP_USER) not in creds_to_try:
-        creds_to_try.append((DEFAULT_SMTP_USER, DEFAULT_SMTP_PASS, DEFAULT_SMTP_USER))
+    if ("business.n8n25@gmail.com", "gtea ikdk yoat jekq", "business.n8n25@gmail.com") not in creds_to_try:
+        creds_to_try.append(("business.n8n25@gmail.com", "gtea ikdk yoat jekq", "business.n8n25@gmail.com"))
+    if ("aditya.airecruitment@gmail.com", "psxirlbzfcixnfyl", "aditya.airecruitment@gmail.com") not in creds_to_try:
+        creds_to_try.append(("aditya.airecruitment@gmail.com", "psxirlbzfcixnfyl", "aditya.airecruitment@gmail.com"))
 
     last_err = None
     for u, p, sender in creds_to_try:
@@ -330,7 +332,7 @@ def _send_smtp_email(recipient: str, subject: str, body: str, config_user: str =
             return True, u
         except Exception as err:
             last_err = err
-            print(f"  [SMTP Auth Warning] Could not send via {u}: {err}. Retrying fallback...")
+            print(f"  [SMTP Warning] Send failed via {u}: {err}. Retrying fallback SMTP account...")
 
     if last_err:
         raise last_err
