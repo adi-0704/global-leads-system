@@ -1,9 +1,9 @@
 {
-  "smtp_user": "business.n8n25@gmail.com",
-  "smtp_password": "",
+  "smtp_user": "cupboard587@gmail.com",
+  "smtp_password": "ykzv xkxl vecb dlgx",
   "smtp_host": "smtp.gmail.com",
   "smtp_port": 587,
-  "smtp_from": "Aditya Tyagi <business.n8n25@gmail.com>",
+  "smtp_from": "Aditya Tyagi <cupboard587@gmail.com>",
   "keywords": [
     {
       "term": "dentist",

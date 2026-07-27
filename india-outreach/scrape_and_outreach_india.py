@@ -287,8 +287,8 @@ def analyze_website(url: str) -> dict:
 # Email Sending
 # ---------------------------------------------------------------------------
 
-DEFAULT_SMTP_USER = "business.n8n25@gmail.com"
-DEFAULT_SMTP_PASS = "gtea ikdk yoat jekq"
+DEFAULT_SMTP_USER = "cupboard587@gmail.com"
+DEFAULT_SMTP_PASS = "ykzv xkxl vecb dlgx"
 DEFAULT_SMTP_HOST = "smtp.gmail.com"
 DEFAULT_SMTP_PORT = 587
 
