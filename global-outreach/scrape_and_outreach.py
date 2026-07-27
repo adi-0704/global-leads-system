@@ -643,7 +643,7 @@ def send_followup_emails_global(
     print(f"\n[Follow-Up Global] {len(due_leads)} follow-up(s) due (cap: {followup_cap}). Sending...")
 
 DEFAULT_SMTP_USER = "business.n8n25@gmail.com"
-DEFAULT_SMTP_PASS = "gtea ikdk yoat jekq"
+DEFAULT_SMTP_PASS = "nryw vjuk zufu vwqz"
 DEFAULT_SMTP_HOST = "smtp.gmail.com"
 DEFAULT_SMTP_PORT = 587
 

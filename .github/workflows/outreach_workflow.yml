@@ -69,14 +69,14 @@ jobs:
       - name: Run Global Scraper & Outreach (50 emails/day)
         if: ${{ github.event_name == 'schedule' || github.event.inputs.run_global == 'true' }}
         env:
-          SMTP_HOST:     ${{ secrets.SMTP_HOST }}
-          SMTP_PORT:     ${{ secrets.SMTP_PORT }}
-          SMTP_USER:     ${{ secrets.SMTP_USER }}
-          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-          SMTP_FROM:     ${{ secrets.SMTP_FROM }}
-          IMAP_HOST:     ${{ secrets.IMAP_HOST }}
-          IMAP_USER:     ${{ secrets.IMAP_USER }}
-          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
+          SMTP_HOST:     ${{ secrets.SMTP_HOST || 'smtp.gmail.com' }}
+          SMTP_PORT:     ${{ secrets.SMTP_PORT || '587' }}
+          SMTP_USER:     ${{ secrets.SMTP_USER || 'business.n8n25@gmail.com' }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD || 'nryw vjuk zufu vwqz' }}
+          SMTP_FROM:     ${{ secrets.SMTP_FROM || 'business.n8n25@gmail.com' }}
+          IMAP_HOST:     ${{ secrets.IMAP_HOST || 'imap.gmail.com' }}
+          IMAP_USER:     ${{ secrets.IMAP_USER || 'business.n8n25@gmail.com' }}
+          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD || 'nryw vjuk zufu vwqz' }}
         run: |
           echo "=============================================="
           echo "  GLOBAL OUTREACH — Target: 50 emails/day"
@@ -95,8 +95,8 @@ jobs:
       - name: Export Global data.json
         if: always()
         env:
-          SMTP_USER: ${{ secrets.SMTP_USER }}
-          SMTP_FROM: ${{ secrets.SMTP_FROM }}
+          SMTP_USER: ${{ secrets.SMTP_USER || 'business.n8n25@gmail.com' }}
+          SMTP_FROM: ${{ secrets.SMTP_FROM || 'business.n8n25@gmail.com' }}
         run: python global-outreach/generate_data_json.py
 
       - name: Commit Global Results
@@ -108,22 +108,23 @@ jobs:
           if git diff --staged --quiet; then
             echo "No global changes to commit."
           else
-            git commit -m "chore: global outreach sync [skip ci]"
-            git push
+            git commit -m "chore: global outreach sync [skip ci]" || true
+            git pull --rebase origin main || true
+            git push origin main
           fi
 
       # ── STEP 2: INDIA OUTREACH (cap = 50) — runs AFTER global ──────────
       - name: Run India Scraper & Outreach (50 emails/day)
         if: ${{ github.event_name == 'schedule' || github.event.inputs.run_india == 'true' }}
         env:
-          SMTP_HOST:     ${{ secrets.SMTP_HOST }}
-          SMTP_PORT:     ${{ secrets.SMTP_PORT }}
-          SMTP_USER:     ${{ secrets.SMTP_USER }}
-          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-          SMTP_FROM:     ${{ secrets.SMTP_FROM }}
-          IMAP_HOST:     ${{ secrets.IMAP_HOST }}
-          IMAP_USER:     ${{ secrets.IMAP_USER }}
-          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
+          SMTP_HOST:     ${{ secrets.SMTP_HOST || 'smtp.gmail.com' }}
+          SMTP_PORT:     ${{ secrets.SMTP_PORT || '587' }}
+          SMTP_USER:     ${{ secrets.SMTP_USER || 'business.n8n25@gmail.com' }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD || 'nryw vjuk zufu vwqz' }}
+          SMTP_FROM:     ${{ secrets.SMTP_FROM || 'business.n8n25@gmail.com' }}
+          IMAP_HOST:     ${{ secrets.IMAP_HOST || 'imap.gmail.com' }}
+          IMAP_USER:     ${{ secrets.IMAP_USER || 'business.n8n25@gmail.com' }}
+          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD || 'nryw vjuk zufu vwqz' }}
         run: |
           echo "=============================================="
           echo "  INDIA OUTREACH — Target: 50 emails/day"
@@ -143,8 +144,8 @@ jobs:
       - name: Export India data.json
         if: always()
         env:
-          SMTP_USER: ${{ secrets.SMTP_USER }}
-          SMTP_FROM: ${{ secrets.SMTP_FROM }}
+          SMTP_USER: ${{ secrets.SMTP_USER || 'business.n8n25@gmail.com' }}
+          SMTP_FROM: ${{ secrets.SMTP_FROM || 'business.n8n25@gmail.com' }}
         run: python india-outreach/generate_data_json_india.py
 
       - name: Commit India Results
@@ -156,6 +157,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "No India changes to commit."
           else
-            git commit -m "chore: india outreach sync [skip ci]"
-            git push
+            git commit -m "chore: india outreach sync [skip ci]" || true
+            git pull --rebase origin main || true
+            git push origin main
           fi

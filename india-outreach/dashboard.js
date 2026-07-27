@@ -21,114 +21,108 @@ let pages = {
 let chartStatus = null, chartCities = null, chartHealth = null, chartPipeline = null;
 
 function getFilteredLeads() {
-  if (selectedDate === 'ALL') {
-    return ALL_LEADS;
-  }
-  return ALL_LEADS.filter(lead => {
-    return lead.scraped_at && lead.scraped_at.startsWith(selectedDate);
-  });
+    if (selectedDate === 'ALL') {
+        return ALL_LEADS;
+    }
+    return ALL_LEADS.filter(lead => {
+        const scrapedDate  = lead.scraped_at ? lead.scraped_at.split('T')[0] : '';
+        const sentDate     = lead.sent_at ? lead.sent_at.split('T')[0] : '';
+        const followupDate = lead.followup_sent_at ? lead.followup_sent_at.split('T')[0] : '';
+        const repliedDate  = lead.replied_at ? lead.replied_at.split('T')[0] : '';
+        return (scrapedDate === selectedDate || sentDate === selectedDate || followupDate === selectedDate || repliedDate === selectedDate);
+    });
 }
 
 function calculateStats(leadsList) {
-  const stats = {
-    total: 0,
-    sent: 0,
-    followup_sent: 0,
-    replied: 0,
-    conversion_rate: 0,
-    old_website: 0,
-    no_website: 0,
-    followups_due: 0,
-    failed: 0,
-    modern_website: 0
-  };
+    const stats = {
+        total: 0,
+        no_website: 0,
+        old_website: 0,
+        modern_website: 0,
+        sent: 0,
+        replied: 0,
+        failed: 0,
+        conversion_rate: 0
+    };
 
-  const now = Date.now();
-  const FIVE_DAY = 5 * 24 * 60 * 60 * 1000;
+    leadsList.forEach(lead => {
+        if (lead.status === 'Filtered (No Email)') return;
 
-  leadsList.forEach(l => {
-    stats.total++;
-    
-    if (l.status === "No Website") {
-      stats.no_website++;
-    } else if (l.status === "Old Website" || l.status === "No Booking/AI") {
-      stats.old_website++;
-    } else if (l.status === "Modern Website") {
-      stats.modern_website++;
+        stats.total++;
+        if (lead.status === 'No Website') {
+            stats.no_website++;
+        } else if ((lead.status === 'Old Website' || lead.status === 'No Booking/AI') && lead.email && lead.email.trim() !== '') {
+            stats.old_website++;
+        } else if (lead.status === 'Modern Website') {
+            stats.modern_website++;
+        }
+
+        if (lead.email_status === 'Sent' || lead.email_status === 'Sent (Dry Run)' || lead.email_status === 'Replied') {
+            stats.sent++;
+        }
+        if (lead.email_status === 'Replied') {
+            stats.replied++;
+        } else if (lead.email_status === 'Failed') {
+            stats.failed++;
+        }
+    });
+
+    if (stats.sent > 0) {
+        stats.conversion_rate = Math.round((stats.replied / stats.sent) * 100 * 10) / 10;
+        if (stats.conversion_rate > 100) stats.conversion_rate = 100;
     }
 
-    if (["Sent", "Sent (Dry Run)", "Follow-Up Sent", "Replied"].includes(l.email_status)) {
-      stats.sent++;
-    }
-
-    if (l.email_status === "Follow-Up Sent" || l.followup_sent_at) {
-      stats.followup_sent++;
-    }
-
-    if (l.email_status === "Replied") {
-      stats.replied++;
-    } else if (l.email_status === "Failed") {
-      stats.failed++;
-    }
-
-    // Follow-ups due today calculation
-    const isDue = l.email_status === "Sent" && 
-                  !l.followup_sent_at && 
-                  l.sent_at && 
-                  (now - new Date(l.sent_at)) >= FIVE_DAY;
-    if (isDue) {
-      stats.followups_due++;
-    }
-  });
-
-  if (stats.sent > 0) {
-    stats.conversion_rate = Math.round((stats.replied / stats.sent) * 100);
-  }
-
-  return stats;
+    return stats;
 }
 
 function populateDateFilterBar() {
-  const bar = document.getElementById("date-filter-bar");
-  if (!bar) return;
+    const bar = document.getElementById('date-filter-bar');
+    if (!bar) return;
 
-  const dateSet = new Set();
-  ALL_LEADS.forEach(lead => {
-    if (lead.scraped_at) {
-      const datePart = lead.scraped_at.split("T")[0]; // "YYYY-MM-DD"
-      if (datePart && datePart.match(/^\d{4}-\d{2}-\d{2}$/)) {
-        dateSet.add(datePart);
-      }
-    }
-  });
-
-  const sortedDates = Array.from(dateSet).sort().reverse();
-
-  let html = `<button class="date-tab ${selectedDate === 'ALL' ? 'active' : ''}" onclick="setDateFilter('ALL')">All Time</button>`;
-
-  sortedDates.forEach(dateStr => {
-    const dateObj = new Date(dateStr);
-    const todayLocal = new Date();
-    const offset = todayLocal.getTimezoneOffset();
-    const localDateStr = new Date(todayLocal.getTime() - (offset*60*1000)).toISOString().split('T')[0];
-
-    let label = "";
-    const formattedDate = dateObj.toLocaleDateString("en-IN", {
-      month: "short",
-      day: "numeric",
-      year: "numeric"
+    // Extract unique dates from scraped_at, sent_at, followup_sent_at, replied_at
+    const dateSet = new Set();
+    ALL_LEADS.forEach(lead => {
+        ['scraped_at', 'sent_at', 'followup_sent_at', 'replied_at'].forEach(field => {
+            if (lead[field]) {
+                const datePart = lead[field].split('T')[0]; // "YYYY-MM-DD"
+                if (datePart && datePart.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                    dateSet.add(datePart);
+                }
+            }
+        });
     });
 
-    if (dateStr === localDateStr) {
-      label = `Today (${dateObj.toLocaleDateString("en-IN", { month: "short", day: "numeric" })})`;
-    } else {
-      label = formattedDate;
-    }
+    // Always include today's date if not present
+    const todayLocal = new Date();
+    const offset = todayLocal.getTimezoneOffset();
+    const localDateStr = new Date(todayLocal.getTime() - (offset * 60 * 1000)).toISOString().split('T')[0];
+    dateSet.add(localDateStr);
 
-    html += `<button class="date-tab ${selectedDate === dateStr ? 'active' : ''}" onclick="setDateFilter('${dateStr}')">${label}</button>`;
-  });
+    // Convert to sorted array (newest first)
+    const sortedDates = Array.from(dateSet).sort().reverse();
 
-  bar.innerHTML = html;
+    // Rebuild the HTML
+    let html = `<button class="date-tab ${selectedDate === 'ALL' ? 'active' : ''}" onclick="setDateFilter('ALL')">All Time</button>`;
+    
+    sortedDates.forEach(dateStr => {
+        const dateObj = new Date(dateStr);
+        let label = '';
+        const formattedDate = dateObj.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+        
+        if (dateStr === localDateStr) {
+            label = `Today (${dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})`;
+        } else {
+            label = formattedDate;
+        }
+
+        html += `<button class="date-tab ${selectedDate === dateStr ? 'active' : ''}" onclick="setDateFilter('${dateStr}')">${label}</button>`;
+    });
+
+    bar.innerHTML = html;
 }
 
 function setDateFilter(dateStr) {
