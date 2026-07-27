@@ -294,8 +294,7 @@ DEFAULT_SMTP_PORT = 587
 
 def _send_smtp_email(recipient: str, subject: str, body: str, config_user: str = "", config_pass: str = "") -> tuple[bool, str]:
     """
-    Robust SMTP email sender with automatic multi-tier failover.
-    Tries primary doctor account (business.n8n25@gmail.com) first; falls back to aditya.airecruitment@gmail.com on 534/auth failure.
+    SMTP email sender for Doctor Outreach (exclusively using business.n8n25@gmail.com).
     """
     host = os.environ.get("SMTP_HOST", DEFAULT_SMTP_HOST).strip()
     try:
@@ -303,17 +302,11 @@ def _send_smtp_email(recipient: str, subject: str, body: str, config_user: str =
     except Exception:
         port = DEFAULT_SMTP_PORT
 
-    env_user = os.environ.get("SMTP_USER", "").strip() or config_user.strip()
-    env_pass = os.environ.get("SMTP_PASSWORD", "").strip() or config_pass.strip()
+    env_user = os.environ.get("SMTP_USER", "").strip() or config_user.strip() or DEFAULT_SMTP_USER
+    env_pass = os.environ.get("SMTP_PASSWORD", "").strip() or config_pass.strip() or DEFAULT_SMTP_PASS
     from_addr = os.environ.get("SMTP_FROM", "").strip() or env_user or DEFAULT_SMTP_USER
 
-    creds_to_try = []
-    if env_user and env_pass:
-        creds_to_try.append((env_user, env_pass, from_addr))
-    if ("business.n8n25@gmail.com", "gtea ikdk yoat jekq", "business.n8n25@gmail.com") not in creds_to_try:
-        creds_to_try.append(("business.n8n25@gmail.com", "gtea ikdk yoat jekq", "business.n8n25@gmail.com"))
-    if ("aditya.airecruitment@gmail.com", "psxirlbzfcixnfyl", "aditya.airecruitment@gmail.com") not in creds_to_try:
-        creds_to_try.append(("aditya.airecruitment@gmail.com", "psxirlbzfcixnfyl", "aditya.airecruitment@gmail.com"))
+    creds_to_try = [(env_user, env_pass, from_addr)]
 
     last_err = None
     for u, p, sender in creds_to_try:
@@ -332,11 +325,11 @@ def _send_smtp_email(recipient: str, subject: str, body: str, config_user: str =
             return True, u
         except Exception as err:
             last_err = err
-            print(f"  [SMTP Warning] Send failed via {u}: {err}. Retrying fallback SMTP account...")
+            print(f"  [SMTP Error] Doctor email send failed via {u}: {err}.")
 
     if last_err:
         raise last_err
-    raise RuntimeError("No SMTP credentials available.")
+    raise RuntimeError("No SMTP credentials available for doctor outreach.")
 
 
 def _format_issues(website_notes: str) -> str:
