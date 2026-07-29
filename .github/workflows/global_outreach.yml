@@ -1,28 +1,31 @@
 name: Global Lead Outreach Campaign
 
 on:
-  push:
-    branches: [ main ]
   schedule:
     # Runs daily at 09:00 UTC = 2:30 PM IST
     - cron: '0 9 * * *'
-
   workflow_dispatch:
     inputs:
       dry_run:
-        description: 'Dry-run only? (true = log, false = send real emails)'
+        description: 'Dry-run? (true = log only, false = send real emails)'
         required: false
         default: 'false'
         type: choice
-        options: ['true', 'false']
+        options: ['false', 'true']
       limit:
         description: 'Max Google Maps results per search'
         required: false
         default: '50'
       target:
-        description: 'Target qualified leads today (default: 50)'
+        description: 'Target emails to send today'
         required: false
         default: '50'
+      no_scrape:
+        description: 'Skip scraping, only send emails from existing leads'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
 
 permissions:
   contents: write
@@ -30,14 +33,15 @@ permissions:
 jobs:
   global-outreach:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 40
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
           submodules: false
+          fetch-depth: 1
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
@@ -64,26 +68,23 @@ jobs:
           IMAP_HOST:     ${{ secrets.IMAP_HOST || 'imap.gmail.com' }}
           IMAP_USER:     ${{ secrets.IMAP_USER || 'cupboard587@gmail.com' }}
           IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD || 'ykzv xkxl vecb dlgx' }}
+          PYTHONUNBUFFERED: "1"
         run: |
           echo "======================================"
           echo "  GLOBAL OUTREACH — 2:30 PM IST"
           echo "  Target: 50 emails/day"
-          echo "  Follow-ups: max 20 | New: min 30"
           echo "======================================"
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            ARGS="--limit ${{ github.event.inputs.limit || '50' }} --target ${{ github.event.inputs.target || '50' }} --max-iterations 10"
-            [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
-            echo "Args: $ARGS"
-            eval python global-outreach/scrape_and_outreach.py $ARGS
-          else
-            python global-outreach/scrape_and_outreach.py --target 50 --limit 50 --max-iterations 10
-          fi
+          ARGS="--target ${{ github.event.inputs.target || '50' }} --limit ${{ github.event.inputs.limit || '50' }} --max-iterations 10"
+          [ "${{ github.event.inputs.dry_run }}" = "true" ]   && ARGS="$ARGS --dry-run"
+          [ "${{ github.event.inputs.no_scrape }}" = "true" ] && ARGS="$ARGS --no-scrape"
+          echo "Running: python global-outreach/scrape_and_outreach.py $ARGS"
+          eval python global-outreach/scrape_and_outreach.py $ARGS
 
       - name: Export data.json
         if: always()
         env:
-          SMTP_USER: ${{ secrets.SMTP_USER }}
-          SMTP_FROM: ${{ secrets.SMTP_FROM }}
+          SMTP_USER: ${{ secrets.SMTP_USER || 'cupboard587@gmail.com' }}
+          SMTP_FROM: ${{ secrets.SMTP_FROM || 'cupboard587@gmail.com' }}
         run: python global-outreach/generate_data_json.py
 
       - name: Commit Results
@@ -91,12 +92,11 @@ jobs:
         run: |
           git config --global user.name  "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout main || true
           git add global-outreach/leads.db global-outreach/data.json global-outreach/sender_email.txt || true
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "chore: global outreach sync [skip ci]" || true
+            git commit -m "chore: global outreach daily sync [skip ci]"
             git pull --rebase origin main || true
             git push origin main
           fi

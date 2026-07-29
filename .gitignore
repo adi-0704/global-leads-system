@@ -26,3 +26,11 @@ exports/
 # Keep leads.db tracked in git (the Actions bot writes it back)
 # If a future .gitignore template tries to ignore *.db, override it here:
 !global-outreach/leads.db
+!india-outreach/leads.db
+
+# Embedded git repos that are NOT submodules — ignore their .git to prevent
+# them from being tracked as submodule pointers (mode 160000)
+personalized site/
+personalized site/.git
+scratch/city-dental-clinic-/
+scratch/city-dental-clinic-/.git

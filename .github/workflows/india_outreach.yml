@@ -1,28 +1,31 @@
 name: India Lead Outreach Campaign
 
 on:
-  push:
-    branches: [ main ]
   schedule:
     # Runs daily at 04:30 UTC = 10:00 AM IST
     - cron: '30 4 * * *'
-
   workflow_dispatch:
     inputs:
       dry_run:
-        description: 'Dry-run only? (true = log, false = send real emails)'
+        description: 'Dry-run? (true = log only, false = send real emails)'
         required: false
         default: 'false'
         type: choice
-        options: ['true', 'false']
+        options: ['false', 'true']
       limit:
         description: 'Max Google Maps results per search'
         required: false
         default: '50'
       target:
-        description: 'Target qualified leads today (default: 50)'
+        description: 'Target emails to send today'
         required: false
         default: '50'
+      no_scrape:
+        description: 'Skip scraping, only send emails from existing leads'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
 
 permissions:
   contents: write
@@ -30,14 +33,15 @@ permissions:
 jobs:
   india-outreach:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 40
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
           submodules: false
+          fetch-depth: 1
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
@@ -58,33 +62,30 @@ jobs:
         env:
           SMTP_HOST:     ${{ secrets.SMTP_HOST || 'smtp.gmail.com' }}
           SMTP_PORT:     ${{ secrets.SMTP_PORT || '587' }}
-          SMTP_USER:     ${{ secrets.SMTP_USER || 'aditya.airecruitment@gmail.com' }}
-          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD || 'psxirlbzfcixnfyl' }}
-          SMTP_FROM:     ${{ secrets.SMTP_FROM || 'aditya.airecruitment@gmail.com' }}
+          SMTP_USER:     ${{ secrets.SMTP_USER || 'cupboard587@gmail.com' }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD || 'ykzv xkxl vecb dlgx' }}
+          SMTP_FROM:     ${{ secrets.SMTP_FROM || 'cupboard587@gmail.com' }}
           IMAP_HOST:     ${{ secrets.IMAP_HOST || 'imap.gmail.com' }}
-          IMAP_USER:     ${{ secrets.IMAP_USER || 'aditya.airecruitment@gmail.com' }}
-          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD || 'psxirlbzfcixnfyl' }}
+          IMAP_USER:     ${{ secrets.IMAP_USER || 'cupboard587@gmail.com' }}
+          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD || 'ykzv xkxl vecb dlgx' }}
+          PYTHONUNBUFFERED: "1"
         run: |
           echo "======================================"
           echo "  INDIA OUTREACH — 10:00 AM IST"
           echo "  35+ niches | 80+ cities"
           echo "  Target: 50 emails/day"
-          echo "  Follow-ups: max 20 | New: min 30"
           echo "======================================"
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            ARGS="--limit ${{ github.event.inputs.limit || '50' }} --target ${{ github.event.inputs.target || '50' }} --max-iterations 10"
-            [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
-            echo "Args: $ARGS"
-            eval python india-outreach/scrape_and_outreach_india.py $ARGS
-          else
-            python india-outreach/scrape_and_outreach_india.py --target 50 --limit 50 --max-iterations 10
-          fi
+          ARGS="--target ${{ github.event.inputs.target || '50' }} --limit ${{ github.event.inputs.limit || '50' }} --max-iterations 10"
+          [ "${{ github.event.inputs.dry_run }}" = "true" ]   && ARGS="$ARGS --dry-run"
+          [ "${{ github.event.inputs.no_scrape }}" = "true" ] && ARGS="$ARGS --no-scrape"
+          echo "Running: python india-outreach/scrape_and_outreach_india.py $ARGS"
+          eval python india-outreach/scrape_and_outreach_india.py $ARGS
 
       - name: Export India data.json
         if: always()
         env:
-          SMTP_USER: ${{ secrets.SMTP_USER }}
-          SMTP_FROM: ${{ secrets.SMTP_FROM }}
+          SMTP_USER: ${{ secrets.SMTP_USER || 'cupboard587@gmail.com' }}
+          SMTP_FROM: ${{ secrets.SMTP_FROM || 'cupboard587@gmail.com' }}
         run: python india-outreach/generate_data_json_india.py
 
       - name: Commit Results
@@ -92,12 +93,11 @@ jobs:
         run: |
           git config --global user.name  "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout main || true
           git add india-outreach/leads.db india-outreach/data.json india-outreach/sender_email.txt || true
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "chore: india outreach sync [skip ci]" || true
+            git commit -m "chore: india outreach daily sync [skip ci]"
             git pull --rebase origin main || true
             git push origin main
           fi
