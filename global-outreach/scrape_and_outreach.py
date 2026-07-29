@@ -39,6 +39,51 @@ if PARENT_DIR not in sys.path:
 
 from scraper import GoogleMapsScraper, EmailFinder  # noqa: E402
 
+# ── Email Safety Module (anti-spam headers, retry, jitter) ────────────────────
+try:
+    from email_safety import (
+        send_safe_email, safe_delay,
+        check_daily_cap, resilient_scrape, resilient_send,
+        GLOBAL_DAILY_HARD_CAP,
+    )
+    _SAFETY_MODULE = True
+except ImportError:
+    _SAFETY_MODULE = False
+    print("[Warning] email_safety.py not found — using basic SMTP fallback.")
+
+# -- Email Intelligence (MX validation, lead scoring, run summaries) ----------
+try:
+    from email_intelligence import (
+        validate_email_full, score_lead, rotate_subject,
+        send_run_summary, check_bounce_guard, format_send_stats,
+        is_good_send_time,
+    )
+    _INTELLIGENCE_MODULE = True
+except ImportError:
+    _INTELLIGENCE_MODULE = False
+    print("[Warning] email_intelligence.py not found -- skipping MX validation & scoring.")
+    def validate_email_full(e): return True, "ok"
+    def score_lead(**kw): return 50
+    def rotate_subject(cat="", business_name="", seed=None): return None
+    def send_run_summary(*a, **kw): return False
+    def check_bounce_guard(db, **kw): return True, "ok"
+    def format_send_stats(**kw): return ""
+    def is_good_send_time(): return True, "ok"
+
+# -- Cross-Workflow Dedup Engine (prevents same doctor being emailed twice) ---
+try:
+    from dedup_engine import DedupEngine as _DedupEngine
+    _dedup = _DedupEngine()   # uses shared global_dedup.db at project root
+    _DEDUP_MODULE = True
+except ImportError:
+    _DEDUP_MODULE = False
+    print("[Warning] dedup_engine.py not found -- dedup disabled.")
+    class _FakeDedup:
+        def is_sendable(self, e): return True
+        def mark_contacted(self, *a, **kw): return True
+        def scan_reply_for_unsubscribe(self, *a): return False
+    _dedup = _FakeDedup()
+
 # Default paths
 DB_PATH     = os.path.join(SCRIPT_DIR, "leads.db")
 CONFIG_PATH = os.path.join(SCRIPT_DIR, "config.json")
@@ -592,67 +637,6 @@ async def scrape_until_target(
 # ---------------------------------------------------------------------------
 # Follow-Up Engine (Global)
 # ---------------------------------------------------------------------------
-
-def send_followup_emails_global(
-    db_path: str,
-    config:  dict,
-    budget_used: int = 0,
-    dry_run: bool = False,
-) -> int:
-    """
-    Send follow-up emails (global system) to leads that:
-      - email_status = 'Sent'
-      - sent_at >= follow_up_days (5) days ago
-      - followup_sent_at IS NULL
-
-    Capped at followup_max_per_day (20). Returns number sent.
-    Excess follow-ups carry over to the next day — never dropped.
-    """
-    DAILY_CAP      = config.get("daily_email_limit", 50)
-    FOLLOWUP_MAX   = config.get("followup_max_per_day", 20)
-    FOLLOW_UP_DAYS = config.get("follow_up_days", 5)
-    SEND_GAP_SEC   = config.get("send_gap_seconds", 60)
-
-    remaining_budget = DAILY_CAP - budget_used
-    followup_cap     = min(FOLLOWUP_MAX, remaining_budget)
-
-    if followup_cap <= 0:
-        print("[Follow-Up Global] No budget remaining for follow-ups today.")
-        return 0
-
-    from datetime import timedelta
-    cutoff = (datetime.now() - timedelta(days=FOLLOW_UP_DAYS)).strftime("%Y-%m-%d")
-
-    with sqlite3.connect(db_path) as conn:
-        due_leads = conn.execute("""
-            SELECT id, name, email, website, query, location, status, website_notes
-            FROM   leads
-            WHERE  email_status    = 'Sent'
-              AND  sent_at         < ?
-              AND  followup_sent_at IS NULL
-              AND  email           IS NOT NULL
-              AND  email           != ''
-            ORDER BY sent_at ASC
-            LIMIT ?
-        """, (cutoff + "T00:00:00", followup_cap)).fetchall()
-
-    if not due_leads:
-        print("[Follow-Up Global] No follow-ups due today.")
-        return 0
-
-    print(f"\n[Follow-Up Global] {len(due_leads)} follow-up(s) due (cap: {followup_cap}). Sending...")
-
-# ── Import shared email safety module ────────────────────────────────────────
-try:
-    from email_safety import (
-        send_safe_email, get_smtp_creds, safe_delay,
-        check_daily_cap, resilient_scrape, resilient_send,
-        GLOBAL_DAILY_HARD_CAP,
-    )
-    _SAFETY_MODULE = True
-except ImportError:
-    _SAFETY_MODULE = False
-    print("[Warning] email_safety.py not found — using basic SMTP fallback.")
 
 DEFAULT_SMTP_USER = "cupboard587@gmail.com"
 DEFAULT_SMTP_PASS = "ykzv xkxl vecb dlgx"
