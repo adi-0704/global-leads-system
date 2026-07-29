@@ -16,11 +16,11 @@ on:
       limit:
         description: 'Max Google Maps results per search'
         required: false
-        default: '150'
+        default: '50'
       target:
-        description: 'Target qualified leads today (default: 400)'
+        description: 'Target qualified leads today (default: 50)'
         required: false
-        default: '400'
+        default: '50'
 
 permissions:
   contents: write
@@ -28,7 +28,7 @@ permissions:
 jobs:
   global-outreach:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 45
 
     steps:
       - name: Checkout Repository
@@ -68,11 +68,11 @@ jobs:
           echo "  Follow-ups: max 20 | New: min 30"
           echo "======================================"
           if [ "${{ github.event_name }}" = "schedule" ]; then
-            python global-outreach/scrape_and_outreach.py --target 400 --limit 150 --max-iterations 100
+            python global-outreach/scrape_and_outreach.py --target 50 --limit 50 --max-iterations 10
           else
-            ARGS="--limit ${{ github.event.inputs.limit || '150' }}"
+            ARGS="--limit ${{ github.event.inputs.limit || '50' }}"
             [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
-            TARGET="${{ github.event.inputs.target || '400' }}"
+            TARGET="${{ github.event.inputs.target || '50' }}"
             [ "$TARGET" != "0" ] && ARGS="$ARGS --target $TARGET"
             echo "Args: $ARGS"
             eval python global-outreach/scrape_and_outreach.py $ARGS

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Outreach HQ — Global & India Dashboards</title>
+  <title>Outreach HQ — Unified Command Centre</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <style>
@@ -22,9 +22,9 @@
     .logo { font-size: 2.8rem; margin-bottom: 8px; }
     h1 {
       font-family: 'Outfit', sans-serif;
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 800;
-      background: linear-gradient(90deg, #7c6af7, #FF8C00);
+      background: linear-gradient(90deg, #7c6af7, #FF8C00, #38ef7d);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 8px;
@@ -36,13 +36,13 @@
       gap: 24px;
       flex-wrap: wrap;
       justify-content: center;
-      max-width: 700px;
+      max-width: 960px;
     }
     .card {
       background: #0d1340;
       border: 1px solid rgba(255,255,255,0.08);
       border-radius: 18px;
-      padding: 32px 36px;
+      padding: 32px 30px;
       text-align: center;
       text-decoration: none;
       color: inherit;
@@ -58,6 +58,8 @@
     .card.global:hover { border-color: #7c6af7; box-shadow: 0 16px 40px rgba(124,106,247,0.2); }
     .card.india  { border-color: rgba(255,140,0,0.3); }
     .card.india:hover  { border-color: #FF8C00; box-shadow: 0 16px 40px rgba(255,140,0,0.2); }
+    .card.recruitment { border-color: rgba(56,239,125,0.3); }
+    .card.recruitment:hover { border-color: #38ef7d; box-shadow: 0 16px 40px rgba(56,239,125,0.2); }
 
     .card-icon { font-size: 3rem; margin-bottom: 16px; }
     .card h2 {
@@ -68,6 +70,7 @@
     }
     .card.global h2 { color: #a78bfa; }
     .card.india  h2 { color: #FF8C00; }
+    .card.recruitment h2 { color: #38ef7d; }
     .card p { font-size: 0.82rem; color: #718096; line-height: 1.6; }
     .card .pill {
       display: inline-block;
@@ -79,6 +82,7 @@
     }
     .card.global .pill { background: rgba(124,106,247,0.15); color: #a78bfa; }
     .card.india  .pill { background: rgba(255,140,0,0.12); color: #FF8C00; }
+    .card.recruitment .pill { background: rgba(56,239,125,0.15); color: #38ef7d; }
 
     .footer { margin-top: 48px; font-size: 0.75rem; color: #4a5568; text-align: center; }
     .footer a { color: #718096; }
@@ -87,7 +91,7 @@
 <body>
   <div class="logo">⚡</div>
   <h1>Outreach HQ</h1>
-  <p class="subtitle">Automated doctor outreach · Scrape → Audit → Email → Follow-Up · 100 emails/day</p>
+  <p class="subtitle">Unified Command Centre · Global Doctor, India Doctor & Recruitment Agency Workflows</p>
 
   <div class="cards">
     <a href="global-outreach/dashboard.html" class="card global">
@@ -103,10 +107,17 @@
       <p>35+ medical specialties across 80+ Indian cities. Practo, JustDial, WhatsApp context.</p>
       <span class="pill">50 emails / day</span>
     </a>
+
+    <a href="../recruitment-leads-system/dashboard.html" class="card recruitment">
+      <div class="card-icon">💼</div>
+      <h2>Recruitment Dashboard</h2>
+      <p>Tech & healthcare staffing agencies. ATS tech stack detection + AI opportunity score.</p>
+      <span class="pill">50 emails / day</span>
+    </a>
   </div>
 
   <div class="footer">
-    <p>Powered by GitHub Actions · Runs daily at 2:30 PM IST · Follow-ups sent after 5 days</p>
+    <p>Powered by GitHub Actions · Runs daily · Real-time 2-way SQLite & JSON Sync</p>
     <p style="margin-top:6px">Built by Aditya Tyagi — AI & Automation Engineer</p>
   </div>
 </body>
