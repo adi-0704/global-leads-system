@@ -58,12 +58,12 @@ jobs:
         env:
           SMTP_HOST:     ${{ secrets.SMTP_HOST || 'smtp.gmail.com' }}
           SMTP_PORT:     ${{ secrets.SMTP_PORT || '587' }}
-          SMTP_USER:     ${{ secrets.SMTP_USER || 'aditya.airecruitment@gmail.com' }}
-          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD || 'psxirlbzfcixnfyl' }}
-          SMTP_FROM:     ${{ secrets.SMTP_FROM || 'aditya.airecruitment@gmail.com' }}
+          SMTP_USER:     ${{ secrets.SMTP_USER || 'cupboard587@gmail.com' }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD || 'ykzv xkxl vecb dlgx' }}
+          SMTP_FROM:     ${{ secrets.SMTP_FROM || 'cupboard587@gmail.com' }}
           IMAP_HOST:     ${{ secrets.IMAP_HOST || 'imap.gmail.com' }}
-          IMAP_USER:     ${{ secrets.IMAP_USER || 'aditya.airecruitment@gmail.com' }}
-          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD || 'psxirlbzfcixnfyl' }}
+          IMAP_USER:     ${{ secrets.IMAP_USER || 'cupboard587@gmail.com' }}
+          IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD || 'ykzv xkxl vecb dlgx' }}
         run: |
           echo "======================================"
           echo "  GLOBAL OUTREACH — 2:30 PM IST"
