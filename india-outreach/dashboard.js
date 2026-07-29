@@ -148,11 +148,31 @@ function setDateFilter(dateStr) {
   renderAll();
 }
 
+// ── Auto-Refresh (Real-Time Sync) ─────────────────────────────────────────
+let _indiaRefreshTimer = null;
+let _indiaCountdown = 60;
+let _indiaCountdownTick = null;
+
+function startIndiaAutoRefresh() {
+  if (_indiaRefreshTimer) clearInterval(_indiaRefreshTimer);
+  if (_indiaCountdownTick) clearInterval(_indiaCountdownTick);
+  _indiaCountdown = 60;
+  _indiaRefreshTimer = setInterval(() => { fetchData(); _indiaCountdown = 60; }, 60000);
+  _indiaCountdownTick = setInterval(() => {
+    _indiaCountdown = Math.max(0, _indiaCountdown - 1);
+    const el = document.getElementById("last-updated");
+    if (el && el.dataset.base) {
+      el.textContent = el.dataset.base + `  ·  Refresh in ${_indiaCountdown}s`;
+    }
+  }, 1000);
+}
+
 // ── Boot ───────────────────────────────────────────────────────────────────
-document.addEventListener("DOMContentLoaded", fetchData);
+document.addEventListener("DOMContentLoaded", () => { fetchData(); startIndiaAutoRefresh(); });
 
 async function fetchData() {
-  document.getElementById("last-updated").textContent = "Loading…";
+  const luEl = document.getElementById("last-updated");
+  if (luEl) luEl.textContent = "Loading…";
   try {
     const res  = await fetch("data.json?t=" + Date.now());
     const data = await res.json();
@@ -163,16 +183,19 @@ async function fetchData() {
     CITY_DATA  = data.city_breakdown  || [];
     NO_WEB_CSV = data.no_website_csv  || "";
 
+    const now = new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
     const genAt = data.generated_at
       ? new Date(data.generated_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) + " IST"
       : "—";
-    document.getElementById("last-updated").textContent = "Updated: " + genAt;
+    const baseStr = `Updated: ${now}  ·  Data: ${genAt}`;
+    if (luEl) { luEl.textContent = baseStr; luEl.dataset.base = baseStr; }
+    _indiaCountdown = 60;
 
     populateDateFilterBar();
     renderAll();
   } catch (e) {
     console.error("Failed to load data.json:", e);
-    document.getElementById("last-updated").textContent = "⚠ Failed to load data";
+    if (luEl) luEl.textContent = "⚠ Failed to load data — retrying in 60s";
   }
 }
 
@@ -217,8 +240,10 @@ function switchTab(tab) {
 function renderStatCards() {
   const filtered = getFilteredLeads();
   const s = calculateStats(filtered);
+  // Emails Sent: always count by sent_at date (not scraped_at) so today's emails always show
+  const sentCount = countSentOnDate(selectedDate);
   setText("stat-total",     fmtNum(s.total));
-  setText("stat-sent",      fmtNum(s.sent));
+  setText("stat-sent",      fmtNum(sentCount));   // ← by sent_at date
   setText("stat-followup",  fmtNum(s.followup_sent));
   setText("stat-replied",   fmtNum(s.replied));
   setText("stat-conv",      (s.conversion_rate || 0) + "%");
