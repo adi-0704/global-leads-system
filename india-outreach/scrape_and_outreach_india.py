@@ -1080,10 +1080,7 @@ def check_for_replies(db_path: str) -> None:
 # ---------------------------------------------------------------------------
 
 def git_sync(db_path: str):
-    """Export data.json and commit/push changes in real-time during run."""
-    if not os.environ.get("GITHUB_ACTIONS"):
-        return
-
+    """Export data.json and update sender email locally during run."""
     try:
         smtp_from = os.environ.get("SMTP_FROM", os.environ.get("SMTP_USER", "")).strip()
         if smtp_from:
@@ -1091,7 +1088,7 @@ def git_sync(db_path: str):
             with open(txt_path, "w", encoding="utf-8") as f:
                 f.write(smtp_from)
     except Exception as e:
-        print(f"  [Git Sync] sender_email.txt write failed: {e}")
+        print(f"  [Sync] sender_email.txt write failed: {e}")
 
     try:
         if SCRIPT_DIR not in sys.path:
@@ -1099,29 +1096,7 @@ def git_sync(db_path: str):
         import generate_data_json_india
         generate_data_json_india.main()
     except Exception as export_err:
-        print(f"  [Git Sync] data.json export failed: {export_err}")
-        return
-
-    try:
-        subprocess.run(["git", "config", "--global", "user.name",  "github-actions[bot]"], check=True, capture_output=True)
-        subprocess.run(["git", "config", "--global", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True, capture_output=True)
-        subprocess.run(["git", "add",
-                        "india-outreach/leads.db",
-                        "india-outreach/data.json",
-                        "india-outreach/sender_email.txt"],
-                       check=True, capture_output=True)
-        diff = subprocess.run(["git", "diff", "--staged", "--quiet"])
-        if diff.returncode == 0:
-            return
-        subprocess.run(["git", "commit", "-m", "chore: india real-time dashboard sync [skip ci]"], check=True, capture_output=True)
-        subprocess.run(["git", "pull",  "--rebase"], check=True, capture_output=True)
-        subprocess.run(["git", "push"],              check=True, capture_output=True)
-        print("  [Git Sync] India dashboard updated on GitHub Pages.")
-    except subprocess.CalledProcessError as e:
-        err = e.stderr.decode("utf-8", errors="ignore") if e.stderr else ""
-        print(f"  [Git Sync] Git error: {err}")
-    except Exception as e:
-        print(f"  [Git Sync] Unexpected error: {e}")
+        print(f"  [Sync] data.json export failed: {export_err}")
 
 # ---------------------------------------------------------------------------
 # CLI Entry Point

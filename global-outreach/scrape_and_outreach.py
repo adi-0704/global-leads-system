@@ -1064,11 +1064,7 @@ def send_outreach_emails(
 # ---------------------------------------------------------------------------
 
 def git_sync(db_path: str):
-    """Export data.json and commit/push changes in real-time during run."""
-    if not os.environ.get("GITHUB_ACTIONS"):
-        return
-
-    # Write sender email first
+    """Export data.json and update sender email locally during run."""
     try:
         smtp_from = os.environ.get("SMTP_FROM", os.environ.get("SMTP_USER", "")).strip()
         if smtp_from:
@@ -1077,9 +1073,8 @@ def git_sync(db_path: str):
             with open(txt_path, "w", encoding="utf-8") as f:
                 f.write(smtp_from)
     except Exception as e:
-        print(f"  [Real-time Sync] Failed to write sender_email.txt: {e}")
+        print(f"  [Sync] Failed to write sender_email.txt: {e}")
 
-    # Export data.json first
     try:
         script_dir = os.path.dirname(os.path.abspath(__file__))
         if script_dir not in sys.path:
@@ -1087,40 +1082,7 @@ def git_sync(db_path: str):
         import generate_data_json
         generate_data_json.main()
     except Exception as export_err:
-        print(f"  [Real-time Sync] Failed to export data.json: {export_err}")
-        return
-
-    # Commit and push
-    try:
-        import subprocess
-        # Configure user if needed
-        subprocess.run(["git", "config", "--global", "user.name", "github-actions[bot]"], check=True, capture_output=True)
-        subprocess.run(["git", "config", "--global", "user.email", "github-actions[bot]@users.noreply.github.com"], check=True, capture_output=True)
-        
-        # Add files (relative paths from repo root)
-        subprocess.run(["git", "add", "global-outreach/leads.db", "global-outreach/data.json", "global-outreach/sender_email.txt"], check=True, capture_output=True)
-        
-        # Check if changes exist
-        diff_res = subprocess.run(["git", "diff", "--staged", "--quiet"])
-        if diff_res.returncode == 0:
-            return # No changes
-            
-        # Commit
-        subprocess.run([
-            "git", "commit", "-m", "chore: real-time dashboard sync [skip ci]"
-        ], check=True, capture_output=True)
-        
-        # Pull with rebase
-        subprocess.run(["git", "pull", "--rebase"], check=True, capture_output=True)
-        
-        # Push
-        subprocess.run(["git", "push"], check=True, capture_output=True)
-        print("  [Real-time Sync] Database & dashboard updated on GitHub Pages.")
-    except subprocess.CalledProcessError as git_err:
-        stderr_msg = git_err.stderr.decode('utf-8', errors='ignore') if git_err.stderr else ''
-        print(f"  [Real-time Sync] Git command failed: {stderr_msg}")
-    except Exception as err:
-        print(f"  [Real-time Sync] Unexpected error: {err}")
+        print(f"  [Sync] Failed to export data.json: {export_err}")
 
 
 # ---------------------------------------------------------------------------
