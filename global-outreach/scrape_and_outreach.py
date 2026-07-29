@@ -642,6 +642,18 @@ def send_followup_emails_global(
 
     print(f"\n[Follow-Up Global] {len(due_leads)} follow-up(s) due (cap: {followup_cap}). Sending...")
 
+# ── Import shared email safety module ────────────────────────────────────────
+try:
+    from email_safety import (
+        send_safe_email, get_smtp_creds, safe_delay,
+        check_daily_cap, resilient_scrape, resilient_send,
+        GLOBAL_DAILY_HARD_CAP,
+    )
+    _SAFETY_MODULE = True
+except ImportError:
+    _SAFETY_MODULE = False
+    print("[Warning] email_safety.py not found — using basic SMTP fallback.")
+
 DEFAULT_SMTP_USER = "cupboard587@gmail.com"
 DEFAULT_SMTP_PASS = "ykzv xkxl vecb dlgx"
 DEFAULT_SMTP_HOST = "smtp.gmail.com"
@@ -649,7 +661,8 @@ DEFAULT_SMTP_PORT = 587
 
 def _send_smtp_email(recipient: str, subject: str, body: str, config_user: str = "", config_pass: str = "") -> tuple[bool, str]:
     """
-    SMTP email sender for Doctor Outreach (exclusively using business.n8n25@gmail.com).
+    SMTP email sender — uses email_safety.py for full anti-spam compliance.
+    Falls back to basic SMTP if module not available.
     """
     host = os.environ.get("SMTP_HOST", DEFAULT_SMTP_HOST).strip()
     try:
@@ -657,34 +670,38 @@ def _send_smtp_email(recipient: str, subject: str, body: str, config_user: str =
     except Exception:
         port = DEFAULT_SMTP_PORT
 
-    env_user = os.environ.get("SMTP_USER", "").strip() or config_user.strip() or DEFAULT_SMTP_USER
-    env_pass = os.environ.get("SMTP_PASSWORD", "").strip() or config_pass.strip() or DEFAULT_SMTP_PASS
-    from_addr = os.environ.get("SMTP_FROM", "").strip() or env_user or DEFAULT_SMTP_USER
+    env_user  = os.environ.get("SMTP_USER",     "").strip() or config_user.strip()  or DEFAULT_SMTP_USER
+    env_pass  = os.environ.get("SMTP_PASSWORD", "").strip() or config_pass.strip()  or DEFAULT_SMTP_PASS
+    from_addr = os.environ.get("SMTP_FROM",     "").strip() or env_user
 
-    creds_to_try = [(env_user, env_pass, from_addr)]
+    if _SAFETY_MODULE:
+        return send_safe_email(
+            recipient  = recipient,
+            subject    = subject,
+            body       = body,
+            smtp_user  = env_user,
+            smtp_pass  = env_pass,
+            smtp_host  = host,
+            smtp_port  = port,
+            smtp_from  = from_addr,
+            max_retries= 2,
+        )
 
-    last_err = None
-    for u, p, sender in creds_to_try:
-        try:
-            msg = MIMEMultipart()
-            msg["From"] = sender
-            msg["To"] = recipient
-            msg["Subject"] = subject
-            msg.attach(MIMEText(body, "plain", "utf-8"))
+    # ── Fallback basic SMTP (if email_safety.py missing) ─────────────────────
+    try:
+        msg = MIMEMultipart()
+        msg["From"]    = from_addr
+        msg["To"]      = recipient
+        msg["Subject"] = subject
+        msg.attach(MIMEText(body, "plain", "utf-8"))
+        with smtplib.SMTP(host, port, timeout=25) as server:
+            server.ehlo(); server.starttls(); server.login(env_user, env_pass)
+            server.sendmail(from_addr, [recipient], msg.as_string())
+        return True, env_user
+    except Exception as err:
+        print(f"  [SMTP Error] {recipient}: {err}")
+        raise
 
-            with smtplib.SMTP(host, port, timeout=25) as server:
-                server.ehlo()
-                server.starttls()
-                server.login(u, p)
-                server.sendmail(sender, [recipient], msg.as_string())
-            return True, u
-        except Exception as err:
-            last_err = err
-            print(f"  [SMTP Error] Doctor email send failed via {u}: {err}.")
-
-    if last_err:
-        raise last_err
-    raise RuntimeError("No SMTP credentials available for doctor outreach.")
 
 
 def send_followup_emails_global(

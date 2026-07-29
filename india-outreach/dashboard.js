@@ -20,58 +20,64 @@ let pages = {
 // Chart instances (so we can destroy/recreate on re-render)
 let chartStatus = null, chartCities = null, chartHealth = null, chartPipeline = null;
 
+// Helper: today's local YYYY-MM-DD
+function todayLocal() {
+    const d = new Date();
+    return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+}
+
 function getFilteredLeads() {
-    if (selectedDate === 'ALL') {
-        return ALL_LEADS;
-    }
+    if (selectedDate === 'ALL') return ALL_LEADS;
+    const isTodayFilter = (selectedDate === todayLocal());
     return ALL_LEADS.filter(lead => {
-        const scrapedDate  = lead.scraped_at ? lead.scraped_at.split('T')[0] : '';
-        const sentDate     = lead.sent_at ? lead.sent_at.split('T')[0] : '';
-        const followupDate = lead.followup_sent_at ? lead.followup_sent_at.split('T')[0] : '';
-        const repliedDate  = lead.replied_at ? lead.replied_at.split('T')[0] : '';
-        return (scrapedDate === selectedDate || sentDate === selectedDate || followupDate === selectedDate || repliedDate === selectedDate);
+        const scrapedDate  = lead.scraped_at        ? lead.scraped_at.split('T')[0]        : '';
+        const sentDate     = lead.sent_at           ? lead.sent_at.split('T')[0]           : '';
+        const followupDate = lead.followup_sent_at  ? lead.followup_sent_at.split('T')[0]  : '';
+        const repliedDate  = lead.replied_at        ? lead.replied_at.split('T')[0]        : '';
+        if (isTodayFilter) {
+            // Always show leads emailed/followed-up/replied today, regardless of scrape date
+            if (sentDate === selectedDate)     return true;
+            if (followupDate === selectedDate) return true;
+            if (repliedDate === selectedDate)  return true;
+            if (scrapedDate === selectedDate)  return true;
+            return false;
+        }
+        return (scrapedDate === selectedDate || sentDate === selectedDate ||
+                followupDate === selectedDate || repliedDate === selectedDate);
     });
 }
 
-function calculateStats(leadsList) {
-    const stats = {
-        total: 0,
-        no_website: 0,
-        old_website: 0,
-        modern_website: 0,
-        sent: 0,
-        replied: 0,
-        failed: 0,
-        conversion_rate: 0
-    };
+// Count emails sent on a specific date (by sent_at, not scraped_at)
+function countSentOnDate(dateStr) {
+    if (dateStr === 'ALL') {
+        return ALL_LEADS.filter(l =>
+            l.email_status === 'Sent' || l.email_status === 'Sent (Dry Run)' ||
+            l.email_status === 'Replied' || l.email_status === 'Follow-Up Sent'
+        ).length;
+    }
+    return ALL_LEADS.filter(l => {
+        const sd = l.sent_at          ? l.sent_at.split('T')[0]           : '';
+        const fd = l.followup_sent_at ? l.followup_sent_at.split('T')[0]  : '';
+        return sd === dateStr || fd === dateStr;
+    }).length;
+}
 
+function calculateStats(leadsList) {
+    const stats = { total:0, no_website:0, old_website:0, modern_website:0, sent:0, replied:0, failed:0, conversion_rate:0 };
     leadsList.forEach(lead => {
         if (lead.status === 'Filtered (No Email)') return;
-
         stats.total++;
-        if (lead.status === 'No Website') {
-            stats.no_website++;
-        } else if ((lead.status === 'Old Website' || lead.status === 'No Booking/AI') && lead.email && lead.email.trim() !== '') {
-            stats.old_website++;
-        } else if (lead.status === 'Modern Website') {
-            stats.modern_website++;
-        }
-
-        if (lead.email_status === 'Sent' || lead.email_status === 'Sent (Dry Run)' || lead.email_status === 'Replied') {
-            stats.sent++;
-        }
-        if (lead.email_status === 'Replied') {
-            stats.replied++;
-        } else if (lead.email_status === 'Failed') {
-            stats.failed++;
-        }
+        if (lead.status === 'No Website') stats.no_website++;
+        else if ((lead.status === 'Old Website' || lead.status === 'No Booking/AI') && lead.email && lead.email.trim() !== '') stats.old_website++;
+        else if (lead.status === 'Modern Website') stats.modern_website++;
+        if (lead.email_status === 'Sent' || lead.email_status === 'Sent (Dry Run)' || lead.email_status === 'Replied') stats.sent++;
+        if (lead.email_status === 'Replied') stats.replied++;
+        else if (lead.email_status === 'Failed') stats.failed++;
     });
-
     if (stats.sent > 0) {
         stats.conversion_rate = Math.round((stats.replied / stats.sent) * 100 * 10) / 10;
         if (stats.conversion_rate > 100) stats.conversion_rate = 100;
     }
-
     return stats;
 }
 

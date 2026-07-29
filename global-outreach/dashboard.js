@@ -17,8 +17,41 @@ let configData = {};
 let activeTab  = 'overview';
 let senderEmail = '';
 
+// ─── Auto-Refresh (Real-Time Sync) ────────────────────────────────────────────
+let _autoRefreshInterval = null;
+let _lastUpdated = null;
+let _nextRefreshIn = 60;
+let _countdownTick = null;
+
+function startAutoRefresh() {
+    stopAutoRefresh();
+    _nextRefreshIn = 60;
+    _autoRefreshInterval = setInterval(() => {
+        fetchData();
+        _nextRefreshIn = 60;
+    }, 60000);
+    _countdownTick = setInterval(() => {
+        _nextRefreshIn = Math.max(0, _nextRefreshIn - 1);
+        updateLiveIndicator();
+    }, 1000);
+}
+
+function stopAutoRefresh() {
+    if (_autoRefreshInterval) { clearInterval(_autoRefreshInterval); _autoRefreshInterval = null; }
+    if (_countdownTick)       { clearInterval(_countdownTick);       _countdownTick = null; }
+}
+
+function updateLiveIndicator() {
+    const el = document.getElementById('live-indicator');
+    if (!el) return;
+    const lastStr = _lastUpdated ? `Updated ${_lastUpdated}` : 'Syncing...';
+    el.innerHTML = `<span class="live-dot"></span> LIVE &nbsp;·&nbsp; ${lastStr} &nbsp;·&nbsp; Next refresh in ${_nextRefreshIn}s`;
+}
+
 // Initialize Dashboard
 document.addEventListener('DOMContentLoaded', () => {
+    injectLiveIndicator();
+
     // Adjust UI for static (read-only) mode
     if (IS_STATIC) {
         const scrapeBtn = document.querySelector('[onclick="openScrapeModal()"]');
@@ -39,7 +72,50 @@ document.addEventListener('DOMContentLoaded', () => {
         if (settingsBtn) settingsBtn.style.display = 'none';
     }
     fetchData();
+    startAutoRefresh();
 });
+
+function injectLiveIndicator() {
+    // Inject live sync bar below header
+    const style = document.createElement('style');
+    style.textContent = `
+        #live-sync-bar {
+            display:flex; align-items:center; justify-content:space-between;
+            background: rgba(16,185,129,0.08); border-bottom: 1px solid rgba(16,185,129,0.2);
+            padding: 6px 28px; font-size: 0.78rem; color: #10b981; font-family: 'Inter', sans-serif;
+            position: sticky; top: 0; z-index: 99;
+        }
+        .live-dot {
+            display:inline-block; width:8px; height:8px; border-radius:50%;
+            background:#10b981; margin-right:6px;
+            animation: livepulse 1.5s ease-in-out infinite;
+        }
+        @keyframes livepulse {
+            0%,100%{opacity:1;transform:scale(1);}
+            50%{opacity:0.4;transform:scale(0.7);}
+        }
+        #live-workflow-badges { display:flex; gap:12px; }
+        .wf-badge {
+            background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25);
+            border-radius: 20px; padding: 2px 12px; font-size:0.73rem; color:#a5b4fc;
+        }
+    `;
+    document.head.appendChild(style);
+
+    const bar = document.createElement('div');
+    bar.id = 'live-sync-bar';
+    bar.innerHTML = `
+        <span id="live-indicator"><span class="live-dot"></span> LIVE · Connecting...</span>
+        <span id="live-workflow-badges">
+            <a class="wf-badge" href="../india-outreach/dashboard.html">🇮🇳 India</a>
+            <a class="wf-badge" href="../../recruitment-leads-system/dashboard.html">💼 Recruitment</a>
+        </span>
+    `;
+    // Insert after <body> or before main content
+    const appContainer = document.querySelector('.app-container') || document.body;
+    appContainer.insertBefore(bar, appContainer.firstChild);
+}
+
 
 // Switch Dashboard Tabs
 function switchTab(tabId) {
@@ -190,6 +266,11 @@ async function fetchData() {
 
         // Render the filtered view (which computes stats and renders current tab)
         renderCurrentFilteredView();
+
+        // Update live indicator
+        _lastUpdated = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        _nextRefreshIn = 60;
+        updateLiveIndicator();
 
     } catch (err) {
         console.error('Dashboard data error:', err);
@@ -576,34 +657,61 @@ function formatDate(isoStr) {
 // ─── Real-time Date-wise Filter & Stats ───────────────────────────────────────────
 let selectedDate = 'ALL';
 
+// Helper: get today's local date string YYYY-MM-DD
+function todayLocal() {
+    const d = new Date();
+    return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+}
+
 function getFilteredLeads() {
-    if (selectedDate === 'ALL') {
-        return allLeads;
-    }
+    if (selectedDate === 'ALL') return allLeads;
+    const isTodayFilter = (selectedDate === todayLocal());
     return allLeads.filter(lead => {
-        const scrapedDate  = lead.scraped_at ? lead.scraped_at.split('T')[0] : '';
-        const sentDate     = lead.sent_at ? lead.sent_at.split('T')[0] : '';
-        const followupDate = lead.followup_sent_at ? lead.followup_sent_at.split('T')[0] : '';
-        const repliedDate  = lead.replied_at ? lead.replied_at.split('T')[0] : '';
-        return (scrapedDate === selectedDate || sentDate === selectedDate || followupDate === selectedDate || repliedDate === selectedDate);
+        const scrapedDate  = lead.scraped_at        ? lead.scraped_at.split('T')[0]        : '';
+        const sentDate     = lead.sent_at           ? lead.sent_at.split('T')[0]           : '';
+        const followupDate = lead.followup_sent_at  ? lead.followup_sent_at.split('T')[0]  : '';
+        const repliedDate  = lead.replied_at        ? lead.replied_at.split('T')[0]        : '';
+
+        // When TODAY is selected: ALWAYS include leads emailed/followed-up/replied today,
+        // regardless of when they were scraped.
+        if (isTodayFilter) {
+            if (sentDate === selectedDate)     return true;
+            if (followupDate === selectedDate) return true;
+            if (repliedDate === selectedDate)  return true;
+            // Also show leads scraped today that haven't been emailed yet
+            if (scrapedDate === selectedDate)  return true;
+            return false;
+        }
+        // For other date filters: match any field
+        return (scrapedDate === selectedDate || sentDate === selectedDate ||
+                followupDate === selectedDate || repliedDate === selectedDate);
     });
+}
+
+// Compute 'Emails Sent' specifically from sent_at date when a date is selected,
+// so the count is always accurate regardless of scrape date.
+function countSentOnDate(dateStr) {
+    if (dateStr === 'ALL') {
+        return allLeads.filter(l =>
+            l.email_status === 'Sent' || l.email_status === 'Sent (Dry Run)' ||
+            l.email_status === 'Replied' || l.email_status === 'Follow-Up Sent'
+        ).length;
+    }
+    return allLeads.filter(l => {
+        const sd = l.sent_at           ? l.sent_at.split('T')[0]          : '';
+        const fd = l.followup_sent_at  ? l.followup_sent_at.split('T')[0] : '';
+        return sd === dateStr || fd === dateStr;
+    }).length;
 }
 
 function calculateStats(leadsList) {
     const stats = {
-        total: 0,
-        no_website: 0,
-        old_website: 0,
-        modern_website: 0,
-        sent: 0,
-        replied: 0,
-        failed: 0,
-        conversion_rate: 0
+        total: 0, no_website: 0, old_website: 0, modern_website: 0,
+        sent: 0, replied: 0, failed: 0, conversion_rate: 0
     };
 
     leadsList.forEach(lead => {
         if (lead.status === 'Filtered (No Email)') return;
-
         stats.total++;
         if (lead.status === 'No Website') {
             stats.no_website++;
@@ -612,22 +720,17 @@ function calculateStats(leadsList) {
         } else if (lead.status === 'Modern Website') {
             stats.modern_website++;
         }
-
         if (lead.email_status === 'Sent' || lead.email_status === 'Sent (Dry Run)' || lead.email_status === 'Replied') {
             stats.sent++;
         }
-        if (lead.email_status === 'Replied') {
-            stats.replied++;
-        } else if (lead.email_status === 'Failed') {
-            stats.failed++;
-        }
+        if (lead.email_status === 'Replied')      stats.replied++;
+        else if (lead.email_status === 'Failed')  stats.failed++;
     });
 
     if (stats.sent > 0) {
         stats.conversion_rate = Math.round((stats.replied / stats.sent) * 100 * 10) / 10;
         if (stats.conversion_rate > 100) stats.conversion_rate = 100;
     }
-
     return stats;
 }
 
@@ -701,23 +804,25 @@ function setDateFilter(dateStr) {
 function renderCurrentFilteredView() {
     const filteredLeads = getFilteredLeads();
     const stats = calculateStats(filteredLeads);
-    
+
+    // 'Emails Sent' KPI: always count from sent_at/followup_sent_at date
+    // so leads emailed today (regardless of scrape date) are always visible.
+    const sentOnDate = countSentOnDate(selectedDate);
+
     // Update KPI cards
-    document.getElementById('kpi-total').innerText      = stats.total      ?? 0;
-    document.getElementById('kpi-no-website').innerText = stats.no_website ?? 0;
-    document.getElementById('kpi-old-website').innerText = stats.old_website ?? 0;
-    document.getElementById('kpi-sent').innerText       = stats.sent       ?? 0;
-    document.getElementById('kpi-replied').innerText    = stats.replied    ?? 0;
-    document.getElementById('kpi-conversion').innerText = stats.conversion_rate + '%';
+    const setKpi = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val ?? 0; };
+    setKpi('kpi-total',      stats.total);
+    setKpi('kpi-no-website', stats.no_website);
+    setKpi('kpi-old-website',stats.old_website);
+    setKpi('kpi-sent',       sentOnDate);   // ← always by sent_at date
+    setKpi('kpi-replied',    stats.replied);
+    const convEl = document.getElementById('kpi-conversion');
+    if (convEl) convEl.innerText = stats.conversion_rate + '%';
 
     // Update sidebar badges
-    document.getElementById('badge-count-nowebsite').innerText = stats.no_website ?? 0;
-    document.getElementById('badge-count-campaign').innerText  = stats.old_website ?? 0;
-    
-    const repliesBadge = document.getElementById('badge-count-replies');
-    if (repliesBadge) {
-        repliesBadge.innerText = stats.replied ?? 0;
-    }
+    setKpi('badge-count-nowebsite', stats.no_website);
+    setKpi('badge-count-campaign',  stats.old_website);
+    setKpi('badge-count-replies',   stats.replied);
 
     // Render current tab
     if      (activeTab === 'overview')   renderOverview();
