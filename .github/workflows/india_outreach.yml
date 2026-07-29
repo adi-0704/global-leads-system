@@ -79,7 +79,11 @@ jobs:
           [ "${{ github.event.inputs.dry_run }}" = "true" ]   && ARGS="$ARGS --dry-run"
           [ "${{ github.event.inputs.no_scrape }}" = "true" ] && ARGS="$ARGS --no-scrape"
           echo "Running: python india-outreach/scrape_and_outreach_india.py $ARGS"
-          eval python india-outreach/scrape_and_outreach_india.py $ARGS
+          # Run outreach; if it fails (scraper crash), retry with --no-scrape to still send emails
+          if ! eval python india-outreach/scrape_and_outreach_india.py $ARGS; then
+            echo "[Resilience] Full run failed. Retrying with --no-scrape to send emails from existing leads..."
+            eval python india-outreach/scrape_and_outreach_india.py $ARGS --no-scrape || echo "[Resilience] --no-scrape also failed. Will still export whatever data is in DB."
+          fi
 
       - name: Export India data.json
         if: always()
