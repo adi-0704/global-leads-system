@@ -335,11 +335,11 @@
     "Austin",
     "Atlanta"
   ],
-  "daily_email_limit": 25,
-  "followup_max_per_day": 10,
-  "new_outreach_min_per_day": 15,
+  "daily_email_limit": 1000,
+  "followup_max_per_day": 1000,
+  "new_outreach_min_per_day": 1000,
   "follow_up_days": 5,
-  "send_gap_seconds": 300,
+  "send_gap_seconds": 1,
   "promo_urls": {
     "general": "https://smile-dental.vercel.app/",
     "dental": "https://smile-dental.vercel.app/",
